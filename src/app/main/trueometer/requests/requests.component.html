@@ -1,0 +1,156 @@
+<div id="requests" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    priority_high
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Demandes
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input #filter placeholder="Rechercher une demande">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+            <!-- ADD BUTTON -->
+            <!--<button mat-fab class="accent"
+                    id="add-contact-button"
+                    (click)="newVerif()"
+                    matTooltip="Nouvelle Vérification"
+                    [@animate]="{value:'*', params:{delay:'300ms',scale:'.2'}}">
+                <mat-icon>add</mat-icon>
+            </button>-->
+            <button mat-raised-button
+                    [routerLink]="'/main/trueometer/requests/new'"
+                    class="add-product-button fuse-white mt-24 mt-md-0">
+                <mat-icon>add</mat-icon>
+                <span>Nouvelle Demande</span>
+            </button>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <mat-table class="requests-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="subject">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <p class="text-truncate">{{request.subject}}</p>
+                    </mat-cell>
+                </ng-container>
+
+             <!--   <ng-container matColumnDef="content">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Contenu</mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <p class="text-truncate">{{request.content}}</p>
+                    </mat-cell>
+                </ng-container>-->
+
+                <ng-container matColumnDef="requestDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <p class="text-truncate">{{request.requestDate | date: 'dd/MM/yyyy'}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="newSource">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Source d'infos</mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <p class="text-truncate">{{request.newSource}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="elected">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Elus</mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <p class="text-truncate">
+                            {{request.elected?.firstname}} {{request.elected?.lastname}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <p class="text-truncate">{{request.category?.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="buttons">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let request">
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                    (click)="$event.stopPropagation();">
+                                <mat-icon class="secondary-text">more_vert</mat-icon>
+                            </button>
+
+                            <mat-menu #moreMenu="matMenu">
+                                <button  mat-menu-item
+                                        [routerLink]="'/main/trueometer/request-details/'+request.id">
+                                    <mat-icon>remove_red_eye</mat-icon>
+                                    <span>Voir Plus</span>
+                                </button>
+                                <button *ngIf="!request.answered" mat-menu-item
+                                        [routerLink]="'/main/trueometer/request-answer/'+request.id">
+                                    <mat-icon>check</mat-icon>
+                                    <span>Répondre</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let request; columns: displayedColumns;"
+                         class="request"
+                         matRipple>
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

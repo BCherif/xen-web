@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    hmr       : false,
+    xensaGreenColor  : '#006400',
+    dsnGrisColor  : '#FFD835',
+    serviceUrl: '/xensa-service/api'
 };
 
 /*

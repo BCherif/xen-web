@@ -1,0 +1,106 @@
+<div id="law-article" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/main/norme/law-articles'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        {{lawArticle.name}}
+                    </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        Nouveau Article
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button
+                    class="save-product-button"
+                    [disabled]="lawArticleForm.invalid"
+                    (click)="saveOrUpdate()"
+                    *ngIf="pageType ==='new'">
+                <span>Enregistrer</span>
+            </button>
+
+            <button mat-raised-button
+                    class="save-product-button"
+                    (click)="saveOrUpdate()"
+                    [disabled]="lawArticleForm.invalid || lawArticleForm.pristine"
+                    *ngIf="pageType ==='edit'">
+                <span>Modifier</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="lawForm" [formGroup]="lawArticleForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+                    <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Nom</mat-label>
+                                <input name="name" formControlName="name"
+                                       matInput>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Contenu</mat-label>
+                                <textarea name="content" formControlName="content"
+                                          matInput type="text"
+                                          required
+                                          max-rows="15">
+                                </textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Lois</mat-label>
+                                <mat-select formControlName="law"
+                                            (selectionChange)="findLawSelected($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let law of laws" [value]="law.id">
+                                        {{law.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

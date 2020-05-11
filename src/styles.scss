@@ -1,1 +1,13 @@
-@import "assets/base";
+// Import Fuse core library
+@import "@fuse/scss/core";
+
+// Import app.theme.scss
+@import "app/app.theme";
+
+// import toast
+@import '~ngx-toastr/toastr';
+
+.dialog-toolbar{
+    background: #006400 !important;
+    color: white !important;
+}
