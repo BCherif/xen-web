@@ -8,24 +8,23 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
-import {InterpellationsService} from "./interpellations.service";
 import {MatDialog} from "@angular/material/dialog";
-import {CALL_AS, ORGAN_CALL} from '../../../data/enums/enums';
+import {FormsService} from './forms.service';
+import {CATEGORY_FORM} from '../../../data/enums/enums';
 
 @Component({
-    selector     : 'trueometer-interpellations',
-    templateUrl  : './interpellations.component.html',
-    styleUrls    : ['./interpellations.component.scss'],
+    selector     : 'publications-forms',
+    templateUrl  : './forms.component.html',
+    styleUrls    : ['./forms.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class InterpellationsComponent implements OnInit
+export class FormsComponent implements OnInit
 {
     dialogRef: any;
-    callAs = CALL_AS;
-    organCall = ORGAN_CALL;
+    categoryForm = CATEGORY_FORM;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['interpelDate','callAs','elected','organ'];
+    displayedColumns = ['name','categoryForm'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -40,7 +39,7 @@ export class InterpellationsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _interpellationsService: InterpellationsService,
+        private _formsService: FormsService,
         private _matDialog: MatDialog
     )
     {
@@ -56,7 +55,7 @@ export class InterpellationsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._interpellationsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._formsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -84,19 +83,19 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Constructor
      *
-     * @param {InterpellationsService} _interpellationsService
+     * @param _formsService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _interpellationsService: InterpellationsService,
+        private _formsService: FormsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     )
     {
         super();
 
-        this.filteredData = this._interpellationsService.interpellations;
+        this.filteredData = this._formsService.forms;
     }
 
     /**
@@ -107,7 +106,7 @@ export class FilesDataSource extends DataSource<any>
     connect(): Observable<any[]>
     {
         const displayDataChanges = [
-            this._interpellationsService.onInterpellationsChanged,
+            this._formsService.onFormsChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -116,7 +115,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._interpellationsService.interpellations.slice();
+                        let data = this._formsService.forms.slice();
 
                         data = this.filterData(data);
 
@@ -195,14 +194,11 @@ export class FilesDataSource extends DataSource<any>
 
             switch ( this._matSort.active )
             {
-                case 'subject':
-                    [propertyA, propertyB] = [a.subject, b.subject];
+                case 'name':
+                    [propertyA, propertyB] = [a.name, b.name];
                     break;
-                case 'interpelDate':
-                    [propertyA, propertyB] = [a.interpelDate, b.interpelDate];
-                    break;
-                case 'elected':
-                    [propertyA, propertyB] = [a.elected.name, b.elected.name];
+                case 'categoryForm':
+                    [propertyA, propertyB] = [a.categoryForm, b.categoryForm];
                     break;
             }
 

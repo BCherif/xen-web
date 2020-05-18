@@ -1,4 +1,4 @@
-<div id="articles" class="page-layout carded fullwidth inner-scroll">
+<div id="petitions" class="page-layout carded fullwidth inner-scroll">
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
@@ -19,7 +19,7 @@
                     priority_high
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Articles
+                    Pétitions
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -28,7 +28,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Rechercher un article">
+                    <input #filter placeholder="Rechercher une pétition">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -39,45 +39,31 @@
         <!-- CONTENT CARD -->
         <div class="content-card">
 
-            <mat-table class="articles-table"
+            <mat-table class="petitions-table"
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar>
 
                 <!-- Name Column -->
-                <ng-container matColumnDef="verification">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Titre de la vérification</mat-header-cell>
-                    <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{article.verification ? article.verification?.label : 'Ne concerne pas une vérification'}}</p>
+                <ng-container matColumnDef="title">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Titre</mat-header-cell>
+                    <mat-cell *matCellDef="let petition">
+                        <p class="text-truncate">{{petition.article.title}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="request">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Demande à verifier</mat-header-cell>
-                    <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{article.request ? article.request?.subject : 'Ne concerne pas une demande'}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="category">
+                <ng-container matColumnDef="decisionMaker">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
-                    <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{article.category?.name}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="interpellation">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Interpellation</mat-header-cell>
-                    <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{article.interpellation ? article.interpellation?.subject : 'Ne concerne pas une interpellation'}}</p>
+                    <mat-cell *matCellDef="let petition">
+                        <p class="text-truncate">{{petition.decisionMaker}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let article; columns: displayedColumns;"
-                         class="article"
+                <mat-row *matRowDef="let petition; columns: displayedColumns;"
+                         class="petition"
                          matRipple>
                 </mat-row>
 

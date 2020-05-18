@@ -8,21 +8,23 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
-import {ArticlesService} from "./articles.service";
 import {MatDialog} from "@angular/material/dialog";
+import {STATE_FOLDER} from '../../../data/enums/enums';
+import {LegalFoldersService} from './legal-folders.service';
 
 @Component({
-    selector     : 'trueometer-articles',
-    templateUrl  : './articles.component.html',
-    styleUrls    : ['./articles.component.scss'],
+    selector     : 'publications-legal-folders',
+    templateUrl  : './legal-folders.component.html',
+    styleUrls    : ['./legal-folders.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class ArticlesComponent implements OnInit
+export class LegalFoldersComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['verification','request','category','interpellation'];
+    stateFolder = STATE_FOLDER;
+    displayedColumns = ['title','stateFolder'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -37,7 +39,7 @@ export class ArticlesComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _articlesService: ArticlesService,
+        private _legalFoldersService: LegalFoldersService,
         private _matDialog: MatDialog
     )
     {
@@ -53,7 +55,7 @@ export class ArticlesComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._articlesService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._legalFoldersService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -81,19 +83,19 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Constructor
      *
-     * @param {ArticlesService} _articlesService
+     * @param _legalFoldersService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _articlesService: ArticlesService,
+        private _legalFoldersService: LegalFoldersService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     )
     {
         super();
 
-        this.filteredData = this._articlesService.articles;
+        this.filteredData = this._legalFoldersService.legalFolders;
     }
 
     /**
@@ -104,7 +106,7 @@ export class FilesDataSource extends DataSource<any>
     connect(): Observable<any[]>
     {
         const displayDataChanges = [
-            this._articlesService.onArticlesChanged,
+            this._legalFoldersService.onLegalFoldersChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -113,7 +115,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._articlesService.articles.slice();
+                        let data = this._legalFoldersService.legalFolders.slice();
 
                         data = this.filterData(data);
 
@@ -192,14 +194,11 @@ export class FilesDataSource extends DataSource<any>
 
             switch ( this._matSort.active )
             {
-                case 'verification':
-                    [propertyA, propertyB] = [a.verification.label, b.verification.label];
+                case 'title':
+                    [propertyA, propertyB] = [a.title, b.title];
                     break;
-                case 'request':
-                    [propertyA, propertyB] = [a.request.subject, b.request.subject];
-                    break;
-                case 'category':
-                    [propertyA, propertyB] = [a.category.name, b.category.name];
+                case 'stateFolder':
+                    [propertyA, propertyB] = [a.year, b.year];
                     break;
             }
 

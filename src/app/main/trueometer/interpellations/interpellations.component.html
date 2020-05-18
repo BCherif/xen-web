@@ -32,6 +32,7 @@
                 </div>
             </div>
             <!-- / SEARCH -->
+<!--
 
             <button mat-raised-button
                     [routerLink]="'/main/trueometer/interpellations/new'"
@@ -39,7 +40,8 @@
                 <mat-icon>add</mat-icon>
                 <span>Nouvelle Interpellation</span>
             </button>
-            <!-- / ADD BUTTON -->
+
+-->
 
         </div>
         <!-- / HEADER -->
@@ -54,12 +56,12 @@
                        fusePerfectScrollbar>
 
                 <!-- Name Column -->
-                <ng-container matColumnDef="subject">
+              <!--  <ng-container matColumnDef="subject">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
                         <p class="text-truncate">{{interpellation.subject}}</p>
                     </mat-cell>
-                </ng-container>
+                </ng-container>-->
 
                <!-- <ng-container matColumnDef="content">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Contenu</mat-header-cell>
@@ -91,13 +93,6 @@
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
-                    <mat-cell *matCellDef="let interpellation">
-                        <p class="text-truncate">{{interpellation.category?.name}}</p>
-                    </mat-cell>
-                </ng-container>
-
                 <ng-container matColumnDef="organ">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Organ</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
@@ -106,6 +101,7 @@
                 </ng-container>
 
                 <!-- Buttons Column -->
+<!--
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
@@ -130,6 +126,7 @@
                         </div>
                     </mat-cell>
                 </ng-container>
+-->
 
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>

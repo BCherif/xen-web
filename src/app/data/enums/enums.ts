@@ -12,6 +12,22 @@ export enum STATE_PROJECT {
     NO_ASSESS = "Non Evaluer"
 }
 
+export enum CATEGORY {
+    LAW_PROJECT = "Projet de lois",
+    DENUNCIATION = "Dénonciation",
+    INTERPELLATION = "Interpellation",
+    PETITION = "Pétition",
+    LEGAL_FILE = "Dossier en justice"
+}
+
+export enum STATE_FOLDER {
+    OPEN = "Ouvert",
+    CLOSE = "Fermé",
+    IN_PROGRESS = "En cours"
+}
+
+
+
 export enum CALL_AS {
     ANONYMOUS = "Anonyme",
     NOT_ANONYMOUS = "Non Anonyme"
@@ -20,4 +36,19 @@ export enum CALL_AS {
 export enum ORGAN_CALL {
     ELECTED = "Elus",
     ORGAN = "Organ"
+}
+
+export enum VOICE {
+    FOR = "Pour",
+    AGAINST = "Contre"
+}
+
+export enum STATE_LAW_PROJECT {
+    OPEN = "Ouvert",
+    CLOSE = "Fermé"
+}
+
+export enum CATEGORY_FORM {
+    CORRUPTOMETER = "Corruptomètre",
+    GOVERNOMETER = "Gouvernomètre"
 }

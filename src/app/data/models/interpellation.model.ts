@@ -1,34 +1,30 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
-import {Category} from "./category.model";
 import {Elected} from "./elected.model";
 import {Organ} from "./organ.model";
 import {CALL_AS, ORGAN_CALL} from '../enums/enums';
+import {Article} from './article.model';
 
 @Injectable()
 export class Interpellation implements Deserializable{
     id: number;
     interpelDate: Date = new Date();
-    subject: string;
-    content: string;
     response: string;
     callAs: CALL_AS;
     organCall: ORGAN_CALL;
     elected: Elected;
-    category: Category;
+    article: Article;
     organ: Organ;
 
     constructor(interpellation?) {
         interpellation = interpellation || {};
         this.id = interpellation.id;
-        this.subject = interpellation.subject;
         this.interpelDate = interpellation.interpelDate;
-        this.content = interpellation.content;
         this.response = interpellation.response;
         this.callAs = interpellation.callAs;
         this.organCall = interpellation.organCall;
         this.elected = interpellation.elected;
-        this.category = interpellation.category;
+        this.article = interpellation.article;
         this.organ = interpellation.organ;
     }
 

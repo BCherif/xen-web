@@ -88,9 +88,14 @@ $typography: mat-typography-config(
 @import "src/app/main/trueometer/verifications/verifications.theme";
 @import "src/app/main/trueometer/requests/requests.theme";
 @import "src/app/main/trueometer/interpellations/interpellations.theme";
-@import "src/app/main/trueometer/articles/articles.theme";
+@import "src/app/main/publications/articles/articles.theme";
 @import "src/app/main/norme/law-categories/law-categories.theme";
 @import "src/app/main/norme/laws/laws.theme";
+@import "src/app/main/publications/forms/forms.theme";
+@import "src/app/main/publications/denunciations/denunciations.theme";
+@import "src/app/main/publications/petitions/petitions.theme";
+@import "src/app/main/publications/legal-folders/legal-folders.theme";
+@import "src/app/main/publications/law-projects/law-projects.theme";
 @import "src/app/main/norme/law-articles/law-articles.theme";
 
 // Define a mixin for easier access
@@ -107,9 +112,14 @@ $typography: mat-typography-config(
     @include trueometer-verifications-theme($theme);
     @include trueometer-requests-theme($theme);
     @include trueometer-interpellations-theme($theme);
-    @include trueometer-articles-theme($theme);
+    @include publications-articles-theme($theme);
     @include norme-law-categories-theme($theme);
     @include norme-laws-theme($theme);
+    @include publications-legal-folders-theme($theme);
+    @include publications-law-projects-theme($theme);
+    @include publications-denunciations-theme($theme);
+    @include publications-petitions-theme($theme);
+    @include publications-forms-theme($theme);
     @include norme-law-articles-theme($theme);
 }
 

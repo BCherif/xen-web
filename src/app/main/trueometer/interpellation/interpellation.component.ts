@@ -100,16 +100,16 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                         this.getElectedById(interpellation.elected.id);
                         this.interpellationForm.get('elected').setValue(interpellation.elected.id);                    }
                     if (interpellation.organ) {
-                        this.getOrganById(interpellation.category.id);
+                        this.getOrganById(interpellation.organ.id);
                         this.interpellationForm.get('organ').setValue(interpellation.organ.id);
                     }
-                    this.getCategoryById(interpellation.category.id);
+                   /* this.getCategoryById(interpellation.category.id);
                     this.interpellationForm.get('id').setValue(interpellation.id);
                     this.interpellationForm.get('subject').setValue(interpellation.subject);
                     this.interpellationForm.get('content').setValue(interpellation.content);
                     this.interpellationForm.get('organCall').setValue(interpellation.organCall);
                     this.interpellationForm.get('callAs').setValue(interpellation.callAs);
-                    this.interpellationForm.get('category').setValue(interpellation.category.id);
+                    this.interpellationForm.get('category').setValue(interpellation.category.id);*/
                     this.interpellation = new Interpellation(interpellation);
                     this.pageType = 'edit';
                 } else {
@@ -198,7 +198,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         this.getOrganById(value);
     }
 
-    saveOrUpdate() {
+   /* saveOrUpdate() {
         this.interpellation = new Interpellation();
         this.interpellation = this.interpellationForm.getRawValue();
         this.interpellation.elected = this.elected;
@@ -225,7 +225,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                 // console.log(error);
             });
         }
-    }
+    }*/
 
     getOrganChoice(value) {
         this.organCallSelected = value;

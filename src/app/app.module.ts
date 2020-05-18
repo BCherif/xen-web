@@ -30,7 +30,7 @@ const appRoutes: Routes = [
     },
     {
         path      : '**',
-        redirectTo: 'main/trueometer/articles'
+        redirectTo: 'main/publications/articles'
     }
 ];
 

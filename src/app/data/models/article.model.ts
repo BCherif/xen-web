@@ -1,26 +1,19 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
-import {Verification} from "./verification.model";
-import {Interpellation} from "./interpellation.model";
-import {Category} from "./category.model";
-import {Request} from './request.model';
+import {CATEGORY} from '../enums/enums';
 
 @Injectable()
 export class Article implements Deserializable{
     id: number;
-    name: string;
-    verification: Verification;
-    request: Request;
-    interpellation: Interpellation;
-    category: Category
+    title: string;
+    content: string;
+    category: CATEGORY
 
     constructor(article?) {
         article = article || {};
         this.id = article.id;
-        this.name = article.name ;
-        this.verification = article.verification;
-        this.request = article.request;
-        this.interpellation = article.interpellation;
+        this.title = article.title ;
+        this.content = article.content;
         this.category = article.category;
     }
 

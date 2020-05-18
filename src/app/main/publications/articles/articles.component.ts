@@ -8,24 +8,23 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
-import {InterpellationsService} from "./interpellations.service";
+import {ArticlesService} from "./articles.service";
 import {MatDialog} from "@angular/material/dialog";
-import {CALL_AS, ORGAN_CALL} from '../../../data/enums/enums';
+import {CATEGORY} from '../../../data/enums/enums';
 
 @Component({
-    selector     : 'trueometer-interpellations',
-    templateUrl  : './interpellations.component.html',
-    styleUrls    : ['./interpellations.component.scss'],
+    selector     : 'publications-articles',
+    templateUrl  : './articles.component.html',
+    styleUrls    : ['./articles.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class InterpellationsComponent implements OnInit
+export class ArticlesComponent implements OnInit
 {
     dialogRef: any;
-    callAs = CALL_AS;
-    organCall = ORGAN_CALL;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['interpelDate','callAs','elected','organ'];
+    category = CATEGORY;
+    displayedColumns = ['title','content','category'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -40,7 +39,7 @@ export class InterpellationsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _interpellationsService: InterpellationsService,
+        private _articlesService: ArticlesService,
         private _matDialog: MatDialog
     )
     {
@@ -56,7 +55,7 @@ export class InterpellationsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._interpellationsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._articlesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -84,19 +83,19 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Constructor
      *
-     * @param {InterpellationsService} _interpellationsService
+     * @param {ArticlesService} _articlesService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _interpellationsService: InterpellationsService,
+        private _articlesService: ArticlesService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     )
     {
         super();
 
-        this.filteredData = this._interpellationsService.interpellations;
+        this.filteredData = this._articlesService.articles;
     }
 
     /**
@@ -107,7 +106,7 @@ export class FilesDataSource extends DataSource<any>
     connect(): Observable<any[]>
     {
         const displayDataChanges = [
-            this._interpellationsService.onInterpellationsChanged,
+            this._articlesService.onArticlesChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -116,7 +115,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._interpellationsService.interpellations.slice();
+                        let data = this._articlesService.articles.slice();
 
                         data = this.filterData(data);
 
@@ -195,14 +194,14 @@ export class FilesDataSource extends DataSource<any>
 
             switch ( this._matSort.active )
             {
-                case 'subject':
-                    [propertyA, propertyB] = [a.subject, b.subject];
+                case 'verification':
+                    [propertyA, propertyB] = [a.verification.label, b.verification.label];
                     break;
-                case 'interpelDate':
-                    [propertyA, propertyB] = [a.interpelDate, b.interpelDate];
+                case 'request':
+                    [propertyA, propertyB] = [a.request.subject, b.request.subject];
                     break;
-                case 'elected':
-                    [propertyA, propertyB] = [a.elected.name, b.elected.name];
+                case 'category':
+                    [propertyA, propertyB] = [a.category.name, b.category.name];
                     break;
             }
 

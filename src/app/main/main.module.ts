@@ -15,6 +15,10 @@ const routes = [
     {
         path        : 'norme',
         loadChildren: () => import('./norme/norme.module').then(m => m.NormeModule)
+    },
+    {
+        path        : 'publications',
+        loadChildren: () => import('./publications/publications.module').then(m => m.PublicationsModule)
     }
 ];
 

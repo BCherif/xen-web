@@ -100,16 +100,16 @@ export class InterpellationDetailsComponent implements OnInit, OnDestroy {
                         this.getElectedById(interpellationDetails.elected.id);
                         this.interpellationForm.get('elected').setValue(interpellationDetails.elected.id);                    }
                     if (interpellationDetails.organ) {
-                        this.getOrganById(interpellationDetails.category.id);
+                        this.getOrganById(interpellationDetails.article.category.id);
                         this.interpellationForm.get('organ').setValue(interpellationDetails.organ.id);
                     }
-                    this.getCategoryById(interpellationDetails.category.id);
+                    this.getCategoryById(interpellationDetails.article.category.id);
                     this.interpellationForm.get('id').setValue(interpellationDetails.id);
-                    this.interpellationForm.get('subject').setValue(interpellationDetails.subject);
-                    this.interpellationForm.get('content').setValue(interpellationDetails.content);
+                    this.interpellationForm.get('subject').setValue(interpellationDetails.article.subject);
+                    this.interpellationForm.get('content').setValue(interpellationDetails.article.content);
                     this.interpellationForm.get('organCall').setValue(interpellationDetails.organCall);
                     this.interpellationForm.get('callAs').setValue(interpellationDetails.callAs);
-                    this.interpellationForm.get('category').setValue(interpellationDetails.category.id);
+                    this.interpellationForm.get('category').setValue(interpellationDetails.article.category.id);
                     this.interpellationDetails = new Interpellation(interpellationDetails);
                 }
             });

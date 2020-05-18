@@ -1,9 +1,9 @@
-@mixin trueometer-articles-theme($theme) {
+@mixin publications-law-projects-theme($theme) {
 
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
 
-    trueometer-articles {
+    publications-law-projects {
 
         .header {
 

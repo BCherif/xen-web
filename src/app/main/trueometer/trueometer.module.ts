@@ -39,8 +39,6 @@ import {InterpellationsComponent} from './interpellations/interpellations.compon
 import {InterpellationsService} from './interpellations/interpellations.service';
 import {InterpellationComponent} from './interpellation/interpellation.component';
 import {InterpellationService} from './interpellation/interpellation.service';
-import {ArticlesComponent} from './articles/articles.component';
-import {ArticlesService} from './articles/articles.service';
 import {MatMenuModule} from '@angular/material/menu';
 import {RequestAnswerComponent} from './request-answer/request-answer.component';
 import {RequestAnswerService} from './request-answer/request-answer.service';
@@ -151,13 +149,6 @@ const routes: Routes = [
         }
     },
     {
-        path     : 'articles',
-        component: ArticlesComponent,
-        resolve  : {
-            data: ArticlesService
-        }
-    },
-    {
         path     : 'electeds',
         component: ElectedsComponent,
         resolve  : {
@@ -180,7 +171,6 @@ const routes: Routes = [
         InterpellationComponent,
         InterpellationDetailsComponent,
         SettingOrganFormDialogComponent,
-        ArticlesComponent,
         RequestAnswerComponent,
         SettingElectedFormDialogComponent
     ],

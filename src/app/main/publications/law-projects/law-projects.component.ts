@@ -8,24 +8,23 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
-import {InterpellationsService} from "./interpellations.service";
 import {MatDialog} from "@angular/material/dialog";
-import {CALL_AS, ORGAN_CALL} from '../../../data/enums/enums';
+import {STATE_LAW_PROJECT} from '../../../data/enums/enums';
+import {LawProjectsService} from './law-projects.service';
 
 @Component({
-    selector     : 'trueometer-interpellations',
-    templateUrl  : './interpellations.component.html',
-    styleUrls    : ['./interpellations.component.scss'],
+    selector     : 'publications-law-projects',
+    templateUrl  : './law-projects.component.html',
+    styleUrls    : ['./law-projects.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class InterpellationsComponent implements OnInit
+export class LawProjectsComponent implements OnInit
 {
     dialogRef: any;
-    callAs = CALL_AS;
-    organCall = ORGAN_CALL;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['interpelDate','callAs','elected','organ'];
+    stateLawProject = STATE_LAW_PROJECT;
+    displayedColumns = ['title','year','elected','stateLawProject'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -40,7 +39,7 @@ export class InterpellationsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _interpellationsService: InterpellationsService,
+        private _lawProjectsService: LawProjectsService,
         private _matDialog: MatDialog
     )
     {
@@ -56,7 +55,7 @@ export class InterpellationsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._interpellationsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._lawProjectsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -84,19 +83,19 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Constructor
      *
-     * @param {InterpellationsService} _interpellationsService
+     * @param _lawProjectsService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _interpellationsService: InterpellationsService,
+        private _lawProjectsService: LawProjectsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     )
     {
         super();
 
-        this.filteredData = this._interpellationsService.interpellations;
+        this.filteredData = this._lawProjectsService.lawProjects;
     }
 
     /**
@@ -107,7 +106,7 @@ export class FilesDataSource extends DataSource<any>
     connect(): Observable<any[]>
     {
         const displayDataChanges = [
-            this._interpellationsService.onInterpellationsChanged,
+            this._lawProjectsService.onLawProjectsChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -116,7 +115,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._interpellationsService.interpellations.slice();
+                        let data = this._lawProjectsService.lawProjects.slice();
 
                         data = this.filterData(data);
 
@@ -195,14 +194,14 @@ export class FilesDataSource extends DataSource<any>
 
             switch ( this._matSort.active )
             {
-                case 'subject':
-                    [propertyA, propertyB] = [a.subject, b.subject];
+                case 'title':
+                    [propertyA, propertyB] = [a.title, b.title];
                     break;
-                case 'interpelDate':
-                    [propertyA, propertyB] = [a.interpelDate, b.interpelDate];
+                case 'year':
+                    [propertyA, propertyB] = [a.year, b.year];
                     break;
                 case 'elected':
-                    [propertyA, propertyB] = [a.elected.name, b.elected.name];
+                    [propertyA, propertyB] = [a.elected, b.elected];
                     break;
             }
 
