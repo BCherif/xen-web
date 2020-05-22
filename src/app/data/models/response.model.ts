@@ -6,12 +6,14 @@ import {Quiz} from './quiz.model';
 export class Response implements Deserializable{
     id: number;
     name: string;
+    description: string;
     quiz: Quiz;
 
     constructor(response?) {
         response = response || {};
         this.id = response.id;
         this.name = response.name;
+        this.description = response.description;
         this.quiz = response.quiz;
     }
 

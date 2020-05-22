@@ -125,6 +125,20 @@ export class FormComponent implements OnInit, OnDestroy
         this.quizs.splice(size+1,0,newQuiz);
     }
 
+    isQuizzesCorrect(): boolean {
+        let ret: boolean = true;
+        if (this.quizs.length < 1) {
+            ret = false;
+        }else {
+            for (let item of this.quizs) {
+                if (!item.name || !item.description || item.name.length <= 0 || item.description.length <= 0) {
+                    return false;
+                }
+            }
+        }
+        return ret;
+    }
+
     save() {
         this.form = new Form();
         this.formSaveEntity = new FormSaveEntity();

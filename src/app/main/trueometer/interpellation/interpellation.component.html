@@ -20,7 +20,7 @@
                 <div fxLayout="column" fxLayoutAlign="start start"
                      [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div class="h2" *ngIf="pageType ==='edit'">
-                        {{interpellation.subject}}
+                        {{interpellation.interpelDate}}
                     </div>
                     <div class="h2" *ngIf="pageType ==='new'">
                         Nouvelle Interpellation
@@ -31,7 +31,6 @@
 
             <button mat-raised-button
                     class="save-product-button"
-                    (click)="saveOrUpdate()"
                     [disabled]="interpellationForm.invalid"
                     *ngIf="pageType ==='new'">
                 <span>Enregistrer</span>
@@ -39,7 +38,6 @@
 
             <button mat-raised-button
                     class="save-product-button"
-                    (click)="saveOrUpdate()"
                     [disabled]="interpellationForm.invalid || interpellationForm.pristine"
                     *ngIf="pageType ==='edit'">
                 <span>Modifier</span>

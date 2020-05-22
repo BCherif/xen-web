@@ -22,16 +22,32 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { SampleModule } from 'app/main/sample/sample.module';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {ToastrModule} from "ngx-toastr";
+import {LOCALE_ID} from '@angular/core';
+import localeFr from '@angular/common/locales/fr';
+import {HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
+import {AuthGuard} from './shared/auth.guard';
+
+registerLocaleData(localeFr);
 
 const appRoutes: Routes = [
     {
-        path        : 'main',
-        loadChildren: () => import('./main/main.module').then(m => m.MainModule)
+        path      : '',
+        redirectTo: 'main/publications/articles',
+        pathMatch: 'full'
     },
+    {
+        path        : 'auth/login',
+        loadChildren: () => import('./main/auth/login/login.module').then(m => m.LoginModule)
+    },
+    {
+        path        : 'main',
+        loadChildren: () => import('./main/main.module').then(m => m.MainModule),
+        canActivate: [AuthGuard]
+    }/*,
     {
         path      : '**',
         redirectTo: 'main/publications/articles'
-    }
+    }*/
 ];
 
 @NgModule({
@@ -76,6 +92,10 @@ const appRoutes: Routes = [
         MatTableModule,
         MatRippleModule,
         MatPaginatorModule
+    ],
+    providers: [
+        {provide: LOCALE_ID, useValue: 'fr-FR'},
+        {provide: LocationStrategy, useClass: HashLocationStrategy}
     ],
     bootstrap   : [
         AppComponent

@@ -48,6 +48,15 @@ import {RequestDetailsComponent} from './request-details/request-details.compone
 import {RequestDetailsService} from './request-details/request-details.service';
 import {InterpellationDetailsComponent} from './interpellation-details/interpellation-details.component';
 import {InterpellationDetailsService} from './interpellation-details/interpellation-details.service';
+import {ProjectsService} from './projects/projects.service';
+import {ProjectsComponent} from './projects/projects.component';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+import {ProjectService} from './project/project.service';
+import {ProjectComponent} from './project/project.component';
+
+const maskConfig: Partial<IConfig> = {
+    validation: false,
+};
 
 const routes: Routes = [
     {
@@ -154,6 +163,27 @@ const routes: Routes = [
         resolve  : {
             data: ElectedsService
         }
+    },
+    {
+        path     : 'projects',
+        component: ProjectsComponent,
+        resolve  : {
+            data: ProjectsService
+        }
+    },
+    {
+        path     : 'projects/:id/:label',
+        component: ProjectComponent,
+        resolve  : {
+            data: ProjectService
+        }
+    },
+    {
+        path     : 'projects/:id',
+        component: ProjectComponent,
+        resolve  : {
+            data: ProjectService
+        }
     }
 ];
 
@@ -165,6 +195,7 @@ const routes: Routes = [
         VerificationComponent,
         RequestsComponent,
         RequestComponent,
+        ProjectComponent,
         RequestDetailsComponent,
         VerificationDetailsComponent,
         InterpellationsComponent,
@@ -172,10 +203,12 @@ const routes: Routes = [
         InterpellationDetailsComponent,
         SettingOrganFormDialogComponent,
         RequestAnswerComponent,
-        SettingElectedFormDialogComponent
+        SettingElectedFormDialogComponent,
+        ProjectsComponent
     ],
     imports: [
         RouterModule.forChild(routes),
+        NgxMaskModule.forRoot(maskConfig),
         MatButtonModule,
         MatChipsModule,
         MatExpansionModule,

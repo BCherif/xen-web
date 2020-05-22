@@ -30,6 +30,15 @@ import {SettingCuttingFormDialogComponent} from "./cutting-form/cutting-form.com
 import {LocalitiesService} from "./localities/localities.service";
 import {LocalitiesComponent} from "./localities/localities.component";
 import {SettingLocalityFormDialogComponent} from "./locality-form/locality-form.component";
+import {AxesComponent} from './axes/axes.component';
+import {AxesService} from './axes/axes.service';
+import {SettingAxeFormDialogComponent} from './axe-form/axe-form.component';
+import {DomainsComponent} from './domains/domains.component';
+import {DomainsService} from './domains/domains.service';
+import {SettingDomainFormDialogComponent} from './domain-form/domain-form.component';
+import {ProgramsService} from './programs/programs.service';
+import {ProgramsComponent} from './programs/programs.component';
+import {SettingProgramFormDialogComponent} from './program-form/program-form.component';
 
 const routes: Routes = [
     {
@@ -52,32 +61,44 @@ const routes: Routes = [
         resolve  : {
             data: LocalitiesService
         }
-    }
-    /*,
+    },
     {
-        path     : 'products/:id',
-        component: EcommerceProductComponent,
+        path     : 'axes',
+        component: AxesComponent,
         resolve  : {
-            data: EcommerceProductService
+            data: AxesService
         }
     },
     {
-        path     : 'products/:id/:handle',
-        component: EcommerceProductComponent,
+        path     : 'domains',
+        component: DomainsComponent,
         resolve  : {
-            data: EcommerceProductService
+            data: DomainsService
         }
-    }*/
+    },
+    {
+        path     : 'programs',
+        component: ProgramsComponent,
+        resolve  : {
+            data: ProgramsService
+        }
+    }
 ];
 
 @NgModule({
     declarations: [
         CategoriesComponent,
         CuttingsComponent,
+        ProgramsComponent,
         SettingCategoryFormDialogComponent,
         SettingCuttingFormDialogComponent,
         LocalitiesComponent,
-        SettingLocalityFormDialogComponent
+        AxesComponent,
+        DomainsComponent,
+        SettingLocalityFormDialogComponent,
+        SettingAxeFormDialogComponent,
+        SettingDomainFormDialogComponent,
+        SettingProgramFormDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -110,7 +131,10 @@ const routes: Routes = [
     entryComponents: [
         SettingCategoryFormDialogComponent,
         SettingCuttingFormDialogComponent,
-        SettingLocalityFormDialogComponent
+        SettingLocalityFormDialogComponent,
+        SettingAxeFormDialogComponent,
+        SettingDomainFormDialogComponent,
+        SettingProgramFormDialogComponent
     ]
 })
 export class SettingModule

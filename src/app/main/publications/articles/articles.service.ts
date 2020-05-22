@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Article} from '../../../data/models/article.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -24,9 +25,10 @@ export class ArticlesService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
-        this.serviceURL = environment.serviceUrl + '/articles';
         // Set the defaults
         this.onArticlesChanged = new BehaviorSubject({});
+        this.httpOptions = new XensaUtils().httpHeaders();
+        this.serviceURL = environment.serviceUrl + '/articles';
     }
 
     /**
@@ -58,7 +60,7 @@ export class ArticlesService implements Resolve<any>
      */
     getArticles(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.articles = res['response'];

@@ -4,12 +4,14 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class Axis implements Deserializable{
     id: number;
-    nom: string;
+    name: string;
+    description: string;
 
-    constructor(category?) {
-        category = category || {};
-        this.id = category.id;
-        this.nom = category.nom ;
+    constructor(axis?) {
+        axis = axis || {};
+        this.id = axis.id;
+        this.name = axis.name;
+        this.description = axis.description;
     }
 
     deserialize(input: any): this {

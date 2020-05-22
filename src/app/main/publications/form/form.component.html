@@ -32,7 +32,7 @@
             <button mat-raised-button
                     class="save-product-button"
                     (click)="save()"
-                    [disabled]="crudForm.invalid"
+                    [disabled]="crudForm.invalid || !isQuizzesCorrect()"
                     *ngIf="pageType ==='new'">
                 <span>Enregistrer</span>
             </button>
@@ -72,6 +72,7 @@
                     </form>
                 </div>
                 <div class="divServicesQuiz">
+                    <h2><strong>Liste de questions lié a ce formulaire</strong></h2>
                     <div class="responsiveTbl">
                         <table>
                             <thead>
