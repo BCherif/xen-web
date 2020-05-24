@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Article} from '../../../data/models/article.model';
 import {SaveArticleEntity} from '../../../data/wrapper/save.article.entity.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +32,7 @@ export class ArticleService implements Resolve<any>
         this.onArticleChanged = new BehaviorSubject({});
         this.serviceURL = environment.serviceUrl + '/articles';
         this.crudServiceURL = environment.serviceUrl + '/publications';
+        this.httpOptions = new XensaUtils().httpHeaders();
     }
 
     /**
@@ -79,6 +81,6 @@ export class ArticleService implements Resolve<any>
     }
 
     create(saveArticleEntity: SaveArticleEntity) {
-        return this._httpClient.post(this.crudServiceURL, saveArticleEntity);
+        return this._httpClient.post(this.crudServiceURL, saveArticleEntity,this.httpOptions);
     }
 }

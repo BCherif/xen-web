@@ -228,7 +228,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this._articleService.create(this.saveArticleEntity).subscribe(data => {
             if (data['status'] === 'OK') {
                 this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/publications/articles');
+                this._router.navigateByUrl('/main/publications/articles/new');
             } else {
                 this._toastr.error(data['message']);
             }

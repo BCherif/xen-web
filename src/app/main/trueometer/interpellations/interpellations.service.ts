@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Interpellation} from '../../../data/models/interpellation.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class InterpellationsService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
+        this.httpOptions = new XensaUtils().httpHeaders();
         this.serviceURL = environment.serviceUrl + '/interpellations';
         // Set the defaults
         this.onInterpellationsChanged = new BehaviorSubject({});
@@ -58,7 +60,7 @@ export class InterpellationsService implements Resolve<any>
      */
     getinterpellations(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.interpellations = res['response'];
@@ -70,13 +72,14 @@ export class InterpellationsService implements Resolve<any>
     }
 
     getById(id: number){
-        return this._httpClient.get(this.serviceURL + '/' + id);
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
     }
 
     create(interpellation: Interpellation) {
-        return this._httpClient.post(this.serviceURL, interpellation);
+        return this._httpClient.post(this.serviceURL, interpellation,this.httpOptions);
     }
+
     update(interpellation: Interpellation) {
-        return this._httpClient.put(this.serviceURL, interpellation);
+        return this._httpClient.put(this.serviceURL, interpellation,this.httpOptions);
     }
 }

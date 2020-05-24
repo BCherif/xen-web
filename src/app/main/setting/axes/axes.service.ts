@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Axis} from '../../../data/models/axis.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class AxesService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
+        this.httpOptions = new XensaUtils().httpHeaders();
         this.serviceURL = environment.serviceUrl + '/axis';
         // Set the defaults
         this.onAxiesChanged = new BehaviorSubject({});
@@ -58,7 +60,7 @@ export class AxesService implements Resolve<any>
      */
     getAxies(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.axes = res['response'];
@@ -70,17 +72,17 @@ export class AxesService implements Resolve<any>
     }
 
     getAll() {
-        return this._httpClient.get(this.serviceURL);
+        return this._httpClient.get(this.serviceURL,this.httpOptions);
     }
 
     getById(id: number){
-        return this._httpClient.get(this.serviceURL + '/' + id);
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
     }
 
     create(axis: Axis) {
-        return this._httpClient.post(this.serviceURL, axis);
+        return this._httpClient.post(this.serviceURL, axis,this.httpOptions);
     }
     update(axis: Axis) {
-        return this._httpClient.put(this.serviceURL, axis);
+        return this._httpClient.put(this.serviceURL, axis,this.httpOptions);
     }
 }

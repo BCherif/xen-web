@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {environment} from "../../../../environments/environment";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
 import {Project} from '../../../data/models/project.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ProjectService implements Resolve<any>
-{
+export class ProjectService implements Resolve<any> {
     routeParams: any;
     project: Project;
     onProjectChanged: BehaviorSubject<any>;
@@ -23,9 +23,9 @@ export class ProjectService implements Resolve<any>
      */
     constructor(
         private _httpClient: HttpClient
-    )
-    {
+    ) {
         // Set the defaults
+        this.httpOptions = new XensaUtils().httpHeaders();
         this.onProjectChanged = new BehaviorSubject({});
         this.serviceURL = environment.serviceUrl + '/projects';
     }
@@ -37,8 +37,7 @@ export class ProjectService implements Resolve<any>
      * @param {RouterStateSnapshot} state
      * @returns {Observable<any> | Promise<any> | any}
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         this.routeParams = route.params;
 
         return new Promise((resolve, reject) => {
@@ -76,14 +75,15 @@ export class ProjectService implements Resolve<any>
     }
 
 
-    getById(id: number){
-        return this._httpClient.get(this.serviceURL + '/' + id);
+    getById(id: number) {
+        return this._httpClient.get(this.serviceURL + '/' + id, this.httpOptions);
     }
 
     create(project: Project) {
-        return this._httpClient.post(this.serviceURL, project);
+        return this._httpClient.post(this.serviceURL, project, this.httpOptions);
     }
+
     update(project: Project) {
-        return this._httpClient.put(this.serviceURL, project);
+        return this._httpClient.put(this.serviceURL, project, this.httpOptions);
     }
 }

@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('app-token', btoa(JSON.stringify(ret['response'])));
                 localStorage.setItem('isLoggedin', 'true');
 
-                this.router.navigate(['/main/publications/articles']);
+                this.router.navigate(['/main/publications/articles/new']);
             } else {
                 this.toastr.error(ret['message']);
                 // console.log(ret['message']);

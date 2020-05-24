@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Response} from '../../../data/models/response.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class ResponsesService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
+        this.httpOptions = new XensaUtils().httpHeaders();
         this.serviceURL = environment.serviceUrl + '/responses';
         // Set the defaults
         this.onResponsesChanged = new BehaviorSubject({});
@@ -58,7 +60,7 @@ export class ResponsesService implements Resolve<any>
      */
     getResponses(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.responses = res['response'];

@@ -19,7 +19,7 @@
                     person_add
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Elus
+                    Membre
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -28,18 +28,17 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Rechercher un elus">
+                    <input #filter placeholder="Rechercher un membre">
                 </div>
             </div>
             <!-- / SEARCH -->
 
             <!-- ADD BUTTON -->
-            <button mat-fab class="accent"
-                    id="add-contact-button"
+            <button mat-raised-button
                     (click)="newElected()"
-                    matTooltip="Nouveau Elus"
-                    [@animate]="{value:'*', params:{delay:'300ms',scale:'.2'}}">
+                    class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
+                <span>Nouveau Membre</span>
             </button>
             <!-- / ADD BUTTON -->
 

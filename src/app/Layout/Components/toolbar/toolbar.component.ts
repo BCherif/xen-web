@@ -8,6 +8,8 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
+import {User} from '../../../data/models/user.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Component({
     selector     : 'toolbar',
@@ -18,6 +20,7 @@ import { navigation } from 'app/navigation/navigation';
 
 export class ToolbarComponent implements OnInit, OnDestroy
 {
+
     horizontalNavbar: boolean;
     rightNavbar: boolean;
     hiddenNavbar: boolean;
@@ -25,6 +28,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
+
+    xensaUtils = new XensaUtils();
+    currentUser: User = this.xensaUtils.getAppUser();
+
 
     // Private
     private _unsubscribeAll: Subject<any>;

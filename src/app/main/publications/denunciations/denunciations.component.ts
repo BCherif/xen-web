@@ -37,7 +37,7 @@ export class DenunciationsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _denunciationService: DenunciationsService,
+        public _denunciationService: DenunciationsService,
         private _matDialog: MatDialog
     )
     {

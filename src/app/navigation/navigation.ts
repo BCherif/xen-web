@@ -29,10 +29,10 @@ export const navigation: FuseNavigation[] = [
                      },*/
                     {
                         id: 'articles',
-                        title: 'Articles',
+                        title: 'Nouvelle Article',
                         type: 'item',
                         icon: 'library_books',
-                        url: '/main/publications/articles'
+                        url: '/main/publications/articles/new'
                     },
                     {
                         id: 'legal-folders',
@@ -72,6 +72,28 @@ export const navigation: FuseNavigation[] = [
                 ]
             },
             {
+                id: 'org',
+                title: 'Organs',
+                type: 'collapsable',
+                icon: 'person_add',
+                children: [
+                    {
+                        id: 'electeds',
+                        title: 'Membres',
+                        type: 'item',
+                        icon: 'person_add',
+                        url: '/main/trueometer/electeds'
+                    },
+                    {
+                        id: 'organs',
+                        title: 'Organs',
+                        type: 'item',
+                        icon: 'people',
+                        url: '/main/trueometer/organs'
+                    }
+                ]
+            },
+            {
                 id: 'programs',
                 title: 'Programmes',
                 type: 'item',
@@ -84,20 +106,6 @@ export const navigation: FuseNavigation[] = [
                 type: 'item',
                 icon: 'folder',
                 url: '/main/trueometer/projects'
-            },
-            {
-                id: 'electeds',
-                title: 'Elus',
-                type: 'item',
-                icon: 'person_add',
-                url: '/main/trueometer/electeds'
-            },
-            {
-                id: 'organs',
-                title: 'Organs',
-                type: 'item',
-                icon: 'people',
-                url: '/main/trueometer/organs'
             },
             {
                 id: 'form',

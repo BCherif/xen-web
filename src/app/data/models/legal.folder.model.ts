@@ -1,12 +1,12 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
 import {Article} from './article.model';
-import {STATE_LAW_PROJECT} from '../enums/enums';
+import {STATE_FOLDER} from '../enums/enums';
 
 @Injectable()
 export class LegalFolder implements Deserializable{
     id: number;
-    stateFolder: STATE_LAW_PROJECT;
+    stateFolder: STATE_FOLDER;
     article: Article;
 
     constructor(legalFolder?) {

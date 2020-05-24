@@ -78,6 +78,7 @@
                             <thead>
                             <tr>
                                 <th>N°</th>
+                                <th>Type de Question</th>
                                 <th>Nom</th>
                                 <th>Description</th>
                             </tr>
@@ -85,6 +86,13 @@
                             <tbody>
                             <tr *ngFor="let quiz of quizs; let i=index">
                                 <td>{{i+1}}</td>
+                                <td>
+                                    <mat-select>
+                                        <mat-option *ngFor="let typeQuiz of types"
+                                                    [value]="typeQuiz">{{type[typeQuiz]}}
+                                        </mat-option>
+                                    </mat-select>
+                                </td>
                                 <td>
                                     <textarea [(ngModel)]="quiz.name" id="name_{{i}}" matInput></textarea>
                                 </td>

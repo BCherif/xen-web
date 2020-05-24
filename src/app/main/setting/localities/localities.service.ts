@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Locality} from "../../../data/models/locality.model";
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class LocalitiesService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
+        this.httpOptions = new XensaUtils().httpHeaders();
         this.serviceURL = environment.serviceUrl + '/localities';
         // Set the defaults
         this.onLocalitiesChanged = new BehaviorSubject({});
@@ -58,7 +60,7 @@ export class LocalitiesService implements Resolve<any>
      */
     getLocalities(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.localities = res['response'];
@@ -72,17 +74,17 @@ export class LocalitiesService implements Resolve<any>
     }
 
     getAll() {
-        return this._httpClient.get(this.serviceURL);
+        return this._httpClient.get(this.serviceURL,this.httpOptions);
     }
 
     getById(id: number) {
-        return this._httpClient.get(this.serviceURL + '/' + id);
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
     }
 
     create(locality: Locality) {
-        return this._httpClient.post(this.serviceURL, locality);
+        return this._httpClient.post(this.serviceURL, locality,this.httpOptions);
     }
     update(locality: Locality) {
-        return this._httpClient.put(this.serviceURL, locality);
+        return this._httpClient.put(this.serviceURL, locality,this.httpOptions);
     }
 }

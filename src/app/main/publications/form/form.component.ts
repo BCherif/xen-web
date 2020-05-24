@@ -12,7 +12,7 @@ import {Quiz} from '../../../data/models/quiz.model';
 import {FormService} from './form.service';
 import {Form} from '../../../data/models/form.model';
 import {FormSaveEntity} from '../../../data/wrapper/form.save.entity.model';
-import {CATEGORY_FORM} from '../../../data/enums/enums';
+import {CATEGORY_FORM, TYPE_QUIZ} from '../../../data/enums/enums';
 
 @Component({
     selector     : 'publications-form',
@@ -24,6 +24,8 @@ import {CATEGORY_FORM} from '../../../data/enums/enums';
 export class FormComponent implements OnInit, OnDestroy
 {
     form: Form;
+    types: any[];
+    type = TYPE_QUIZ;
     quizs: Quiz[] = [];
     categoryForm = CATEGORY_FORM;
     categories : any[];
@@ -69,6 +71,7 @@ export class FormComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void {
         this.categories = Object.keys(this.categoryForm);
+        this.types = Object.keys(this.type);
         this.createForm();
         // Subscribe to update request on changes
         this._formService.onFormChanged

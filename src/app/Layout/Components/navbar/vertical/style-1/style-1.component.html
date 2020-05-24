@@ -27,10 +27,12 @@
 
     <div class="user" fxLayout="column" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
 
-        <div class="h3 username">Baba MAIGA</div>
-        <div class="h5 email hint-text mt-8">bsmaiga@tuwindi.org</div>
+        <div class="h3 username">{{currentUser?.firstname}} {{currentUser?.lastname}}</div>
+        <div class="h5 email hint-text mt-8">{{currentUser?.email}}</div>
+        <!--<div class="h3 username">Baba MAIGA</div>
+        <div class="h5 email hint-text mt-8">bsmaiga@tuwindi.org</div>-->
         <div class="avatar-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
-            <img class="avatar" src="assets/images/avatars/Velazquez.jpg">
+            <img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/profile.jpg">
         </div>
 
     </div>

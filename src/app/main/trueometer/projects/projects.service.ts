@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Project} from '../../../data/models/project.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class ProjectsService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
+        this.httpOptions = new XensaUtils().httpHeaders();
         this.serviceURL = environment.serviceUrl + '/projects';
         // Set the defaults
         this.onProjectsChanged = new BehaviorSubject({});
@@ -58,7 +60,7 @@ export class ProjectsService implements Resolve<any>
      */
     getProjects(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.projects = res['response'];
@@ -70,13 +72,14 @@ export class ProjectsService implements Resolve<any>
     }
 
     getById(id: number){
-        return this._httpClient.get(this.serviceURL + '/' + id);
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
     }
 
     create(project: Project) {
-        return this._httpClient.post(this.serviceURL, project);
+        return this._httpClient.post(this.serviceURL, project,this.httpOptions);
     }
+
     update(project: Project) {
-        return this._httpClient.put(this.serviceURL, project);
+        return this._httpClient.put(this.serviceURL, project,this.httpOptions);
     }
 }

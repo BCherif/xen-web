@@ -7,6 +7,8 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import {XensaUtils} from '../../../../../utils/xensa-utils';
+import {User} from '../../../../../data/models/user.model';
 
 @Component({
     selector     : 'navbar-vertical-style-1',
@@ -18,6 +20,9 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
+
+    xensaUtils = new XensaUtils();
+    currentUser: User = this.xensaUtils.getAppUser();
 
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
