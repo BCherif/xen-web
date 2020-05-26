@@ -87,7 +87,7 @@
                             <tr *ngFor="let quiz of quizs; let i=index">
                                 <td>{{i+1}}</td>
                                 <td>
-                                    <mat-select>
+                                    <mat-select placeholder="Choisir un type">
                                         <mat-option *ngFor="let typeQuiz of types"
                                                     [value]="typeQuiz">{{type[typeQuiz]}}
                                         </mat-option>

@@ -9,10 +9,14 @@ import { FuseSearchBarModule, FuseShortcutsModule } from '@fuse/components';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ToolbarComponent } from 'app/layout/components/toolbar/toolbar.component';
+import {AuthResetPasswordFormDialogComponent} from '../../../main/auth/reset-password-form/reset-password-form.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
-        ToolbarComponent
+        ToolbarComponent,
+        AuthResetPasswordFormDialogComponent
     ],
     imports     : [
         RouterModule,
@@ -20,10 +24,14 @@ import { ToolbarComponent } from 'app/layout/components/toolbar/toolbar.componen
         MatIconModule,
         MatMenuModule,
         MatToolbarModule,
-
+        MatInputModule,
+        MatDialogModule,
         FuseSharedModule,
         FuseSearchBarModule,
         FuseShortcutsModule
+    ],
+    entryComponents: [
+        AuthResetPasswordFormDialogComponent
     ],
     exports     : [
         ToolbarComponent

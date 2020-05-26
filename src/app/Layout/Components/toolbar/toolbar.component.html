@@ -46,6 +46,11 @@
                     <span>Inbox</span>
                 </button>-->
 
+                <button mat-menu-item (click)="resetPassword()">
+                    <mat-icon>vpn_key</mat-icon>
+                    <span>Changer mot de passe</span>
+                </button>
+
                 <button mat-menu-item class="" [routerLink]="'/auth/login'">
                     <mat-icon>exit_to_app</mat-icon>
                     <span>Deconnexion</span>

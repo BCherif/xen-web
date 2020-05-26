@@ -10,6 +10,8 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import {User} from '../../../data/models/user.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {MatDialog} from '@angular/material/dialog';
+import {AuthResetPasswordFormDialogComponent} from '../../../main/auth/reset-password-form/reset-password-form.component';
 
 @Component({
     selector     : 'toolbar',
@@ -26,6 +28,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     hiddenNavbar: boolean;
     languages: any;
     navigation: any;
+    dialogRef: any;
     selectedLanguage: any;
     userStatusOptions: any[];
 
@@ -42,11 +45,13 @@ export class ToolbarComponent implements OnInit, OnDestroy
      * @param {FuseConfigService} _fuseConfigService
      * @param {FuseSidebarService} _fuseSidebarService
      * @param {TranslateService} _translateService
+     * @param _matDialog
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
-        private _translateService: TranslateService
+        private _translateService: TranslateService,
+        public _matDialog: MatDialog
     )
     {
         // Set the defaults
@@ -127,6 +132,15 @@ export class ToolbarComponent implements OnInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+    resetPassword() {
+        this.dialogRef = this._matDialog.open(AuthResetPasswordFormDialogComponent, {
+            panelClass: 'reset-form-dialog',
+            data: {
+                action: 'new'
+            }
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
