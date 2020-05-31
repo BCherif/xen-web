@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {Article} from './article.model';
 import {STATE_LAW_PROJECT} from '../enums/enums';
 import {Elected} from './elected.model';
+import {User} from './user.model';
 
 @Injectable()
 export class LawProject implements Deserializable{

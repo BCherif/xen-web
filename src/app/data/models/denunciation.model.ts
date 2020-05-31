@@ -1,6 +1,7 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
 import {Article} from './article.model';
+import {User} from './user.model';
 
 @Injectable()
 export class Denunciation implements Deserializable{
@@ -9,6 +10,7 @@ export class Denunciation implements Deserializable{
     entity: string;
     justification: string;
     article: Article;
+    user: User;
     
     constructor(denunciation?) {
         denunciation = denunciation || {};
@@ -17,6 +19,7 @@ export class Denunciation implements Deserializable{
         this.entity = denunciation.entity;
         this.justification = denunciation.justification;
         this.article = denunciation.article;
+        this.user = denunciation.user;
     }
 
     deserialize(input: any): this {

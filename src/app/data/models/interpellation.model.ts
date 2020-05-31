@@ -4,6 +4,7 @@ import {Elected} from "./elected.model";
 import {Organ} from "./organ.model";
 import {CALL_AS, ORGAN_CALL} from '../enums/enums';
 import {Article} from './article.model';
+import {User} from './user.model';
 
 @Injectable()
 export class Interpellation implements Deserializable{
@@ -15,6 +16,7 @@ export class Interpellation implements Deserializable{
     elected: Elected;
     article: Article;
     organ: Organ;
+    user: User;
 
     constructor(interpellation?) {
         interpellation = interpellation || {};
@@ -26,6 +28,7 @@ export class Interpellation implements Deserializable{
         this.elected = interpellation.elected;
         this.article = interpellation.article;
         this.organ = interpellation.organ;
+        this.user = interpellation.user;
     }
 
     deserialize(input: any): this {

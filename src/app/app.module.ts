@@ -32,7 +32,7 @@ registerLocaleData(localeFr);
 const appRoutes: Routes = [
     {
         path      : '',
-        redirectTo: 'main/publications/articles/new',
+        redirectTo: 'main/governometer/articles',
         pathMatch: 'full'
     },
     {

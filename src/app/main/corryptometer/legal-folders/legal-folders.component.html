@@ -1,0 +1,104 @@
+<div id="legal-folders" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    folder
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Dossiers en justice
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input #filter placeholder="Rechercher un dossier">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+            <button mat-raised-button
+                    [routerLink]="'/main/corryptometer/legal-folders/new'"
+                    class="add-product-button fuse-white mt-24 mt-md-0">
+                <mat-icon>add</mat-icon>
+                <span>Nouveau dossier</span>
+            </button>
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <mat-table class="legal-folders-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="title">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Titre</mat-header-cell>
+                    <mat-cell *matCellDef="let legal">
+                        <p class="text-truncate">{{legal.article.title}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="locality">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
+                    <mat-cell *matCellDef="let legal">
+                        <p class="text-truncate">{{legal?.article?.locality.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="domain">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Domaine</mat-header-cell>
+                    <mat-cell *matCellDef="let legal">
+                        <p class="text-truncate">{{legal?.article?.domain.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="stateFolder">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
+                    <mat-cell *matCellDef="let legal">
+                        <p class="text-truncate">{{stateFolder[legal.stateFolder]}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let legal; columns: displayedColumns;"
+                         class="legal-folder"
+                         matRipple>
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

@@ -1,0 +1,118 @@
+<div id="petition" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/main/participation/petitions'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        {{petition?.article.title}}
+                    </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        Nouvelle pétition
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button
+                    class="save-product-button"
+                    (click)="save()"
+                    [disabled]="petitionForm.invalid"
+                    *ngIf="pageType ==='new'">
+                <span>Enregistrer</span>
+            </button>
+
+            <button mat-raised-button
+                    class="save-product-button"
+                    [disabled]="petitionForm.invalid || petitionForm.pristine"
+                    *ngIf="pageType ==='edit'">
+                <span>Modifier</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="publicationForm" [formGroup]="petitionForm" class="product w-100-p"
+                      fxLayout="column" fxFlex>
+
+                    <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Titre</mat-label>
+                                <input name="title" formControlName="title" matInput required>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Decideur</mat-label>
+                                <input name="decisionMaker" formControlName="decisionMaker" matInput required>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Contenu</mat-label>
+                                <textarea name="content" formControlName="content"
+                                          matInput type="text"
+                                          required
+                                          max-rows="5">
+                                </textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Localité</mat-label>
+                                <mat-select formControlName="locality"
+                                            (selectionChange)="findByLocalitySelected($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let locality of localities"
+                                                [value]="locality.id">{{locality.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Domaine</mat-label>
+                                <mat-select formControlName="domain"
+                                            (selectionChange)="findDomainSelected($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let domain of domains"
+                                                [value]="domain.id">{{domain.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

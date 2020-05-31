@@ -21,81 +21,51 @@ import {FuseWidgetModule} from '@fuse/components/widget/widget.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {FormsService} from './forms/forms.service';
-import {FormsComponent} from './forms/forms.component';
-import {FormComponent} from './form/form.component';
-import {FormService} from './form/form.service';
-import {QuizzesService} from './quizzes/quizzes.service';
-import {QuizzesComponent} from './quizzes/quizzes.component';
-import {MatMenuModule} from '@angular/material/menu';
-import {ResponsesService} from './responses/responses.service';
-import {ResponsesComponent} from './responses/responses.component';
-import {ResponseService} from './response/response.service';
-import {ResponseComponent} from './response/response.component';
 
+import {NgxMaskModule, IConfig} from 'ngx-mask';
+import {MatMenuModule} from '@angular/material/menu';
+import {LegalFoldersComponent} from './legal-folders/legal-folders.component';
+import {LegalFoldersService} from './legal-folders/legal-folders.service';
+import {LegalFolderService} from './legal-folder/legal-folder.service';
+import {LegalFolderComponent} from './legal-folder/legal-folder.component';
+
+
+const maskConfig: Partial<IConfig> = {
+    validation: false,
+};
 
 const routes: Routes = [
     {
-        path: 'quizzes',
-        component: QuizzesComponent,
+        path: 'legal-folders',
+        component: LegalFoldersComponent,
         resolve: {
-            data: QuizzesService
+            data: LegalFoldersService
         }
     },
     {
-        path: 'responses',
-        component: ResponsesComponent,
+        path: 'legal-folders/:id',
+        component: LegalFolderComponent,
         resolve: {
-            data: ResponsesService
+            data: LegalFolderService
         }
     },
     {
-        path: 'forms',
-        component: FormsComponent,
+        path: 'legal-folders/:id/:label',
+        component: LegalFolderComponent,
         resolve: {
-            data: FormsService
-        }
-    },
-    {
-        path: 'forms/:id',
-        component: FormComponent,
-        resolve: {
-            data: FormService
-        }
-    },
-    {
-        path: 'forms/:id/:label',
-        component: FormComponent,
-        resolve: {
-            data: FormService
-        }
-    },
-    {
-        path: 'responses/:id',
-        component: ResponseComponent,
-        resolve: {
-            data: ResponseService
-        }
-    },
-    {
-        path: 'responses/:id/:label',
-        component: ResponseComponent,
-        resolve: {
-            data: ResponseService
+            data: LegalFolderService
         }
     }
 ];
 
 @NgModule({
     declarations: [
-        QuizzesComponent,
-        FormsComponent,
-        FormComponent,
-        ResponsesComponent,
-        ResponseComponent
+        LegalFoldersComponent,
+        LegalFolderComponent
     ],
     imports: [
         RouterModule.forChild(routes),
+        NgxMaskModule.forRoot(maskConfig),
         MatButtonModule,
         MatChipsModule,
         MatExpansionModule,
@@ -125,5 +95,5 @@ const routes: Routes = [
     providers: [],
     entryComponents: []
 })
-export class PublicationsModule {
+export class CorryptometerModule {
 }

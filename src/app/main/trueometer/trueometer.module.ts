@@ -35,19 +35,12 @@ import {RequestsComponent} from "./requests/requests.component";
 import {RequestsService} from "./requests/requests.service";
 import {RequestComponent} from './request/request.component';
 import {RequestService} from './request/request.service';
-import {InterpellationsComponent} from './interpellations/interpellations.component';
-import {InterpellationsService} from './interpellations/interpellations.service';
-import {InterpellationComponent} from './interpellation/interpellation.component';
-import {InterpellationService} from './interpellation/interpellation.service';
 import {MatMenuModule} from '@angular/material/menu';
 import {RequestAnswerComponent} from './request-answer/request-answer.component';
 import {RequestAnswerService} from './request-answer/request-answer.service';
 import {VerificationDetailsComponent} from './verification-details/verification-details.component';
-import {VerificationDetailsService} from './verification-details/verification-details.service';
 import {RequestDetailsComponent} from './request-details/request-details.component';
 import {RequestDetailsService} from './request-details/request-details.service';
-import {InterpellationDetailsComponent} from './interpellation-details/interpellation-details.component';
-import {InterpellationDetailsService} from './interpellation-details/interpellation-details.service';
 import {ProjectsService} from './projects/projects.service';
 import {ProjectsComponent} from './projects/projects.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
@@ -102,27 +95,6 @@ const routes: Routes = [
         }
     },
     {
-        path     : 'interpellations',
-        component: InterpellationsComponent,
-        resolve  : {
-            data: InterpellationsService
-        }
-    },
-    {
-        path     : 'interpellations/:id',
-        component: InterpellationComponent,
-        resolve  : {
-            data: InterpellationService
-        }
-    },
-    {
-        path     : 'interpellations/:id/:label',
-        component: InterpellationComponent,
-        resolve  : {
-            data: InterpellationService
-        }
-    },
-    {
         path     : 'organs',
         component: OrgansComponent,
         resolve  : {
@@ -141,20 +113,6 @@ const routes: Routes = [
         component: RequestDetailsComponent,
         resolve  : {
             data: RequestDetailsService
-        }
-    },
-    {
-        path     : 'interpellation-details/:id',
-        component: InterpellationDetailsComponent,
-        resolve  : {
-            data: InterpellationDetailsService
-        }
-    },
-    {
-        path     : 'verification-details/:id',
-        component: VerificationDetailsComponent,
-        resolve  : {
-            data: VerificationDetailsService
         }
     },
     {
@@ -198,9 +156,6 @@ const routes: Routes = [
         ProjectComponent,
         RequestDetailsComponent,
         VerificationDetailsComponent,
-        InterpellationsComponent,
-        InterpellationComponent,
-        InterpellationDetailsComponent,
         SettingOrganFormDialogComponent,
         RequestAnswerComponent,
         SettingElectedFormDialogComponent,

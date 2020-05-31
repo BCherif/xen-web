@@ -13,11 +13,21 @@ export enum STATE_PROJECT {
 }
 
 export enum CATEGORY {
+    CORRUPTOMETER = 'Corruptomètre',
+    GOVERNOMETER = 'Gouvernomètre',
+    CITIZEN_PARTICIPATION = 'Participation Citoyenne'
+}
+
+export enum SUB_CATEGORY {
+    POLITICAL_GOVERNANCE = 'Gouvernance politique et economique',
+    LOCAL_GOVERNANCE = 'Gouvernance locale',
+    PEACE_AND_SECURITY = 'Paix et sécurité',
+    JUSTICE = 'Justice',
     LAW_PROJECT = 'Projet de lois',
     DENUNCIATION = 'Dénonciation',
-    INTERPELLATION = 'Interpellation',
     PETITION = 'Pétition',
-    LEGAL_FILE = 'Dossier en justice'
+    INTERPELLATION = 'Interpellation',
+    LEGAL_FOLDER = 'Dossier en justice'
 }
 
 export enum STATE_FOLDER {

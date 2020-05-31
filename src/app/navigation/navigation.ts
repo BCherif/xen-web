@@ -8,66 +8,68 @@ export const navigation: FuseNavigation[] = [
         type: 'group',
         children: [
             {
-                id: 'publications',
-                title: 'Publications',
+                id: 'governometer',
+                title: 'Gouvernomètre',
                 type: 'collapsable',
                 icon: 'library_books',
                 children: [
-                    /* {
-                         id   : 'requests',
-                         title: 'Demandes',
-                         type : 'item',
-                         icon: 'priority_high',
-                         url  : '/main/trueometer/requests'
-                     },
-                     {
-                         id   : 'verifications',
-                         title: 'Vérifications',
-                         type : 'item',
-                         icon: 'check',
-                         url  : '/main/trueometer/verifications'
-                     },*/
                     {
                         id: 'articles',
-                        title: 'Nouvelle Article',
+                        title: 'Publications',
                         type: 'item',
                         icon: 'library_books',
-                        url: '/main/publications/articles/new'
-                    },
+                        url: '/main/governometer/articles'
+                    }
+                ]
+            },
+            {
+                id: 'corryptometer',
+                title: 'Corruptomètre',
+                type: 'collapsable',
+                icon: 'folder',
+                children: [
                     {
                         id: 'legal-folders',
                         title: 'Dossiers en justice',
                         type: 'item',
                         icon: 'folder',
-                        url: '/main/publications/legal-folders'
-                    },
+                        url: '/main/corryptometer/legal-folders'
+                    }
+                ]
+            },
+            {
+                id: 'participation',
+                title: 'Participation Citoyenne',
+                type: 'collapsable',
+                icon: 'person_add',
+                children: [
                     {
                         id: 'law-projects',
                         title: 'Projet de Lois',
                         type: 'item',
                         icon: 'gavel',
-                        url: '/main/publications/law-projects'
+                        url: '/main/participation/law-projects'
                     },
                     {
                         id: 'petitions',
                         title: 'Pétitions',
                         type: 'item',
                         icon: 'library_books',
-                        url: '/main/publications/petitions'
+                        url: '/main/participation/petitions'
                     },
                     {
                         id: 'denunciations',
                         title: 'Dénonciations',
                         type: 'item',
                         icon: 'library_books',
-                        url: '/main/publications/denunciations'
+                        url: '/main/participation/denunciations'
                     },
                     {
                         id: 'interpellations',
                         title: 'Interpellations',
                         type: 'item',
                         icon: 'volume_up',
-                        url: '/main/trueometer/interpellations'
+                        url: '/main/participation/interpellations'
                     }
                 ]
             },
