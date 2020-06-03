@@ -47,6 +47,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     locality: Locality;
     jurisdictions: Jurisdiction[];
     jurisdiction: Jurisdiction;
+    minDate: Date;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -234,4 +235,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         });
     }
 
+    onChangeDate(e) {
+        this.minDate = new Date(e.value);
+    }
 }

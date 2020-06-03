@@ -164,6 +164,7 @@
                             <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
                                 <mat-label>Date d'accusation</mat-label>
                                 <input [matDatepicker]="dateOfCharge"
+                                       (dateChange)="onChangeDate($event)"
                                        formControlName="dateOfCharge" matInput
                                        name="dateOfCharge">
                                 <mat-datepicker-toggle [for]="dateOfCharge" matSuffix></mat-datepicker-toggle>
@@ -173,7 +174,7 @@
                                 <mat-label>Date de jugement</mat-label>
                                 <input [matDatepicker]="dateOfJudment"
                                        formControlName="dateOfJudment" matInput
-                                       name="dateOfJudment">
+                                       name="dateOfJudment" [min]="minDate">
                                 <mat-datepicker-toggle [for]="dateOfJudment" matSuffix></mat-datepicker-toggle>
                                 <mat-datepicker #dateOfJudment></mat-datepicker>
                             </mat-form-field>
