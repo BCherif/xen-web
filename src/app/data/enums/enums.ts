@@ -1,8 +1,6 @@
 export enum JUDGMENT {
-    TRUE = 'Vrai',
-    FALSE = 'Faux',
-    PARTLY_TRUE = 'Partiellement Vrai',
-    DANGEROUS = 'Dangereux'
+    CULPABLE = 'Coupable',
+    NOT_CULPABLE = 'Non coupable'
 }
 
 export enum STATE_PROJECT {
@@ -31,8 +29,8 @@ export enum SUB_CATEGORY {
 }
 
 export enum STATE_FOLDER {
-    OPEN = 'Ouvert',
-    CLOSE = 'Fermé',
+    WITHOUT_CONTINUATION = 'Sans Suite',
+    CLOSE = 'Clos',
     IN_PROGRESS = 'En cours'
 }
 

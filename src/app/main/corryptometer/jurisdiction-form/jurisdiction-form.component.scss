@@ -1,6 +1,6 @@
 @import "src/@fuse/scss/fuse";
 
-.program-form-dialog {
+.jurisdiction-form-dialog {
 
     @include media-breakpoint('xs') {
         width: 100%;
@@ -15,6 +15,7 @@
 
         .mat-toolbar {
             flex: 1 0 auto;
+            color: #006400 !important;
             min-height: initial;
         }
 

@@ -82,8 +82,8 @@ export class InterpellationComponent implements OnInit, OnDestroy {
     constructor(
         private _interpellationService: InterpellationService,
         private _electedsService: ElectedsService,
-        private _categoriesService: CategoriesService,
         private _organsService: OrgansService,
+        private _categoriesService: CategoriesService,
         private _formBuilder: FormBuilder,
         private _location: Location,
         private _matSnackBar: MatSnackBar,
@@ -168,6 +168,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         this.interpellationForm = this._formBuilder.group({
             id: new FormControl(''),
             title: new FormControl(''),
+            author: new FormControl(''),
             content: new FormControl('', Validators.required),
             organCall: new FormControl('', Validators.required),
             callAs: new FormControl('', Validators.required),
@@ -248,6 +249,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         this.interpellationSaveEntity = new InterpellationSaveEntity();
         this.interpellation.interpelDate = new Date();
         this.interpellation.callAs = this.interpellationForm.get('callAs').value;
+        this.interpellation.author = this.interpellationForm.get('author').value;
         this.interpellation.organCall = this.interpellationForm.get('organCall').value;
         this.interpellation.elected = this.elected;
         this.interpellation.organ = this.organ;

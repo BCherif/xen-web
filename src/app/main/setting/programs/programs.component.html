@@ -35,7 +35,7 @@
 
             <!-- ADD BUTTON -->
             <button mat-raised-button
-                    (click)="newProgram()"
+                    [routerLink]="'/main/setting/programs/new'"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
                 <span>Nouveau Programme</span>
@@ -54,11 +54,32 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar>
 
-                <!-- Name Column -->
+             <!--
                 <ng-container matColumnDef="years">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Période d'exécution</mat-header-cell>
                     <mat-cell *matCellDef="let program">
                         <p class="text-truncate">{{program.years}}</p>
+                    </mat-cell>
+                </ng-container>-->
+
+                <ng-container matColumnDef="startDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Date début</mat-header-cell>
+                    <mat-cell *matCellDef="let program">
+                        <p class="text-truncate">{{program.startDate | date: 'dd/MM/yyyy'}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="endDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Date fin</mat-header-cell>
+                    <mat-cell *matCellDef="let program">
+                        <p class="text-truncate">{{program.endDate | date: 'dd/MM/yyyy'}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="organ">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Organ</mat-header-cell>
+                    <mat-cell *matCellDef="let program">
+                        <p class="text-truncate">{{program?.organ ? program.organ?.name : 'Ne concerna pas un organ'}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -66,9 +87,10 @@
                 <ng-container matColumnDef="elected">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Elus</mat-header-cell>
                     <mat-cell *matCellDef="let program">
-                        <p class="text-truncate">
-                            {{program.elected.firstname}} {{program.elected.lastname}}
+                        <p *ngIf="program.elected" class="text-truncate">
+                            {{program?.elected?.firstname}} {{program?.elected?.lastname}}
                         </p>
+                        <p *ngIf="!program.elected" class="text-truncate">Ne concerna pas un élus</p>
                     </mat-cell>
                 </ng-container>
 
@@ -76,7 +98,7 @@
 
                 <mat-row *matRowDef="let program; columns: displayedColumns;"
                          class="program"
-                         (click)="editProgram(program)"
+                         [routerLink]="'/main/setting/programs/'+program.id+'/'+program.title"
                          matRipple>
                 </mat-row>
 

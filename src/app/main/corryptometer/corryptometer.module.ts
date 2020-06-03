@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatRippleModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -22,12 +23,16 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
+
 import {NgxMaskModule, IConfig} from 'ngx-mask';
 import {MatMenuModule} from '@angular/material/menu';
 import {LegalFoldersComponent} from './legal-folders/legal-folders.component';
 import {LegalFoldersService} from './legal-folders/legal-folders.service';
 import {LegalFolderService} from './legal-folder/legal-folder.service';
 import {LegalFolderComponent} from './legal-folder/legal-folder.component';
+import {JurisdictionsService} from './jurisdictions/jurisdictions.service';
+import {JurisdictionsComponent} from './jurisdictions/jurisdictions.component';
+import {CorryptometerJurisdictionFormDialogComponent} from './jurisdiction-form/jurisdiction-form.component';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -35,6 +40,13 @@ const maskConfig: Partial<IConfig> = {
 };
 
 const routes: Routes = [
+    {
+        path: 'jurisdictions',
+        component: JurisdictionsComponent,
+        resolve: {
+            data: JurisdictionsService
+        }
+    },
     {
         path: 'legal-folders',
         component: LegalFoldersComponent,
@@ -60,8 +72,10 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
+        JurisdictionsComponent,
         LegalFoldersComponent,
-        LegalFolderComponent
+        LegalFolderComponent,
+        CorryptometerJurisdictionFormDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -90,10 +104,13 @@ const routes: Routes = [
         FuseWidgetModule,
         MatDialogModule,
         MatToolbarModule,
-        MatMenuModule
+        MatMenuModule,
+        MatDatepickerModule
     ],
     providers: [],
-    entryComponents: []
+    entryComponents: [
+        CorryptometerJurisdictionFormDialogComponent
+    ]
 })
 export class CorryptometerModule {
 }

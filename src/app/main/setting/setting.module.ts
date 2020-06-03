@@ -16,6 +16,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AgmCoreModule } from '@agm/core';
 
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import {CategoriesService} from "./categories/categories.service";
@@ -38,7 +40,10 @@ import {DomainsService} from './domains/domains.service';
 import {SettingDomainFormDialogComponent} from './domain-form/domain-form.component';
 import {ProgramsService} from './programs/programs.service';
 import {ProgramsComponent} from './programs/programs.component';
-import {SettingProgramFormDialogComponent} from './program-form/program-form.component';
+import {ProgramService} from './program/program.service';
+import {ProgramComponent} from './program/program.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
 
 const routes: Routes = [
     {
@@ -82,7 +87,21 @@ const routes: Routes = [
         resolve  : {
             data: ProgramsService
         }
-    }
+    },
+    {
+        path: 'programs/:id',
+        component: ProgramComponent,
+        resolve: {
+            data: ProgramService
+        }
+    },
+    {
+        path: 'programs/:id/:label',
+        component: ProgramComponent,
+        resolve: {
+            data: ProgramService
+        }
+    },
 ];
 
 @NgModule({
@@ -90,6 +109,7 @@ const routes: Routes = [
         CategoriesComponent,
         CuttingsComponent,
         ProgramsComponent,
+        ProgramComponent,
         SettingCategoryFormDialogComponent,
         SettingCuttingFormDialogComponent,
         LocalitiesComponent,
@@ -97,8 +117,7 @@ const routes: Routes = [
         DomainsComponent,
         SettingLocalityFormDialogComponent,
         SettingAxeFormDialogComponent,
-        SettingDomainFormDialogComponent,
-        SettingProgramFormDialogComponent
+        SettingDomainFormDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -118,6 +137,7 @@ const routes: Routes = [
         MatTooltipModule,
 
         NgxChartsModule,
+        NgxDaterangepickerMd.forRoot(),
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyD81ecsCj4yYpcXSLFcYU97PvRsE_X8Bx8'
         }),
@@ -125,7 +145,10 @@ const routes: Routes = [
         FuseSharedModule,
         FuseWidgetModule,
         MatDialogModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatDatepickerModule,
+        SatDatepickerModule,
+        SatNativeDateModule
     ],
     providers   : [],
     entryComponents: [
@@ -133,8 +156,7 @@ const routes: Routes = [
         SettingCuttingFormDialogComponent,
         SettingLocalityFormDialogComponent,
         SettingAxeFormDialogComponent,
-        SettingDomainFormDialogComponent,
-        SettingProgramFormDialogComponent
+        SettingDomainFormDialogComponent
     ]
 })
 export class SettingModule

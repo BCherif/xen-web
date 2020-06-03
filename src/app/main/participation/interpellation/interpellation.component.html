@@ -123,6 +123,13 @@
                             </mat-form-field>
                         </div>
 
+                        <div  fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field *ngIf="asCallSelected === 'NOT_ANONYMOUS'" appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Auteur de l'interpellation</mat-label>
+                                <input name="author" formControlName="author" matInput required>
+                            </mat-form-field>
+                        </div>
+
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Localité</mat-label>

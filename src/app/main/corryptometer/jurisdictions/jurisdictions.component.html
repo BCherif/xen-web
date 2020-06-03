@@ -1,4 +1,4 @@
-<div id="legal-folders" class="page-layout carded fullwidth inner-scroll">
+<div id="jurisdictions" class="page-layout carded fullwidth inner-scroll">
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
@@ -16,10 +16,10 @@
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    folder
+                    home
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Dossiers en justice
+                    Juridictions
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -28,17 +28,18 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Rechercher un dossier">
+                    <input #filter placeholder="Rechercher une juridiction">
                 </div>
             </div>
             <!-- / SEARCH -->
 
-            <button mat-raised-button
-                    [routerLink]="'/main/corryptometer/legal-folders/new'"
+            <!-- ADD BUTTON -->
+            <button mat-raised-button (click)="newJurisdiction()"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau dossier</span>
+                <span>Nouvelle juridiction</span>
             </button>
+            <!-- / ADD BUTTON -->
 
         </div>
         <!-- / HEADER -->
@@ -46,45 +47,33 @@
         <!-- CONTENT CARD -->
         <div class="content-card">
 
-            <mat-table class="legal-folders-table"
+            <mat-table class="jurisdictions-table"
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar>
 
                 <!-- Name Column -->
-                <ng-container matColumnDef="title">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Titre</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal.article.title}}</p>
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
+                    <mat-cell *matCellDef="let jurisdiction">
+                        <p class="text-truncate">{{jurisdiction.name}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="locality">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal?.article?.locality.name}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="domain">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Domaine</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal?.article?.domain.name}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="stateFolder">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Etat</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{stateFolder[legal.stateFolder]}}</p>
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                    <mat-cell *matCellDef="let jurisdiction">
+                        <p class="text-truncate">{{jurisdiction.description}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let legal; columns: displayedColumns;"
-                         class="legal-folder"
+                <mat-row *matRowDef="let jurisdiction; columns: displayedColumns;"
+                         class="jurisdiction"
+                         (click)="editJurisdiction(jurisdiction)"
                          matRipple>
                 </mat-row>
 

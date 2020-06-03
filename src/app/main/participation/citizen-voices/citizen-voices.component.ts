@@ -9,20 +9,20 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
 import {MatDialog} from "@angular/material/dialog";
-import {ProgramsService} from './programs.service';
+import {CitizenVoicesService} from './citizen-voices.service';
 
 @Component({
-    selector     : 'setting-programs',
-    templateUrl  : './programs.component.html',
-    styleUrls    : ['./programs.component.scss'],
+    selector     : 'participation-citizen-voices',
+    templateUrl  : './citizen-voices.component.html',
+    styleUrls    : ['./citizen-voices.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class ProgramsComponent implements OnInit
+export class CitizenVoicesComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['startDate','endDate', 'elected','organ'];
+    displayedColumns = ['title','user','locality','domain'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -37,7 +37,7 @@ export class ProgramsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _programsService: ProgramsService,
+        public _citizenVoicesService: CitizenVoicesService,
         private _matDialog: MatDialog
     )
     {
@@ -53,7 +53,7 @@ export class ProgramsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._programsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._citizenVoicesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -81,19 +81,19 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Constructor
      *
-     * @param _programsService
+     * @param _citizenVoicesService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _programsService: ProgramsService,
+        public _citizenVoicesService: CitizenVoicesService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     )
     {
         super();
 
-        this.filteredData = this._programsService.programs;
+        this.filteredData = this._citizenVoicesService.citizenVoices;
     }
 
     /**
@@ -104,7 +104,7 @@ export class FilesDataSource extends DataSource<any>
     connect(): Observable<any[]>
     {
         const displayDataChanges = [
-            this._programsService.onProgramsChanged,
+            this._citizenVoicesService.onCitizenVoicesChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -113,7 +113,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._programsService.programs.slice();
+                        let data = this._citizenVoicesService.citizenVoices.slice();
 
                         data = this.filterData(data);
 
@@ -192,11 +192,8 @@ export class FilesDataSource extends DataSource<any>
 
             switch ( this._matSort.active )
             {
-                case 'years':
-                    [propertyA, propertyB] = [a.years, b.years];
-                    break;
-                case 'elected':
-                    [propertyA, propertyB] = [a.elected.name, b.elected.name];
+                case 'title':
+                    [propertyA, propertyB] = [a.title, b.title];
                     break;
             }
 

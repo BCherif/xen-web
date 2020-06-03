@@ -92,6 +92,7 @@ $typography: mat-typography-config(
 @import "src/app/main/trueometer/requests/requests.theme";
 @import "src/app/main/trueometer/projects/projects.theme";
 @import "src/app/main/participation/interpellations/interpellations.theme";
+@import "src/app/main/participation/citizen-voices/citizen-voices.theme";
 @import "src/app/main/governometer/articles/articles.theme";
 @import "src/app/main/norme/law-categories/law-categories.theme";
 @import "src/app/main/norme/laws/laws.theme";
@@ -102,6 +103,7 @@ $typography: mat-typography-config(
 @import "src/app/main/participation/denunciations/denunciations.theme";
 @import "src/app/main/participation/petitions/petitions.theme";
 @import "src/app/main/corryptometer/legal-folders/legal-folders.theme";
+@import "src/app/main/corryptometer/jurisdictions/jurisdictions.theme";
 @import "src/app/main/participation/law-projects/law-projects.theme";
 @import "src/app/main/norme/law-articles/law-articles.theme";
 
@@ -128,7 +130,9 @@ $typography: mat-typography-config(
     @include norme-laws-theme($theme);
     @include login-theme($theme);
     @include corryptometer-legal-folders-theme($theme);
+    @include corryptometer-jurisdictions-theme($theme);
     @include participation-law-projects-theme($theme);
+    @include participation-citizen-voices-theme($theme);
     @include participation-denunciations-theme($theme);
     @include publications-petitions-theme($theme);
     @include publications-forms-theme($theme);

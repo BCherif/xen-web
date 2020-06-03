@@ -9,20 +9,21 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
 import {MatDialog} from "@angular/material/dialog";
-import {ProgramsService} from './programs.service';
+import {JurisdictionsService} from './jurisdictions.service';
+import {CorryptometerJurisdictionFormDialogComponent} from '../jurisdiction-form/jurisdiction-form.component';
 
 @Component({
-    selector     : 'setting-programs',
-    templateUrl  : './programs.component.html',
-    styleUrls    : ['./programs.component.scss'],
+    selector     : 'corryptometer-jurisdictions',
+    templateUrl  : './jurisdictions.component.html',
+    styleUrls    : ['./jurisdictions.component.scss'],
     animations   : fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class ProgramsComponent implements OnInit
+export class JurisdictionsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['startDate','endDate', 'elected','organ'];
+    displayedColumns = ['name', 'description'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -37,7 +38,7 @@ export class ProgramsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _programsService: ProgramsService,
+        private _jurisdictionsService: JurisdictionsService,
         private _matDialog: MatDialog
     )
     {
@@ -53,7 +54,7 @@ export class ProgramsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        this.dataSource = new FilesDataSource(this._programsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._jurisdictionsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -71,6 +72,25 @@ export class ProgramsComponent implements OnInit
             });
     }
 
+    newJurisdiction(): void {
+        this.dialogRef = this._matDialog.open(CorryptometerJurisdictionFormDialogComponent, {
+            panelClass: 'jurisdiction-form-dialog',
+            data      : {
+                action: 'new'
+            }
+        });
+    }
+
+
+    editJurisdiction(jurisdiction) {
+        this.dialogRef = this._matDialog.open(CorryptometerJurisdictionFormDialogComponent, {
+            panelClass: 'jurisdiction-form-dialog',
+            data      : {
+                action: 'edit',
+                jurisdiction:jurisdiction
+            }
+        });
+    }
 }
 
 export class FilesDataSource extends DataSource<any>
@@ -81,19 +101,19 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Constructor
      *
-     * @param _programsService
+     * @param _jurisdictionsService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _programsService: ProgramsService,
+        private _jurisdictionsService: JurisdictionsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     )
     {
         super();
 
-        this.filteredData = this._programsService.programs;
+        this.filteredData = this._jurisdictionsService.jurisdictions;
     }
 
     /**
@@ -104,7 +124,7 @@ export class FilesDataSource extends DataSource<any>
     connect(): Observable<any[]>
     {
         const displayDataChanges = [
-            this._programsService.onProgramsChanged,
+            this._jurisdictionsService.onJurisdictionsChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -113,7 +133,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._programsService.programs.slice();
+                        let data = this._jurisdictionsService.jurisdictions.slice();
 
                         data = this.filterData(data);
 
@@ -192,11 +212,11 @@ export class FilesDataSource extends DataSource<any>
 
             switch ( this._matSort.active )
             {
-                case 'years':
-                    [propertyA, propertyB] = [a.years, b.years];
+                case 'name':
+                    [propertyA, propertyB] = [a.name, b.name];
                     break;
-                case 'elected':
-                    [propertyA, propertyB] = [a.elected.name, b.elected.name];
+                case 'description':
+                    [propertyA, propertyB] = [a.description, b.description];
                     break;
             }
 

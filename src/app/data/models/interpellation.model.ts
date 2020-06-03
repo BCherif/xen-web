@@ -11,6 +11,7 @@ export class Interpellation implements Deserializable{
     id: number;
     interpelDate: Date = new Date();
     response: string;
+    author: string;
     callAs: CALL_AS;
     organCall: ORGAN_CALL;
     elected: Elected;
@@ -23,6 +24,7 @@ export class Interpellation implements Deserializable{
         this.id = interpellation.id;
         this.interpelDate = interpellation.interpelDate;
         this.response = interpellation.response;
+        this.author = interpellation.author;
         this.callAs = interpellation.callAs;
         this.organCall = interpellation.organCall;
         this.elected = interpellation.elected;

@@ -40,6 +40,8 @@ import {PetitionComponent} from './petition/petition.component';
 import {PetitionService} from './petition/petition.service';
 import {LawProjectService} from './law-project/law-project.service';
 import {LawProjectComponent} from './law-project/law-project.component';
+import {CitizenVoicesService} from './citizen-voices/citizen-voices.service';
+import {CitizenVoicesComponent} from './citizen-voices/citizen-voices.component';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -47,6 +49,13 @@ const maskConfig: Partial<IConfig> = {
 };
 
 const routes: Routes = [
+    {
+        path: 'citizen-voices',
+        component: CitizenVoicesComponent,
+        resolve: {
+            data: CitizenVoicesService
+        }
+    },
     {
         path: 'denunciations',
         component: DenunciationsComponent,
@@ -142,7 +151,8 @@ const routes: Routes = [
         PetitionsComponent,
         LawProjectsComponent,
         PetitionComponent,
-        LawProjectComponent
+        LawProjectComponent,
+        CitizenVoicesComponent
     ],
     imports: [
         RouterModule.forChild(routes),

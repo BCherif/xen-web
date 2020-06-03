@@ -1,6 +1,9 @@
 // Import Fuse core library
 @import "@fuse/scss/core";
 
+//Import saturn-datepicker
+@import '~saturn-datepicker/bundle.css';
+
 // Import app.theme.scss
 @import "app/app.theme";
 

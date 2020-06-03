@@ -78,11 +78,4 @@ export class ProgramsService implements Resolve<any>
     getById(id: number) {
         return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
     }
-
-    create(program: Program) {
-        return this._httpClient.post(this.serviceURL, program,this.httpOptions);
-    }
-    update(program: Program) {
-        return this._httpClient.put(this.serviceURL, program,this.httpOptions);
-    }
 }

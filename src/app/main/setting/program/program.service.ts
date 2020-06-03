@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
-import {Article} from '../../../data/models/article.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {Program} from '../../../data/models/program.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ArticlesService implements Resolve<any>
+export class ProgramService implements Resolve<any>
 {
-    articles: Article[];
-    onArticlesChanged: BehaviorSubject<any>;
+    routeParams: any;
+    program: Program;
+    onProgramChanged: BehaviorSubject<any>;
     readonly httpOptions: any;
     readonly serviceURL: string;
-    token: string;
+
     /**
      * Constructor
      *
@@ -26,10 +27,9 @@ export class ArticlesService implements Resolve<any>
     )
     {
         // Set the defaults
-        this.onArticlesChanged = new BehaviorSubject({});
+        this.onProgramChanged = new BehaviorSubject({});
         this.httpOptions = new XensaUtils().httpHeaders();
-        this.serviceURL = environment.serviceUrl + '/articles';
-        this.token = new XensaUtils().getToken();
+        this.serviceURL = environment.serviceUrl + '/programs';
     }
 
     /**
@@ -41,10 +41,12 @@ export class ArticlesService implements Resolve<any>
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
     {
+        this.routeParams = route.params;
+
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getArticles()
+                this.getProgram()
             ]).then(
                 () => {
                     resolve();
@@ -55,21 +57,30 @@ export class ArticlesService implements Resolve<any>
     }
 
     /**
-     * Get articles
+     * Get program
      *
      * @returns {Promise<any>}
      */
-    getArticles(): Promise<any> {
+    getProgram(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL, this.httpOptions)
-                .subscribe((res: any) => {
-                    if (res['status'] === 'OK') {
-                        this.articles = res['response'];
-                        this.onArticlesChanged.next(this.articles);
-                        resolve(res['response']);
-                    }
-                }, reject);
+            if (this.routeParams.id === 'new') {
+                this.onProgramChanged.next(false);
+                resolve(false);
+            } else {
+                this._httpClient.get(this.serviceURL + '/' + this.routeParams.id, this.httpOptions)
+                    .subscribe((response: any) => {
+                        this.program = response['response'];
+                        this.onProgramChanged.next(this.program);
+                        resolve(response['response']);
+                    }, reject);
+            }
         });
     }
 
+    create(program: Program) {
+        return this._httpClient.post(this.serviceURL, program,this.httpOptions);
+    }
+    update(program: Program) {
+        return this._httpClient.put(this.serviceURL, program,this.httpOptions);
+    }
 }

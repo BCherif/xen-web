@@ -1,4 +1,4 @@
-<div id="legal-folders" class="page-layout carded fullwidth inner-scroll">
+<div id="citizen-voices" class="page-layout carded fullwidth inner-scroll">
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
@@ -16,10 +16,10 @@
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    folder
+                    people
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Dossiers en justice
+                    Voix citoyen
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -28,25 +28,23 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Rechercher un dossier">
+                    <input #filter placeholder="Rechercher une voix">
                 </div>
             </div>
             <!-- / SEARCH -->
-
-            <button mat-raised-button
-                    [routerLink]="'/main/corryptometer/legal-folders/new'"
+          <!--  <button mat-raised-button
+                    [routerLink]="'/main/participation/denunciations/new'"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau dossier</span>
-            </button>
+                <span>Nouvelle dénonciation</span>
+            </button>-->
 
         </div>
         <!-- / HEADER -->
 
         <!-- CONTENT CARD -->
         <div class="content-card">
-
-            <mat-table class="legal-folders-table"
+            <mat-table class="citizen-voices-table"
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"
@@ -55,36 +53,37 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="title">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Titre</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal.article.title}}</p>
+                    <mat-cell *matCellDef="let citizenVoice">
+                        <p class="text-truncate">{{citizenVoice.title}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="user">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Citoyen</mat-header-cell>
+                    <mat-cell *matCellDef="let citizenVoice">
+                        <p class="text-truncate">{{citizenVoice?.user?.lastname}} {{citizenVoice?.user?.firstname}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal?.article?.locality.name}}</p>
+                    <mat-cell *matCellDef="let citizenVoice">
+                        <p class="text-truncate">{{citizenVoice?.locality.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="domain">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Domaine</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal?.article?.domain.name}}</p>
+                    <mat-cell *matCellDef="let citizenVoice">
+                        <p class="text-truncate">{{citizenVoice?.domain.name}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="stateFolder">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Etat</mat-header-cell>
-                    <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{stateFolder[legal.stateFolder]}}</p>
-                    </mat-cell>
-                </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let legal; columns: displayedColumns;"
-                         class="legal-folder"
+                <mat-row *matRowDef="let citizenVoice; columns: displayedColumns;"
+                         class="citizen-voice"
                          matRipple>
                 </mat-row>
 

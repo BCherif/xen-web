@@ -58,13 +58,13 @@
                     <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Titre</mat-label>
-                                <textarea name="title" formControlName="title"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
+                                <input name="title" formControlName="title" matInput required>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Nom de l'accusé</mat-label>
+                                <input name="nameOfAccused" formControlName="nameOfAccused" matInput required>
                             </mat-form-field>
                         </div>
 
@@ -80,7 +80,7 @@
                         </div>
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Etat du dossier</mat-label>
                                 <mat-select formControlName="stateFolder"
                                             required>
@@ -88,6 +88,52 @@
                                                 [value]="state">{{statefolder[state]}}
                                     </mat-option>
                                 </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Jugement</mat-label>
+                                <mat-select formControlName="judgment"
+                                            required>
+                                    <mat-option *ngFor="let jud of judments"
+                                                [value]="jud">{{judment[jud]}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Juridiction</mat-label>
+                                <mat-select (selectionChange)="findByJurisdictionSelected($event.value)"
+                                            formControlName="jurisdiction"
+                                            required>
+                                    <mat-option *ngFor="let juridict of jurisdictions"
+                                                [value]="juridict.id">{{juridict.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Montant en jeu</mat-label>
+                                <input name="amountAtStake" formControlName="amountAtStake" matInput
+                                       mask="separator" type="text">
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Décision</mat-label>
+                                <textarea name="decisionOfJurisdiction" formControlName="decisionOfJurisdiction"
+                                          matInput type="text"
+                                          required
+                                          max-rows="5">
+                                </textarea>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Motivation</mat-label>
+                                <textarea name="motivation" formControlName="motivation"
+                                          matInput type="text"
+                                          required
+                                          max-rows="5">
+                                </textarea>
                             </mat-form-field>
                         </div>
 
@@ -111,6 +157,44 @@
                                                 [value]="domain.id">{{domain.name}}
                                     </mat-option>
                                 </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
+                                <mat-label>Date d'accusation</mat-label>
+                                <input [matDatepicker]="dateOfCharge"
+                                       formControlName="dateOfCharge" matInput
+                                       name="dateOfCharge">
+                                <mat-datepicker-toggle [for]="dateOfCharge" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #dateOfCharge></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
+                                <mat-label>Date de jugement</mat-label>
+                                <input [matDatepicker]="dateOfJudment"
+                                       formControlName="dateOfJudment" matInput
+                                       name="dateOfJudment">
+                                <mat-datepicker-toggle [for]="dateOfJudment" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #dateOfJudment></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
+                                <mat-label>Date d'arrêt de la CA</mat-label>
+                                <input [matDatepicker]="dateStopCA"
+                                       formControlName="dateStopCA" matInput
+                                       name="dateStopCA">
+                                <mat-datepicker-toggle [for]="dateStopCA" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #dateStopCA></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
+                                <mat-label>Date d'arrêt de la CS</mat-label>
+                                <input [matDatepicker]="dateStopCS"
+                                       formControlName="dateStopCS" matInput
+                                       name="dateStopCS">
+                                <mat-datepicker-toggle [for]="dateStopCS" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #dateStopCS></mat-datepicker>
                             </mat-form-field>
                         </div>
                     </div>

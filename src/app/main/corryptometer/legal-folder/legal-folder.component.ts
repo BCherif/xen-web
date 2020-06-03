@@ -6,7 +6,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
-import {CATEGORY, STATE_FOLDER, SUB_CATEGORY} from '../../../data/enums/enums';
+import {CATEGORY, JUDGMENT, STATE_FOLDER, SUB_CATEGORY} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {Article} from '../../../data/models/article.model';
@@ -17,6 +17,8 @@ import {Domain} from '../../../data/models/domain.model';
 import {Locality} from '../../../data/models/locality.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {DomainsService} from '../../setting/domains/domains.service';
+import {JurisdictionsService} from '../jurisdictions/jurisdictions.service';
+import {Jurisdiction} from '../../../data/models/jurisdiction.model';
 
 @Component({
     selector: 'corryptometer-denunciation',
@@ -35,12 +37,16 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     categories: any[];
     subCategory = SUB_CATEGORY;
     subCategories: any[];
+    judment = JUDGMENT;
+    judments: any[];
     statefolder = STATE_FOLDER;
     statefolders: any[];
     domains: Domain[];
     domain: Domain;
     localities: Locality[];
     locality: Locality;
+    jurisdictions: Jurisdiction[];
+    jurisdiction: Jurisdiction;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -54,6 +60,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
      * @param _toastr
      * @param _legalFolderService
      * @param _localitiesService
+     * @param _jurisdictionsService
      * @param _domainsService
      * @param _router
      */
@@ -64,6 +71,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         private _toastr: ToastrService,
         private _legalFolderService: LegalFolderService,
         private _localitiesService: LocalitiesService,
+        private _jurisdictionsService: JurisdictionsService,
         private _domainsService: DomainsService,
         private _router: Router
     ) {
@@ -84,11 +92,13 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         this.categories = Object.keys(this.category);
+        this.judments = Object.keys(this.judment);
         this.subCategories = Object.keys(this.subCategory);
         this.statefolders = Object.keys(this.statefolder);
         this.createLegalFolderForm();
         this.getLocalities();
         this.getDomains();
+        this.getJurisdictions();
         // Subscribe to update interpellation on changes
         this._legalFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -126,11 +136,27 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.legalFolderForm = this._formBuilder.group({
             id: new FormControl(''),
             title: new FormControl('', Validators.required),
+            nameOfAccused: new FormControl('', Validators.required),
+            judgment: new FormControl('', Validators.required),
+            jurisdiction: new FormControl('', Validators.required),
+            decisionOfJurisdiction: new FormControl('', Validators.required),
+            amountAtStake: new FormControl('', Validators.required),
+            motivation: new FormControl('', Validators.required),
             content: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
+            dateOfCharge: new FormControl('', Validators.required),
+            dateOfJudment: new FormControl('', Validators.required),
+            dateStopCA: new FormControl(''),
+            dateStopCS: new FormControl(''),
             domain: new FormControl('', Validators.required)
         });
+    }
+
+    getJurisdictions() {
+        this._jurisdictionsService.getAll().subscribe(value => {
+            this.jurisdictions = value['response'];
+        }, error => console.log(error));
     }
 
     getLocalities() {
@@ -151,6 +177,12 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
+    getJurisdictionById(id: number) {
+        this._jurisdictionsService.getById(id).subscribe(value => {
+            this.jurisdiction = value['response'];
+        }, error => console.log(error));
+    }
+
     getDomainById(id: number) {
         this._domainsService.getById(id).subscribe(value => {
             this.domain = value['response'];
@@ -159,6 +191,10 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
 
     findByLocalitySelected(value) {
         this.getLocalityById(value);
+    }
+
+    findByJurisdictionSelected(value) {
+        this.getJurisdictionById(value);
     }
 
     findDomainSelected(value) {
@@ -172,6 +208,16 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.article.title = this.legalFolderForm.get('title').value;
         this.article.content = this.legalFolderForm.get('content').value;
         this.legalFolder.stateFolder = this.legalFolderForm.get('stateFolder').value;
+        this.legalFolder.judgment = this.legalFolderForm.get('judgment').value;
+        this.legalFolder.nameOfAccused = this.legalFolderForm.get('nameOfAccused').value;
+        this.legalFolder.decisionOfJurisdiction = this.legalFolderForm.get('decisionOfJurisdiction').value;
+        this.legalFolder.motivation = this.legalFolderForm.get('motivation').value;
+        this.legalFolder.amountAtStake = this.legalFolderForm.get('amountAtStake').value;
+        this.legalFolder.dateOfCharge = this.legalFolderForm.get('dateOfCharge').value;
+        this.legalFolder.dateOfJudment = this.legalFolderForm.get('dateOfJudment').value;
+        this.legalFolder.dateStopCA = this.legalFolderForm.get('dateStopCA').value;
+        this.legalFolder.dateStopCS = this.legalFolderForm.get('dateStopCS').value;
+        this.legalFolder.jurisdiction= this.jurisdiction;
         this.article.category = this.categories[0];
         this.article.subCategory = this.subCategories[8];
         this.article.locality = this.locality;

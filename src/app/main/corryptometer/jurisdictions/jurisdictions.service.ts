@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
-import {Article} from '../../../data/models/article.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {Jurisdiction} from '../../../data/models/jurisdiction.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ArticlesService implements Resolve<any>
+export class JurisdictionsService implements Resolve<any>
 {
-    articles: Article[];
-    onArticlesChanged: BehaviorSubject<any>;
+    jurisdictions: Jurisdiction[];
+    onJurisdictionsChanged: BehaviorSubject<any>;
     readonly httpOptions: any;
     readonly serviceURL: string;
-    token: string;
+
     /**
      * Constructor
      *
@@ -25,11 +25,10 @@ export class ArticlesService implements Resolve<any>
         private _httpClient: HttpClient
     )
     {
-        // Set the defaults
-        this.onArticlesChanged = new BehaviorSubject({});
         this.httpOptions = new XensaUtils().httpHeaders();
-        this.serviceURL = environment.serviceUrl + '/articles';
-        this.token = new XensaUtils().getToken();
+        this.serviceURL = environment.serviceUrl + '/jurisdictions';
+        // Set the defaults
+        this.onJurisdictionsChanged = new BehaviorSubject({});
     }
 
     /**
@@ -44,7 +43,7 @@ export class ArticlesService implements Resolve<any>
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getArticles()
+                this.getJurisdictions()
             ]).then(
                 () => {
                     resolve();
@@ -55,21 +54,35 @@ export class ArticlesService implements Resolve<any>
     }
 
     /**
-     * Get articles
+     * Get jurisdictions
      *
      * @returns {Promise<any>}
      */
-    getArticles(): Promise<any> {
+    getJurisdictions(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL, this.httpOptions)
+            this._httpClient.get(this.serviceURL,this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
-                        this.articles = res['response'];
-                        this.onArticlesChanged.next(this.articles);
+                        this.jurisdictions = res['response'];
+                        this.onJurisdictionsChanged.next(this.jurisdictions);
                         resolve(res['response']);
                     }
                 }, reject);
         });
     }
 
+    getAll() {
+        return this._httpClient.get(this.serviceURL,this.httpOptions);
+    }
+
+    getById(id: number){
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
+    }
+
+    create(jurisdiction: Jurisdiction) {
+        return this._httpClient.post(this.serviceURL, jurisdiction,this.httpOptions);
+    }
+    update(jurisdiction: Jurisdiction) {
+        return this._httpClient.put(this.serviceURL, jurisdiction,this.httpOptions);
+    }
 }

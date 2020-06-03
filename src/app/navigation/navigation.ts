@@ -29,6 +29,13 @@ export const navigation: FuseNavigation[] = [
                 icon: 'folder',
                 children: [
                     {
+                        id: 'jurisdictions',
+                        title: 'Juridictions',
+                        type: 'item',
+                        icon: 'home',
+                        url: '/main/corryptometer/jurisdictions'
+                    },
+                    {
                         id: 'legal-folders',
                         title: 'Dossiers en justice',
                         type: 'item',
@@ -43,6 +50,13 @@ export const navigation: FuseNavigation[] = [
                 type: 'collapsable',
                 icon: 'person_add',
                 children: [
+                    {
+                        id: 'citizen-voices',
+                        title: 'Voix citoyen',
+                        type: 'item',
+                        icon: 'people',
+                        url: '/main/participation/citizen-voices'
+                    },
                     {
                         id: 'law-projects',
                         title: 'Projet de Lois',
@@ -75,13 +89,13 @@ export const navigation: FuseNavigation[] = [
             },
             {
                 id: 'org',
-                title: 'Organs',
+                title: 'Institutions',
                 type: 'collapsable',
                 icon: 'person_add',
                 children: [
                     {
                         id: 'electeds',
-                        title: 'Membres',
+                        title: 'Elus',
                         type: 'item',
                         icon: 'person_add',
                         url: '/main/trueometer/electeds'
