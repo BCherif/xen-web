@@ -55,6 +55,7 @@ export class FormsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Formulaires';
         this.dataSource = new FilesDataSource(this._formsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

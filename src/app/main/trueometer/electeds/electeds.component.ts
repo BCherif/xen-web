@@ -54,6 +54,7 @@ export class ElectedsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Electeurs';
         this.dataSource = new FilesDataSource(this._electedsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

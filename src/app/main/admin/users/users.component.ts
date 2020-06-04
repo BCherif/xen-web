@@ -1,30 +1,27 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {BehaviorSubject, fromEvent, merge, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import { FuseUtils } from '@fuse/utils';
-import { takeUntil } from 'rxjs/internal/operators';
-import {MatDialog} from "@angular/material/dialog";
-import {STATE_FOLDER} from '../../../data/enums/enums';
-import {LegalFoldersService} from './legal-folders.service';
+import {fuseAnimations} from '@fuse/animations';
+import {FuseUtils} from '@fuse/utils';
+
+import {takeUntil} from 'rxjs/internal/operators';
+import {UsersService} from './users.service';
+
 
 @Component({
-    selector     : 'corryptometer-legal-folders',
-    templateUrl  : './legal-folders.component.html',
-    styleUrls    : ['./legal-folders.component.scss'],
-    animations   : fuseAnimations,
+    selector: 'admin-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class LegalFoldersComponent implements OnInit
-{
-    dialogRef: any;
+export class UsersComponent implements OnInit, OnDestroy {
     dataSource: FilesDataSource | null;
-    stateFolder = STATE_FOLDER;
-    displayedColumns = ['title','stateFolder','locality','domain'];
+    displayedColumns = ['lastname', 'firstname', 'email'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -38,11 +35,12 @@ export class LegalFoldersComponent implements OnInit
     // Private
     private _unsubscribeAll: Subject<any>;
 
+    /**
+     * Constructor
+     */
     constructor(
-        private _legalFoldersService: LegalFoldersService,
-        private _matDialog: MatDialog
-    )
-    {
+        private _userService: UsersService
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -55,8 +53,7 @@ export class LegalFoldersComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        document.title = 'XENSA | Dossiers en justice';
-        this.dataSource = new FilesDataSource(this._legalFoldersService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._userService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -65,70 +62,43 @@ export class LegalFoldersComponent implements OnInit
                 distinctUntilChanged()
             )
             .subscribe(() => {
-                if ( !this.dataSource )
-                {
+                if (!this.dataSource) {
                     return;
                 }
-
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
     }
 
+    /**
+     * On destroy
+     */
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
 }
 
-export class FilesDataSource extends DataSource<any>
-{
+export class FilesDataSource extends DataSource<any> {
+    // Private
     private _filterChange = new BehaviorSubject('');
     private _filteredDataChange = new BehaviorSubject('');
 
     /**
      * Constructor
      *
-     * @param _legalFoldersService
+     * @param {_userService} _userService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _legalFoldersService: LegalFoldersService,
+        private _userService: UsersService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
-    )
-    {
+    ) {
         super();
 
-        this.filteredData = this._legalFoldersService.legalFolders;
-    }
-
-    /**
-     * Connect function called by the table to retrieve one stream containing the data to render.
-     *
-     * @returns {Observable<any[]>}
-     */
-    connect(): Observable<any[]>
-    {
-        const displayDataChanges = [
-            this._legalFoldersService.onLegalFoldersChanged,
-            this._matPaginator.page,
-            this._filterChange,
-            this._matSort.sortChange
-        ];
-
-        return merge(...displayDataChanges)
-            .pipe(
-                map(() => {
-                        let data = this._legalFoldersService.legalFolders.slice();
-
-                        data = this.filterData(data);
-
-                        this.filteredData = [...data];
-
-                        data = this.sortData(data);
-
-                        // Grab the page's slice of data.
-                        const startIndex = this._matPaginator.pageIndex * this._matPaginator.pageSize;
-                        return data.splice(startIndex, this._matPaginator.pageSize);
-                    }
-                ));
+        this.filteredData = this._userService.users;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -136,24 +106,20 @@ export class FilesDataSource extends DataSource<any>
     // -----------------------------------------------------------------------------------------------------
 
     // Filtered data
-    get filteredData(): any
-    {
+    get filteredData(): any {
         return this._filteredDataChange.value;
     }
 
-    set filteredData(value: any)
-    {
+    set filteredData(value: any) {
         this._filteredDataChange.next(value);
     }
 
     // Filter
-    get filter(): string
-    {
+    get filter(): string {
         return this._filterChange.value;
     }
 
-    set filter(filter: string)
-    {
+    set filter(filter: string) {
         this._filterChange.next(filter);
     }
 
@@ -162,15 +128,44 @@ export class FilesDataSource extends DataSource<any>
     // -----------------------------------------------------------------------------------------------------
 
     /**
+     * Connect function called by the table to retrieve one stream containing the data to render.
+     *
+     * @returns {Observable<any[]>}
+     */
+    connect(): Observable<any[]> {
+        const displayDataChanges = [
+            this._userService.onUsersChanged,
+            this._matPaginator.page,
+            this._filterChange,
+            this._matSort.sortChange
+        ];
+
+        return merge(...displayDataChanges).pipe(map(() => {
+
+                let data = this._userService.users.slice();
+
+                data = this.filterData(data);
+
+                this.filteredData = [...data];
+
+                data = this.sortData(data);
+
+                // Grab the page's slice of data.
+                const startIndex = this._matPaginator.pageIndex * this._matPaginator.pageSize;
+                return data.splice(startIndex, this._matPaginator.pageSize);
+            })
+        );
+
+    }
+
+    /**
      * Filter data
      *
      * @param data
      * @returns {any}
      */
-    filterData(data): any
-    {
-        if ( !this.filter )
-        {
+    filterData(data): any {
+        if (!this.filter) {
             return data;
         }
         return FuseUtils.filterArrayByString(data, this.filter);
@@ -182,10 +177,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any[]}
      */
-    sortData(data): any[]
-    {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
+    sortData(data): any[] {
+        if (!this._matSort.active || this._matSort.direction === '') {
             return data;
         }
 
@@ -193,13 +186,15 @@ export class FilesDataSource extends DataSource<any>
             let propertyA: number | string = '';
             let propertyB: number | string = '';
 
-            switch ( this._matSort.active )
-            {
-                case 'title':
-                    [propertyA, propertyB] = [a.title, b.title];
+            switch (this._matSort.active) {
+                case 'lastname':
+                    [propertyA, propertyB] = [a.lastname, b.lastname];
                     break;
-                case 'stateFolder':
-                    [propertyA, propertyB] = [a.year, b.year];
+                case 'firstname':
+                    [propertyA, propertyB] = [a.firstname, b.firstname];
+                    break;
+                case 'email':
+                    [propertyA, propertyB] = [a.email, b.email];
                     break;
             }
 
@@ -213,7 +208,6 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Disconnect
      */
-    disconnect(): void
-    {
+    disconnect(): void {
     }
 }

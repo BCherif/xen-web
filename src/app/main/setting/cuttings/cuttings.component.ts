@@ -54,6 +54,7 @@ export class CuttingsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Découpages';
         this.dataSource = new FilesDataSource(this._cuttingsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

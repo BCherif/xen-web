@@ -97,6 +97,8 @@ $typography: mat-typography-config(
 @import "src/app/main/norme/law-categories/law-categories.theme";
 @import "src/app/main/norme/laws/laws.theme";
 @import "src/app/main/auth/login/login.theme";
+@import "src/app/main/admin/users/users.theme";
+@import "src/app/main/admin/roles/roles.theme";
 @import "src/app/main/publications/forms/forms.theme";
 @import "src/app/main/publications/quizzes/quizzes.theme";
 @import "src/app/main/publications/responses/responses.theme";
@@ -126,6 +128,8 @@ $typography: mat-typography-config(
     @include trueometer-projects-theme($theme);
     @include participation-interpellations-theme($theme);
     @include governometer-articles-theme($theme);
+    @include admin-users-theme($theme);
+    @include admin-roles-theme($theme);
     @include norme-law-categories-theme($theme);
     @include norme-laws-theme($theme);
     @include login-theme($theme);

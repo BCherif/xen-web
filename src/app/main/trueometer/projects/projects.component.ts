@@ -55,6 +55,7 @@ export class ProjectsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Projets';
         this.dataSource = new FilesDataSource(this._projectsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

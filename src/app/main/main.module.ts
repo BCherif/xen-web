@@ -5,6 +5,10 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 const routes = [
     {
+        path        : 'admin',
+        loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    },
+    {
         path        : 'setting',
         loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
     },

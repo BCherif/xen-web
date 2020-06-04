@@ -53,6 +53,7 @@ export class QuizzesComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Questions';
         this.dataSource = new FilesDataSource(this._quizzesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

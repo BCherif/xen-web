@@ -53,6 +53,7 @@ export class DenunciationsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Dénonciations';
         this.dataSource = new FilesDataSource(this._denunciationService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

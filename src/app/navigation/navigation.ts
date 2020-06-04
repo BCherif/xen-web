@@ -102,7 +102,7 @@ export const navigation: FuseNavigation[] = [
                     },
                     {
                         id: 'organs',
-                        title: 'Organs',
+                        title: 'Institutions',
                         type: 'item',
                         icon: 'people',
                         url: '/main/trueometer/organs'
@@ -216,6 +216,28 @@ export const navigation: FuseNavigation[] = [
                         type: 'item',
                         icon: 'settings',
                         url: '/main/setting/axes'
+                    }
+                ]
+            },
+            {
+                id: 'admin',
+                title: 'Administrations',
+                type: 'collapsable',
+                icon: 'person_add',
+                children: [
+                    {
+                        id: 'users',
+                        title: 'Utilisateurs',
+                        type: 'item',
+                        icon: 'person',
+                        url: '/main/admin/users'
+                    },
+                    {
+                        id: 'roles',
+                        title: 'Rôles',
+                        type: 'item',
+                        icon: 'people_outline',
+                        url: '/main/admin/roles'
                     }
                 ]
             }

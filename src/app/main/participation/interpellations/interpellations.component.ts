@@ -56,6 +56,7 @@ export class InterpellationsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Interpellations';
         this.dataSource = new FilesDataSource(this._interpellationsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

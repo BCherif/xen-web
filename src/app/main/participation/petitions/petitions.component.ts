@@ -51,6 +51,7 @@ export class PetitionsComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Pétitions';
         this.dataSource = new FilesDataSource(this._petitionsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

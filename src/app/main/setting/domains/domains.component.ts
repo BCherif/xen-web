@@ -54,6 +54,7 @@ export class DomainsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Domaines';
         this.dataSource = new FilesDataSource(this._domainsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

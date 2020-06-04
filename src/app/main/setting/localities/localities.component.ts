@@ -54,6 +54,7 @@ export class LocalitiesComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Localités';
         this.dataSource = new FilesDataSource(this._localitiesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

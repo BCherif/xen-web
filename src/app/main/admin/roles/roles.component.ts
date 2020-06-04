@@ -1,26 +1,24 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {DataSource} from '@angular/cdk/collections';
+import {BehaviorSubject, fromEvent, merge, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import { FuseUtils } from '@fuse/utils';
-import { takeUntil } from 'rxjs/internal/operators';
-import {OrgansService} from "./organs.service";
-import {MatDialog} from "@angular/material/dialog";
-import {SettingOrganFormDialogComponent} from "../organ-form/organ-form.component";
+import {fuseAnimations} from '@fuse/animations';
+import {FuseUtils} from '@fuse/utils';
+import {takeUntil} from 'rxjs/internal/operators';
+import {RolesService} from './roles.service';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-    selector     : 'trueometer-organs',
-    templateUrl  : './organs.component.html',
-    styleUrls    : ['./organs.component.scss'],
-    animations   : fuseAnimations,
+    selector: 'admin-roles',
+    templateUrl: './roles.component.html',
+    styleUrls: ['./roles.component.scss'],
+    animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class OrgansComponent implements OnInit
-{
+export class RolesComponent implements OnInit {
     dialogRef: any;
     dataSource: FilesDataSource | null;
     displayedColumns = ['name', 'description'];
@@ -38,10 +36,9 @@ export class OrgansComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _organsService: OrgansService,
+        private _rolesService: RolesService,
         private _matDialog: MatDialog
-    )
-    {
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -54,8 +51,9 @@ export class OrgansComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        document.title = 'XENSA | Organes';
-        this.dataSource = new FilesDataSource(this._organsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._rolesService, this.paginator, this.sort);
+
+        // console.log(this.dataSource);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -64,8 +62,7 @@ export class OrgansComponent implements OnInit
                 distinctUntilChanged()
             )
             .subscribe(() => {
-                if ( !this.dataSource )
-                {
+                if (!this.dataSource) {
                     return;
                 }
 
@@ -73,48 +70,50 @@ export class OrgansComponent implements OnInit
             });
     }
 
-    newOrgan(): void {
-        this.dialogRef = this._matDialog.open(SettingOrganFormDialogComponent, {
-            panelClass: 'organ-form-dialog',
-            data      : {
-                action: 'new'
-            }
-        });
-    }
 
-
-    editOrgan(organ) {
-        this.dialogRef = this._matDialog.open(SettingOrganFormDialogComponent, {
-            panelClass: 'organ-form-dialog',
-            data      : {
-                action: 'edit',
-                organ:organ
-            }
-        });
-    }
 }
 
-export class FilesDataSource extends DataSource<any>
-{
+export class FilesDataSource extends DataSource<any> {
     private _filterChange = new BehaviorSubject('');
     private _filteredDataChange = new BehaviorSubject('');
 
     /**
      * Constructor
      *
-     * @param {OrgansService} _organsService
+     * @param {RolesService} _rolesService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _organsService: OrgansService,
+        private _rolesService: RolesService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
-    )
-    {
+    ) {
         super();
 
-        this.filteredData = this._organsService.organs;
+        this.filteredData = this._rolesService.roles;
+    }
+
+    // Filtered data
+    get filteredData(): any {
+        return this._filteredDataChange.value;
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Accessors
+    // -----------------------------------------------------------------------------------------------------
+
+    set filteredData(value: any) {
+        this._filteredDataChange.next(value);
+    }
+
+    // Filter
+    get filter(): string {
+        return this._filterChange.value;
+    }
+
+    set filter(filter: string) {
+        this._filterChange.next(filter);
     }
 
     /**
@@ -122,10 +121,9 @@ export class FilesDataSource extends DataSource<any>
      *
      * @returns {Observable<any[]>}
      */
-    connect(): Observable<any[]>
-    {
+    connect(): Observable<any[]> {
         const displayDataChanges = [
-            this._organsService.onOrgansChanged,
+            this._rolesService.onRolesChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -134,7 +132,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._organsService.organs.slice();
+                        let data = this._rolesService.roles.slice();
 
                         data = this.filterData(data);
 
@@ -150,32 +148,6 @@ export class FilesDataSource extends DataSource<any>
     }
 
     // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    // Filtered data
-    get filteredData(): any
-    {
-        return this._filteredDataChange.value;
-    }
-
-    set filteredData(value: any)
-    {
-        this._filteredDataChange.next(value);
-    }
-
-    // Filter
-    get filter(): string
-    {
-        return this._filterChange.value;
-    }
-
-    set filter(filter: string)
-    {
-        this._filterChange.next(filter);
-    }
-
-    // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
@@ -185,10 +157,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any}
      */
-    filterData(data): any
-    {
-        if ( !this.filter )
-        {
+    filterData(data): any {
+        if (!this.filter) {
             return data;
         }
         return FuseUtils.filterArrayByString(data, this.filter);
@@ -200,10 +170,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any[]}
      */
-    sortData(data): any[]
-    {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
+    sortData(data): any[] {
+        if (!this._matSort.active || this._matSort.direction === '') {
             return data;
         }
 
@@ -211,8 +179,7 @@ export class FilesDataSource extends DataSource<any>
             let propertyA: number | string = '';
             let propertyB: number | string = '';
 
-            switch ( this._matSort.active )
-            {
+            switch (this._matSort.active) {
                 case 'name':
                     [propertyA, propertyB] = [a.name, b.name];
                     break;
@@ -231,7 +198,6 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Disconnect
      */
-    disconnect(): void
-    {
+    disconnect(): void {
     }
 }

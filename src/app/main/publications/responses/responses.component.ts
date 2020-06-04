@@ -53,6 +53,7 @@ export class ResponsesComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Réponses';
         this.dataSource = new FilesDataSource(this._responsesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

@@ -54,6 +54,7 @@ export class AxesComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Axes';
         this.dataSource = new FilesDataSource(this._axesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

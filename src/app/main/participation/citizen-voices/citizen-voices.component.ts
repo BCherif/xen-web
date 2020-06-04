@@ -53,6 +53,7 @@ export class CitizenVoicesComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | Voix citoyens';
         this.dataSource = new FilesDataSource(this._citizenVoicesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')

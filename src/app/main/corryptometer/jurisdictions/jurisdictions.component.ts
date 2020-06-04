@@ -54,6 +54,7 @@ export class JurisdictionsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
+        document.title = 'XENSA | juridictions';
         this.dataSource = new FilesDataSource(this._jurisdictionsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
