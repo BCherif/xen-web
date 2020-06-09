@@ -80,4 +80,8 @@ export class ArticleService implements Resolve<any>
     create(article: Article) {
         return this._httpClient.post(this.serviceURL, article,this.httpOptions);
     }
+
+    update(article: Article) {
+        return this._httpClient.put(this.serviceURL, article,this.httpOptions);
+    }
 }

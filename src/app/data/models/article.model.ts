@@ -13,6 +13,8 @@ export class Article implements Deserializable {
     subCategory: SUB_CATEGORY;
     locality: Locality;
     domain: Domain;
+    createDate: Date = new Date();
+    updateDate: Date;
 
     constructor(article?) {
         article = article || {};

@@ -50,7 +50,7 @@ const routes: Routes = [
         }
     },
     {
-        path: 'articles/:id/:label',
+        path: 'articles/:id/:title',
         component: ArticleComponent,
         resolve: {
             data: ArticleService

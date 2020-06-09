@@ -87,6 +87,15 @@ export class ArticleComponent implements OnInit, OnDestroy {
             .subscribe(article => {
 
                 if (article) {
+                    this.getDomainById(article.domain.id);
+                    this.getLocalityById(article.locality.id);
+                    this.articleForm.get('id').setValue(article.id);
+                    this.articleForm.get('title').setValue(article.title);
+                    this.articleForm.get('content').setValue(article.content);
+                    this.articleForm.get('subCategory').setValue(article.subCategory);
+                    this.articleForm.get('category').setValue(article.category);
+                    this.articleForm.get('domain').setValue(article.domain.id);
+                    this.articleForm.get('locality').setValue(article.locality.id);
                     this.article = new Article(article);
                     this.pageType = 'edit';
                 } else {
@@ -163,14 +172,28 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.article = this.articleForm.getRawValue();
         this.article.locality = this.locality;
         this.article.domain = this.domain;
-        this._articleService.create(this.article).subscribe(data => {
-            if (data['status'] === 'OK') {
-                this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/governometer/articles');
-            } else {
-                this._toastr.error(data['message']);
-            }
-        });
+        if (!this.article.id) {
+            this._articleService.create(this.article).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/governometer/articles');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        } else {
+            this.article.updateDate = new Date();
+            this._articleService.update(this.article).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/governometer/articles');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+
+        }
+
     }
 
 }

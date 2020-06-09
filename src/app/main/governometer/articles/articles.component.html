@@ -91,7 +91,28 @@
                 <ng-container matColumnDef="domain">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Domain</mat-header-cell>
                     <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{article.domain.name}}</p>
+                        <p class="text-truncate">{{article?.domain?.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="buttons">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let article">
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                    (click)="$event.stopPropagation();">
+                                <mat-icon class="secondary-text">more_vert</mat-icon>
+                            </button>
+
+                            <mat-menu #moreMenu="matMenu">
+                                <button mat-menu-item
+                                        [routerLink]="'/main/governometer/articles/'+article.id+'/'+article.title">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Modifier</span>
+                                </button>
+                            </mat-menu>
+                        </div>
                     </mat-cell>
                 </ng-container>
 
