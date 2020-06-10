@@ -23,7 +23,7 @@ export class ElectedsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['firstname','lastname','sexe','job','locality','organ'];
+    displayedColumns = ['firstname','lastname','sexe','job','locality','organ','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

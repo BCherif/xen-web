@@ -22,7 +22,7 @@ export class ProgramsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['startDate','endDate', 'elected','organ'];
+    displayedColumns = ['startDate','endDate', 'elected','organ','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

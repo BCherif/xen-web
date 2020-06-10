@@ -44,6 +44,7 @@ import {ProgramService} from './program/program.service';
 import {ProgramComponent} from './program/program.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
+import {MatMenuModule} from '@angular/material/menu';
 
 const routes: Routes = [
     {
@@ -148,7 +149,8 @@ const routes: Routes = [
         MatToolbarModule,
         MatDatepickerModule,
         SatDatepickerModule,
-        SatNativeDateModule
+        SatNativeDateModule,
+        MatMenuModule
     ],
     providers   : [],
     entryComponents: [

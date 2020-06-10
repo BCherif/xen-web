@@ -88,7 +88,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="electedForm.invalid"
+                [disabled]="electedForm.invalid || electedForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>

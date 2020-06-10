@@ -45,7 +45,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="organForm.invalid"
+                [disabled]="organForm.invalid || organForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>

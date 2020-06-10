@@ -94,6 +94,10 @@ export class ProgramComponent implements OnInit, OnDestroy {
                         this.getOrganById(program.organ.id);
                         this.programForm.get('organ').setValue(program.organ.id);
                     }
+                    this.programForm.get('id').setValue(program.id);
+                    this.programForm.get('title').setValue(program.title);
+                    this.programForm.get('date').setValue({'begin': new Date(program.startDate), 'end': new Date(program.endDate)});
+                    this.programForm.get('organCall').setValue(program.organCall);
                     this.program = new Program(program);
                     this.pageType = 'edit';
                 } else {

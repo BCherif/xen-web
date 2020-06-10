@@ -81,4 +81,10 @@ export class LegalFolderService implements Resolve<any>
     create(legalFolderSaveEntity: LegalFolderSaveEntity) {
         return this._httpClient.post(this.serviceURL, legalFolderSaveEntity,this.httpOptions);
     }
+
+    update(legalFolderSaveEntity: LegalFolderSaveEntity) {
+        return this._httpClient.put(this.serviceURL, legalFolderSaveEntity,this.httpOptions);
+    }
+
+
 }

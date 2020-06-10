@@ -38,6 +38,7 @@
             </button>
 
             <button mat-raised-button
+                    (click)="saveOrUpdate()"
                     class="save-product-button"
                     [disabled]="interpellationForm.invalid || interpellationForm.pristine"
                     *ngIf="pageType ==='edit'">

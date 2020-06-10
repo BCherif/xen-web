@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Interpellation} from '../../../data/models/interpellation.model';
 import {InterpellationSaveEntity} from '../../../data/wrapper/interpellation.save.entity.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +30,7 @@ export class InterpellationService implements Resolve<any>
         // Set the defaults
         this.onInterpellationChanged = new BehaviorSubject({});
         this.serviceURL = environment.serviceUrl + '/interpellations';
+        this.httpOptions = new XensaUtils().httpHeaders();
     }
 
     /**
@@ -77,13 +79,14 @@ export class InterpellationService implements Resolve<any>
     }
 
 
-    getById(id: number){
+   /* getById(id: number){
         return this._httpClient.get(this.serviceURL + '/' + id);
-    }
+    }*/
 
     create(interpellationSaveEntity: InterpellationSaveEntity) {
         return this._httpClient.post(this.serviceURL, interpellationSaveEntity,this.httpOptions);
     }
+
     update(interpellationSaveEntity: InterpellationSaveEntity) {
         return this._httpClient.put(this.serviceURL, interpellationSaveEntity,this.httpOptions);
     }

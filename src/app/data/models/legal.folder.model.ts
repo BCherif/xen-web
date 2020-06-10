@@ -19,6 +19,8 @@ export class LegalFolder implements Deserializable{
     dateStopCS: Date;
     article: Article;
     jurisdiction: Jurisdiction;
+    createDate: Date = new Date();
+    updateDate: Date;
 
     constructor(legalFolder?) {
         legalFolder = legalFolder || {};
@@ -35,6 +37,8 @@ export class LegalFolder implements Deserializable{
         this.dateOfJudment = legalFolder.dateOfJudment;
         this.dateStopCA = legalFolder.dateStopCA;
         this.dateStopCS = legalFolder.dateStopCS;
+        this.createDate = legalFolder.createDate;
+        this.updateDate = legalFolder.updateDate;
     }
 
     deserialize(input: any): this {

@@ -38,6 +38,7 @@
             </button>
 
             <button mat-raised-button
+                    (click)="save()"
                     class="save-product-button"
                     [disabled]="lawProjectForm.invalid || lawProjectForm.pristine"
                     *ngIf="pageType ==='edit'">

@@ -10,6 +10,8 @@ export class Petition implements Deserializable{
     decisionMaker: string;
     article: Article;
     user: User;
+    createDate: Date = new Date();
+    updateDate: Date;
     
     constructor(petition?) {
         petition = petition || {};
@@ -18,6 +20,8 @@ export class Petition implements Deserializable{
         this.decisionMaker = petition.decisionMaker;
         this.article = petition.article;
         this.user = petition.user;
+        this.createDate = petition.createDate;
+        this.updateDate = petition.updateDate;
     }
 
     deserialize(input: any): this {

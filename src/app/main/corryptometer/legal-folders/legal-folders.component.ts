@@ -24,7 +24,7 @@ export class LegalFoldersComponent implements OnInit
     dialogRef: any;
     dataSource: FilesDataSource | null;
     stateFolder = STATE_FOLDER;
-    displayedColumns = ['title','stateFolder','locality','domain'];
+    displayedColumns = ['title','stateFolder','locality','domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

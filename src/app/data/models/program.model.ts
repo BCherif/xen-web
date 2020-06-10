@@ -18,7 +18,7 @@ export class Program implements Deserializable{
     constructor(program?) {
         program = program || {};
         this.id = program.id;
-        this.years = program.years ;
+        this.title = program.title ;
         this.startDate = program.startDate ;
         this.endDate = program.endDate ;
         this.years = program.years ;

@@ -21,7 +21,7 @@ import {PetitionsService} from './petitions.service';
 export class PetitionsComponent implements OnInit {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['title', 'decisionMaker', 'locality', 'domain'];
+    displayedColumns = ['title', 'decisionMaker', 'locality', 'domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

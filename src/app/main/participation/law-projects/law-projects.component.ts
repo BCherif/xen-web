@@ -24,7 +24,7 @@ export class LawProjectsComponent implements OnInit
     dialogRef: any;
     dataSource: FilesDataSource | null;
     stateLawProject = STATE_LAW_PROJECT;
-    displayedColumns = ['title','year','elected','stateLawProject','locality','domain'];
+    displayedColumns = ['title','year','elected','stateLawProject','locality','domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

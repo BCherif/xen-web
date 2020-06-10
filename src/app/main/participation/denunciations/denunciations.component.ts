@@ -22,7 +22,7 @@ export class DenunciationsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['title','entity','locality','domain'];
+    displayedColumns = ['title','entity','locality','domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

@@ -81,4 +81,8 @@ export class LawProjectService implements Resolve<any>
     create(lawProjectSaveEntity: LawProjectSaveEntity) {
         return this._httpClient.post(this.serviceURL, lawProjectSaveEntity,this.httpOptions);
     }
+
+    update(lawProjectSaveEntity: LawProjectSaveEntity) {
+        return this._httpClient.put(this.serviceURL, lawProjectSaveEntity,this.httpOptions);
+    }
 }

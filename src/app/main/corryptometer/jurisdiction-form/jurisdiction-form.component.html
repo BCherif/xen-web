@@ -47,7 +47,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="jurisdictionForm.invalid"
+                [disabled]="jurisdictionForm.invalid || jurisdictionForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>

@@ -18,6 +18,8 @@ export class Interpellation implements Deserializable{
     article: Article;
     organ: Organ;
     user: User;
+    createDate: Date = new Date();
+    updateDate: Date;
 
     constructor(interpellation?) {
         interpellation = interpellation || {};
@@ -31,6 +33,8 @@ export class Interpellation implements Deserializable{
         this.article = interpellation.article;
         this.organ = interpellation.organ;
         this.user = interpellation.user;
+        this.createDate = interpellation.createDate;
+        this.updateDate = interpellation.updateDate;
     }
 
     deserialize(input: any): this {

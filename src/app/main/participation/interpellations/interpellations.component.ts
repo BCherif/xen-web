@@ -25,7 +25,7 @@ export class InterpellationsComponent implements OnInit
     callAs = CALL_AS;
     organCall = ORGAN_CALL;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['interpelDate','callAs','elected','organ','locality','domain'];
+    displayedColumns = ['interpelDate','callAs','elected','organ','locality','domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

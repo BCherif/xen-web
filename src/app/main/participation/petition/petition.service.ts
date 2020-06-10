@@ -81,4 +81,8 @@ export class PetitionService implements Resolve<any>
     create(petitionSaveEntity: PetitionSaveEntity) {
         return this._httpClient.post(this.serviceURL, petitionSaveEntity,this.httpOptions);
     }
+
+    update(petitionSaveEntity: PetitionSaveEntity) {
+        return this._httpClient.put(this.serviceURL, petitionSaveEntity,this.httpOptions);
+    }
 }

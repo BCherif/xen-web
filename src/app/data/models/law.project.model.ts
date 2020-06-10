@@ -12,6 +12,8 @@ export class LawProject implements Deserializable{
     stateLawProject: STATE_LAW_PROJECT;
     article: Article;
     elected: Elected;
+    createDate: Date = new Date();
+    updateDate: Date;
     
     constructor(lawProject?) {
         lawProject = lawProject || {};
@@ -20,6 +22,8 @@ export class LawProject implements Deserializable{
         this.stateLawProject = lawProject.stateLawProject;
         this.article = lawProject.article;
         this.elected = lawProject.elected;
+        this.createDate = lawProject.createDate;
+        this.updateDate = lawProject.updateDate;
     }
 
     deserialize(input: any): this {

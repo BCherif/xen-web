@@ -81,4 +81,8 @@ export class DenunciationService implements Resolve<any>
     create(denunciationSaveEntity: DenunciationSaveEntity) {
         return this._httpClient.post(this.serviceURL, denunciationSaveEntity,this.httpOptions);
     }
+
+    update(denunciationSaveEntity: DenunciationSaveEntity) {
+        return this._httpClient.put(this.serviceURL, denunciationSaveEntity,this.httpOptions);
+    }
 }

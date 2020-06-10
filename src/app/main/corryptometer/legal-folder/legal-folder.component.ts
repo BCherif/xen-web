@@ -106,6 +106,26 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             .subscribe(legalFolder => {
 
                 if (legalFolder) {
+                    this.getJurisdictionById(legalFolder.jurisdiction.id);
+                    this.getDomainById(legalFolder.article.domain.id);
+                    this.getLocalityById(legalFolder.article.locality.id);
+                    this.legalFolderForm.get('id').setValue(legalFolder.id);
+                    this.legalFolderForm.get('title').setValue(legalFolder.article.title);
+                    this.legalFolderForm.get('content').setValue(legalFolder.article.content);
+                    this.legalFolderForm.get('nameOfAccused').setValue(legalFolder.nameOfAccused);
+                    this.legalFolderForm.get('decisionOfJurisdiction').setValue(legalFolder.decisionOfJurisdiction);
+                    this.legalFolderForm.get('amountAtStake').setValue(legalFolder.amountAtStake);
+                    this.legalFolderForm.get('motivation').setValue(legalFolder.motivation);
+                    this.legalFolderForm.get('stateFolder').setValue(legalFolder.stateFolder);
+                    this.legalFolderForm.get('dateOfCharge').setValue(new Date(legalFolder.dateOfCharge));
+                    this.legalFolderForm.get('dateOfJudment').setValue(new Date(legalFolder.dateOfJudment));
+                    this.legalFolderForm.get('dateStopCA').setValue(new Date(legalFolder.dateStopCA));
+                    this.legalFolderForm.get('dateStopCS').setValue(new Date(legalFolder.dateStopCS));
+                    this.legalFolderForm.get('judgment').setValue(legalFolder.judgment);
+                    this.legalFolderForm.get('article').setValue(legalFolder.article.id);
+                    this.legalFolderForm.get('domain').setValue(legalFolder.article.domain.id);
+                    this.legalFolderForm.get('locality').setValue(legalFolder.article.locality.id);
+                    this.legalFolderForm.get('jurisdiction').setValue(legalFolder.jurisdiction.id);
                     this.legalFolder = new LegalFolder(legalFolder);
                     this.pageType = 'edit';
                 } else {
@@ -150,7 +170,8 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             dateOfJudment: new FormControl('', Validators.required),
             dateStopCA: new FormControl(''),
             dateStopCS: new FormControl(''),
-            domain: new FormControl('', Validators.required)
+            domain: new FormControl('', Validators.required),
+            article: new FormControl('')
         });
     }
 
@@ -206,8 +227,10 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.legalFolder = new LegalFolder();
         this.legalFolderSaveEntity = new LegalFolderSaveEntity();
+        this.article.id = this.legalFolderForm.get('article').value;
         this.article.title = this.legalFolderForm.get('title').value;
         this.article.content = this.legalFolderForm.get('content').value;
+        this.legalFolder.id = this.legalFolderForm.get('id').value;
         this.legalFolder.stateFolder = this.legalFolderForm.get('stateFolder').value;
         this.legalFolder.judgment = this.legalFolderForm.get('judgment').value;
         this.legalFolder.nameOfAccused = this.legalFolderForm.get('nameOfAccused').value;
@@ -225,14 +248,26 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.article.domain = this.domain;
         this.legalFolderSaveEntity.article= this.article;
         this.legalFolderSaveEntity.legalFolder = this.legalFolder;
-        this._legalFolderService.create(this.legalFolderSaveEntity).subscribe(data => {
-            if (data['status'] === 'OK') {
-                this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/corryptometer/legal-folders');
-            } else {
-                this._toastr.error(data['message']);
-            }
-        });
+        if (!this.legalFolder.id) {
+            this._legalFolderService.create(this.legalFolderSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/corryptometer/legal-folders');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }else {
+            this.legalFolderSaveEntity.legalFolder.updateDate = new Date();
+            this._legalFolderService.update(this.legalFolderSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/corryptometer/legal-folders');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }
     }
 
     onChangeDate(e) {

@@ -107,6 +107,18 @@ export class LawProjectComponent implements OnInit, OnDestroy {
             .subscribe(lawProject => {
 
                 if (lawProject) {
+                    this.getElectedById(lawProject.elected.id);
+                    this.getLocalityById(lawProject.article.locality.id);
+                    this.getDomainById(lawProject.article.domain.id);
+                    this.lawProjectForm.get('id').setValue(lawProject.id);
+                    this.lawProjectForm.get('title').setValue(lawProject.article.title);
+                    this.lawProjectForm.get('content').setValue(lawProject.article.content);
+                    this.lawProjectForm.get('year').setValue(lawProject.year);
+                    this.lawProjectForm.get('stateLawProject').setValue(lawProject.stateLawProject);
+                    this.lawProjectForm.get('article').setValue(lawProject.article.id);
+                    this.lawProjectForm.get('domain').setValue(lawProject.article.domain.id);
+                    this.lawProjectForm.get('elected').setValue(lawProject.elected.id);
+                    this.lawProjectForm.get('locality').setValue(lawProject.article.locality.id);
                     this.lawProject = new LawProject(lawProject);
                     this.pageType = 'edit';
                 } else {
@@ -143,7 +155,8 @@ export class LawProjectComponent implements OnInit, OnDestroy {
             stateLawProject: new FormControl('', Validators.required),
             elected: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
-            domain: new FormControl('', Validators.required)
+            domain: new FormControl('', Validators.required),
+            article: new FormControl('')
         });
     }
 
@@ -199,25 +212,40 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.lawProject = new LawProject();
         this.lawProjectSaveEntity = new LawProjectSaveEntity();
+        this.article.id = this.lawProjectForm.get('article').value;
         this.article.title = this.lawProjectForm.get('title').value;
         this.article.content = this.lawProjectForm.get('content').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[4];
         this.article.locality = this.locality;
         this.article.domain = this.domain;
+        this.lawProject.id = this.lawProjectForm.get('id').value;
         this.lawProject.year = this.lawProjectForm.get('year').value;
         this.lawProject.elected = this.elected;
         this.lawProject.stateLawProject = this.lawProjectForm.get('stateLawProject').value;
         this.lawProjectSaveEntity.article= this.article;
         this.lawProjectSaveEntity.lawProject = this.lawProject;
-        this._lawProjectService.create(this.lawProjectSaveEntity).subscribe(data => {
-            if (data['status'] === 'OK') {
-                this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/participation/law-projects');
-            } else {
-                this._toastr.error(data['message']);
-            }
-        });
+        if (!this.lawProject.id) {
+            this._lawProjectService.create(this.lawProjectSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/participation/law-projects');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }else {
+            this.lawProjectSaveEntity.lawProject.updateDate = new Date();
+            this._lawProjectService.update(this.lawProjectSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/participation/law-projects');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+
+        }
     }
 
 }

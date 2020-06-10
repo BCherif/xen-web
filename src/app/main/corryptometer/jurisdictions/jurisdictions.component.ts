@@ -23,7 +23,7 @@ export class JurisdictionsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'description'];
+    displayedColumns = ['name', 'description','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

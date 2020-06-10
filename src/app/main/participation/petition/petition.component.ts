@@ -97,6 +97,15 @@ export class PetitionComponent implements OnInit, OnDestroy {
             .subscribe(petition => {
 
                 if (petition) {
+                    this.getLocalityById(petition.article.locality.id);
+                    this.getDomainById(petition.article.domain.id);
+                    this.petitionForm.get('id').setValue(petition.id);
+                    this.petitionForm.get('title').setValue(petition.article.title);
+                    this.petitionForm.get('content').setValue(petition.article.content);
+                    this.petitionForm.get('decisionMaker').setValue(petition.decisionMaker);
+                    this.petitionForm.get('article').setValue(petition.article.id);
+                    this.petitionForm.get('domain').setValue(petition.article.domain.id);
+                    this.petitionForm.get('locality').setValue(petition.article.locality.id);
                     this.petition = new Petition(petition);
                     this.pageType = 'edit';
                 } else {
@@ -131,7 +140,8 @@ export class PetitionComponent implements OnInit, OnDestroy {
             content: new FormControl('', Validators.required),
             decisionMaker: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
-            domain: new FormControl('', Validators.required)
+            domain: new FormControl('', Validators.required),
+            article: new FormControl('')
         });
     }
 
@@ -171,25 +181,39 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.petition = new Petition();
         this.petitionSaveEntity = new PetitionSaveEntity();
+        this.article.id = this.petitionForm.get('article').value;
         this.article.title = this.petitionForm.get('title').value;
         this.article.content = this.petitionForm.get('content').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[6];
         this.article.locality = this.locality;
         this.article.domain = this.domain;
+        this.petition.id = this.petitionForm.get('id').value;
         this.petition.decisionMaker = this.petitionForm.get('decisionMaker').value;
         this.petition.petitionDate = new Date();
         this.petition.user = this.currentUser;
         this.petitionSaveEntity.article= this.article;
         this.petitionSaveEntity.petition = this.petition;
-        this._petitionService.create(this.petitionSaveEntity).subscribe(data => {
-            if (data['status'] === 'OK') {
-                this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/participation/petitions');
-            } else {
-                this._toastr.error(data['message']);
-            }
-        });
+        if (!this.petition.id) {
+            this._petitionService.create(this.petitionSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/participation/petitions');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }else {
+            this.petitionSaveEntity.petition.updateDate = new Date();
+            this._petitionService.update(this.petitionSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/participation/petitions');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }
     }
 
 }

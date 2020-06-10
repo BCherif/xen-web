@@ -38,6 +38,7 @@
             </button>
 
             <button mat-raised-button
+                    (click)="save()"
                     class="save-product-button"
                     [disabled]="legalFolderForm.invalid || legalFolderForm.pristine"
                     *ngIf="pageType ==='edit'">

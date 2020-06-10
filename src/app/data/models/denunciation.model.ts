@@ -11,6 +11,8 @@ export class Denunciation implements Deserializable{
     justification: string;
     article: Article;
     user: User;
+    createDate: Date = new Date();
+    updateDate: Date;
     
     constructor(denunciation?) {
         denunciation = denunciation || {};
@@ -20,6 +22,8 @@ export class Denunciation implements Deserializable{
         this.justification = denunciation.justification;
         this.article = denunciation.article;
         this.user = denunciation.user;
+        this.createDate = denunciation.createDate;
+        this.updateDate = denunciation.updateDate;
     }
 
     deserialize(input: any): this {

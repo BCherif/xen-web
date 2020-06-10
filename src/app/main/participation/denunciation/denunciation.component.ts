@@ -97,6 +97,16 @@ export class DenunciationComponent implements OnInit, OnDestroy {
             .subscribe(denunciation => {
 
                 if (denunciation) {
+                    this.getLocalityById(denunciation.article.locality.id);
+                    this.getDomainById(denunciation.article.domain.id);
+                    this.denunciationForm.get('id').setValue(denunciation.id);
+                    this.denunciationForm.get('title').setValue(denunciation.article.title);
+                    this.denunciationForm.get('content').setValue(denunciation.article.content);
+                    this.denunciationForm.get('entity').setValue(denunciation.entity);
+                    this.denunciationForm.get('justification').setValue(denunciation.justification);
+                    this.denunciationForm.get('article').setValue(denunciation.article.id);
+                    this.denunciationForm.get('domain').setValue(denunciation.article.domain.id);
+                    this.denunciationForm.get('locality').setValue(denunciation.article.locality.id);
                     this.denunciation = new Denunciation(denunciation);
                     this.pageType = 'edit';
                 } else {
@@ -132,7 +142,8 @@ export class DenunciationComponent implements OnInit, OnDestroy {
             entity: new FormControl('', Validators.required),
             justification: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
-            domain: new FormControl('', Validators.required)
+            domain: new FormControl('', Validators.required),
+            article: new FormControl(''),
         });
     }
 
@@ -172,26 +183,40 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.denunciation = new Denunciation();
         this.denunciationSaveEntity = new DenunciationSaveEntity();
+        this.article.id = this.denunciationForm.get('article').value;
         this.article.title = this.denunciationForm.get('title').value;
         this.article.content = this.denunciationForm.get('content').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[5];
         this.article.locality = this.locality;
         this.article.domain = this.domain;
+        this.denunciation.id = this.denunciationForm.get('id').value;
         this.denunciation.entity = this.denunciationForm.get('entity').value;
         this.denunciation.justification = this.denunciationForm.get('justification').value;
         this.denunciation.denunciationDate = new Date();
         this.denunciation.user = this.currentUser;
         this.denunciationSaveEntity.article= this.article;
         this.denunciationSaveEntity.denunciation = this.denunciation;
-        this._denunciationService.create(this.denunciationSaveEntity).subscribe(data => {
-            if (data['status'] === 'OK') {
-                this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/participation/denunciations');
-            } else {
-                this._toastr.error(data['message']);
-            }
-        });
+        if (!this.denunciation.id) {
+            this._denunciationService.create(this.denunciationSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/participation/denunciations');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }else {
+            this.denunciationSaveEntity.denunciation.updateDate = new Date();
+            this._denunciationService.update(this.denunciationSaveEntity).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._toastr.success(data['message']);
+                    this._router.navigateByUrl('/main/participation/denunciations');
+                } else {
+                    this._toastr.error(data['message']);
+                }
+            });
+        }
     }
 
 }
