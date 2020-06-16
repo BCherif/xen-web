@@ -55,15 +55,15 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
 
         if ( this.action === 'edit' )
         {
-            this.dialogTitle = 'Modifier Un elus';
+            this.dialogTitle = 'Modifier un membre';
             this.elected = _data.elected;
-            this.getLocalityById(this.elected.locality.id);
-            this.getOrganById(this.elected.organ.id);
+            this.getLocalityById(this.elected?.level?.id);
+            this.getOrganById(this.elected?.organ?.id);
             this.updateElectedForm();
         }
         else
         {
-            this.dialogTitle = 'Ajouter Un elus';
+            this.dialogTitle = 'Ajouter un membre';
             this.elected = new Elected({});
             this.createElectedForm();
         }
@@ -141,8 +141,8 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
             firstname: new FormControl(this.elected.firstname, Validators.required),
             job: new FormControl(this.elected.job, Validators.required),
             sexe: new FormControl(this.elected.sexe, Validators.required),
-            locality: new FormControl(this.elected.locality.id, Validators.required),
-            organ: new FormControl(this.elected.organ.id, Validators.required)
+            locality: new FormControl(this.elected?.level?.id, Validators.required),
+            organ: new FormControl(this.elected?.organ?.id, Validators.required)
         });
     }
 
@@ -157,7 +157,7 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
     saveOrUpdate() {
         this.elected = new Elected();
         this.elected = this.electedForm.getRawValue();
-        this.elected.locality = this.locality;
+        this.elected.level = this.locality;
         this.elected.organ = this.organ;
         if (!this.elected.id) {
             this._electedsService.create(this.elected).subscribe(data => {

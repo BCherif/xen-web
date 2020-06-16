@@ -1,17 +1,15 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
 import {Article} from './article.model';
-import {STATE_LAW_PROJECT} from '../enums/enums';
-import {Elected} from './elected.model';
-import {User} from './user.model';
+import {INITIATOR, STATE_LAW_PROJECT} from '../enums/enums';
 
 @Injectable()
 export class LawProject implements Deserializable{
     id: number;
-    year: string;
+    year: Date;
     stateLawProject: STATE_LAW_PROJECT;
     article: Article;
-    elected: Elected;
+    initiator: INITIATOR;
     createDate: Date = new Date();
     updateDate: Date;
     
@@ -21,7 +19,7 @@ export class LawProject implements Deserializable{
         this.year = lawProject.year;
         this.stateLawProject = lawProject.stateLawProject;
         this.article = lawProject.article;
-        this.elected = lawProject.elected;
+        this.initiator = lawProject.initiator;
         this.createDate = lawProject.createDate;
         this.updateDate = lawProject.updateDate;
     }

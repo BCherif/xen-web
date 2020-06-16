@@ -8,6 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {LoginComponent} from './login.component';
+import {SpinnerModule} from '../../../shared/modules/spinner.module';
 
 
 const routes = [
@@ -30,7 +31,8 @@ const routes = [
         MatIconModule,
         MatInputModule,
 
-        FuseSharedModule
+        FuseSharedModule,
+        SpinnerModule
     ]
 })
 export class LoginModule {

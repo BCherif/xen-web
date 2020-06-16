@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -19,7 +21,7 @@
                     settings
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Axes
+                    Liste de axes
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -35,7 +37,7 @@
 
             <!-- ADD BUTTON -->
             <button mat-raised-button
-                    (click)="newDomain()"
+                    (click)="newAxe()"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
                 <span>Nouveau Axe</span>
@@ -70,11 +72,20 @@
                     </mat-cell>
                 </ng-container>
 
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let axe">
+                        <a (click)="editAxe(axe)">
+                            <mat-icon>edit</mat-icon>
+                        </a>
+                    </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let axe; columns: displayedColumns;"
                          class="axe"
-                         (click)="editDomain(axe)"
                          matRipple>
                 </mat-row>
 

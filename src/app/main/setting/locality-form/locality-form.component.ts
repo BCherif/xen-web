@@ -18,6 +18,8 @@ import {Subject} from "rxjs";
 export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
     action: string;
     locality: Locality;
+    levels: Locality[];
+    localitySelected: Locality;
     cuttings: Cutting[];
     cutting: Cutting;
     localityForm: FormGroup;
@@ -51,7 +53,8 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
         {
             this.dialogTitle = 'Modifier Une Localité';
             this.locality = _data.locality;
-            this.getCuttingById(this.locality.cutting.id);
+            this.getCuttingById(this.locality?.cutting?.id);
+            this.getLeveSupById(this.locality?.levelSup?.id);
             this.updateOrderForm();
         }
         else
@@ -68,6 +71,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
      */
     ngOnInit(): void {
         this.getAllCutting();
+        this.getLevelSup();
     }
 
     ngOnDestroy(): void {
@@ -79,6 +83,18 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
+    getLevelSup(){
+        this._localitiesService.getAll().subscribe(value => {
+            this.levels = value['response'];
+        }, error => console.log(error))
+    }
+
+    getLeveSupById(id: number) {
+        this._localitiesService.getById(id).subscribe(value => {
+            this.localitySelected = value['response'];
+        },error => console.log(error))
+    }
+
 
     getAllCutting(){
         this._cuttingsService.getAll().subscribe(value => {
@@ -101,7 +117,8 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
         this.localityForm = this._formBuilder.group({
             id: new FormControl(''),
             name: new FormControl('', Validators.required),
-            cutting: new FormControl('', Validators.required)
+            cutting: new FormControl('', Validators.required),
+            levelSup: new FormControl('')
         });
     }
 
@@ -114,7 +131,8 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
         this.localityForm = this._formBuilder.group({
             id: new FormControl(this.locality.id),
             name: new FormControl(this.locality.name, Validators.required),
-            cutting: new FormControl(this.locality.cutting.id, Validators.required)
+            cutting: new FormControl(this.locality?.cutting?.id, Validators.required),
+            levelSup: new FormControl(this.locality?.levelSup?.id)
         });
     }
 
@@ -122,10 +140,15 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
         this.getCuttingById(value);
     }
 
+    findLevelSupSelected(value) {
+        this.getLeveSupById(value);
+    }
+
     saveOrUpdate() {
         this.locality = new Locality();
         this.locality = this.localityForm.getRawValue();
         this.locality.cutting = this.cutting;
+        this.locality.levelSup = this.localitySelected;
         if (!this.locality.id) {
             this._localitiesService.create(this.locality).subscribe(data => {
                 if (data['status'] === 'OK') {

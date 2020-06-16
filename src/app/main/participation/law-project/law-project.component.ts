@@ -6,7 +6,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
-import {CATEGORY, STATE_LAW_PROJECT, SUB_CATEGORY} from '../../../data/enums/enums';
+import {CATEGORY, INITIATOR, STATE_LAW_PROJECT, SUB_CATEGORY} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {Article} from '../../../data/models/article.model';
@@ -21,6 +21,7 @@ import {LawProjectSaveEntity} from '../../../data/wrapper/law.project.save.entit
 import {Elected} from '../../../data/models/elected.model';
 import {LawProjectService} from './law-project.service';
 import {ElectedsService} from '../../trueometer/electeds/electeds.service';
+import {MatDatepicker} from '@angular/material/datepicker';
 
 @Component({
     selector: 'participation-law-project',
@@ -45,11 +46,12 @@ export class LawProjectComponent implements OnInit, OnDestroy {
     domain: Domain;
     localities: Locality[];
     locality: Locality;
-    elected: Elected;
-    electeds: Elected[];
+    initiators: any;
+    initiator = INITIATOR;
 
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
+
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -97,28 +99,27 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.categories = Object.keys(this.category);
         this.subCategories = Object.keys(this.subCategory);
         this.stateProjects = Object.keys(this.statelawproject);
+        this.initiators = Object.keys(this.initiator);
         this.createLawProjectForm();
         this.getLocalities();
         this.getDomains();
-        this.getElecteds();
         // Subscribe to update interpellation on changes
         this._lawProjectService.onLawProjectChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(lawProject => {
 
                 if (lawProject) {
-                    this.getElectedById(lawProject.elected.id);
-                    this.getLocalityById(lawProject.article.locality.id);
-                    this.getDomainById(lawProject.article.domain.id);
+                    this.getLocalityById(lawProject?.article?.level?.id);
+                    this.getDomainById(lawProject?.article?.domain?.id);
                     this.lawProjectForm.get('id').setValue(lawProject.id);
-                    this.lawProjectForm.get('title').setValue(lawProject.article.title);
-                    this.lawProjectForm.get('content').setValue(lawProject.article.content);
+                    this.lawProjectForm.get('title').setValue(lawProject?.article?.title);
+                    this.lawProjectForm.get('projectContent').setValue(lawProject?.article?.content);
                     this.lawProjectForm.get('year').setValue(lawProject.year);
                     this.lawProjectForm.get('stateLawProject').setValue(lawProject.stateLawProject);
                     this.lawProjectForm.get('article').setValue(lawProject.article.id);
-                    this.lawProjectForm.get('domain').setValue(lawProject.article.domain.id);
-                    this.lawProjectForm.get('elected').setValue(lawProject.elected.id);
-                    this.lawProjectForm.get('locality').setValue(lawProject.article.locality.id);
+                    this.lawProjectForm.get('domain').setValue(lawProject?.article?.domain?.id);
+                    this.lawProjectForm.get('initiator').setValue(lawProject.initiator);
+                    this.lawProjectForm.get('locality').setValue(lawProject?.article?.level?.id);
                     this.lawProject = new LawProject(lawProject);
                     this.pageType = 'edit';
                 } else {
@@ -150,10 +151,10 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.lawProjectForm = this._formBuilder.group({
             id: new FormControl(''),
             title: new FormControl('', Validators.required),
-            content: new FormControl('', Validators.required),
-            year: new FormControl('', Validators.required),
+            projectContent: new FormControl('', Validators.required),
+            year: new FormControl(new Date(), Validators.required),
             stateLawProject: new FormControl('', Validators.required),
-            elected: new FormControl('', Validators.required),
+            initiator: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             article: new FormControl('')
@@ -172,17 +173,6 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
-    getElecteds() {
-        this._electedsService.getAll().subscribe(value => {
-            this.electeds = value['response'];
-        }, error => console.log(error));
-    }
-
-    getElectedById(id: number) {
-        this._electedsService.getById(id).subscribe(value => {
-            this.elected = value['response'];
-        }, error => console.log(error));
-    }
 
     getLocalityById(id: number) {
         this._localitiesService.getById(id).subscribe(value => {
@@ -204,24 +194,20 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.getDomainById(value);
     }
 
-    findByElectedSelected(value) {
-        this.getElectedById(value);
-    }
-
     save() {
         this.article = new Article();
         this.lawProject = new LawProject();
         this.lawProjectSaveEntity = new LawProjectSaveEntity();
         this.article.id = this.lawProjectForm.get('article').value;
         this.article.title = this.lawProjectForm.get('title').value;
-        this.article.content = this.lawProjectForm.get('content').value;
+        this.article.content = this.lawProjectForm.get('projectContent').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[4];
-        this.article.locality = this.locality;
+        this.article.level = this.locality;
         this.article.domain = this.domain;
         this.lawProject.id = this.lawProjectForm.get('id').value;
         this.lawProject.year = this.lawProjectForm.get('year').value;
-        this.lawProject.elected = this.elected;
+        this.lawProject.initiator = this.lawProjectForm.get('initiator').value;
         this.lawProject.stateLawProject = this.lawProjectForm.get('stateLawProject').value;
         this.lawProjectSaveEntity.article= this.article;
         this.lawProjectSaveEntity.lawProject = this.lawProject;

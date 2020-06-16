@@ -10,6 +10,8 @@
 
     <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
 
+        <http-spinner></http-spinner>
+
         <form [formGroup]="electedForm">
 
             <div fxLayout="row" fxLayoutAlign="start start">
@@ -58,7 +60,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Organ</mat-label>
+                    <mat-label>Institution</mat-label>
                     <mat-select formControlName="organ"
                                 (selectionChange)="findOrganSelected($event.value)"
                                 required>

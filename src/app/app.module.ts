@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -25,7 +25,8 @@ import {ToastrModule} from "ngx-toastr";
 import {LOCALE_ID} from '@angular/core';
 import localeFr from '@angular/common/locales/fr';
 import {HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
-import {AuthGuard} from './shared/auth.guard';
+import {AuthGuard} from './shared/guard/auth.guard';
+import {InterceptorService} from './shared/http/interceptor.service';
 
 registerLocaleData(localeFr);
 
@@ -95,7 +96,12 @@ const appRoutes: Routes = [
     ],
     providers: [
         {provide: LOCALE_ID, useValue: 'fr-FR'},
-        {provide: LocationStrategy, useClass: HashLocationStrategy}
+        {provide: LocationStrategy, useClass: HashLocationStrategy},
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: InterceptorService,
+            multi: true
+        }
     ],
     bootstrap   : [
         AppComponent

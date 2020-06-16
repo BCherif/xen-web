@@ -28,6 +28,9 @@ import {ArticlesComponent} from './articles/articles.component';
 import {ArticlesService} from './articles/articles.service';
 import {ArticleComponent} from './article/article.component';
 import {ArticleService} from './article/article.service';
+import {SpinnerModule} from '../../shared/modules/spinner.module';
+import {AngularEditorModule} from '@kolkov/angular-editor';
+import {CKEditorModule} from 'ckeditor4-angular';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -90,7 +93,10 @@ const routes: Routes = [
         FuseWidgetModule,
         MatDialogModule,
         MatToolbarModule,
-        MatMenuModule
+        MatMenuModule,
+        SpinnerModule,
+        CKEditorModule,
+        AngularEditorModule
     ],
     providers   : [],
     entryComponents: [

@@ -32,6 +32,7 @@ import {ResponsesService} from './responses/responses.service';
 import {ResponsesComponent} from './responses/responses.component';
 import {ResponseService} from './response/response.service';
 import {ResponseComponent} from './response/response.component';
+import {SpinnerModule} from '../../shared/modules/spinner.module';
 
 
 const routes: Routes = [
@@ -120,7 +121,8 @@ const routes: Routes = [
         FuseWidgetModule,
         MatDialogModule,
         MatToolbarModule,
-        MatMenuModule
+        MatMenuModule,
+        SpinnerModule
     ],
     providers: [],
     entryComponents: []

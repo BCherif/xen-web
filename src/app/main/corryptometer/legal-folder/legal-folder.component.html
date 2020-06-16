@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -28,22 +30,6 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="save()"
-                    [disabled]="legalFolderForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button
-                    (click)="save()"
-                    class="save-product-button"
-                    [disabled]="legalFolderForm.invalid || legalFolderForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -69,7 +55,7 @@
                             </mat-form-field>
                         </div>
 
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                        <!--<div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                 <mat-label>Contenu</mat-label>
                                 <textarea name="content" formControlName="content"
@@ -78,7 +64,7 @@
                                           max-rows="5">
                                 </textarea>
                             </mat-form-field>
-                        </div>
+                        </div>-->
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
@@ -166,7 +152,7 @@
                                 <mat-label>Date d'accusation</mat-label>
                                 <input [matDatepicker]="dateOfCharge"
                                        (dateChange)="onChangeDate($event)"
-                                       formControlName="dateOfCharge" matInput
+                                       formControlName="dateOfCharge" matInput required
                                        name="dateOfCharge">
                                 <mat-datepicker-toggle [for]="dateOfCharge" matSuffix></mat-datepicker-toggle>
                                 <mat-datepicker #dateOfCharge></mat-datepicker>
@@ -199,6 +185,25 @@
                                 <mat-datepicker #dateStopCS></mat-datepicker>
                             </mat-form-field>
                         </div>
+                        <div>
+                            <ckeditor formControlName="content" required></ckeditor>
+                        </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="save()"
+                                [disabled]="legalFolderForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                (click)="save()"
+                                color="primary"
+                                [disabled]="legalFolderForm.invalid || legalFolderForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
                     </div>
 
                 </form>

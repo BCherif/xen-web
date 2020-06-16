@@ -3,6 +3,11 @@ export enum JUDGMENT {
     NOT_CULPABLE = 'Non coupable'
 }
 
+export enum INITIATOR {
+    PRESIDENT = 'Président de la republique',
+    ASSEMBLY = 'Assemblée nationale'
+}
+
 export enum STATE_PROJECT {
     REALIZE = 'Réaliser',
     NO_REALIZE = 'Non Réaliser',
@@ -14,6 +19,13 @@ export enum CATEGORY {
     CORRUPTOMETER = 'Corruptomètre',
     GOVERNOMETER = 'Gouvernomètre',
     CITIZEN_PARTICIPATION = 'Participation Citoyenne'
+}
+
+export enum GOUV_SUB_CAT {
+    POLITICAL_GOVERNANCE = 'Gouvernance politique et economique',
+    LOCAL_GOVERNANCE = 'Gouvernance locale',
+    PEACE_AND_SECURITY = 'Paix et sécurité',
+    JUSTICE = 'Justice'
 }
 
 export enum SUB_CATEGORY {
@@ -60,8 +72,10 @@ export enum VOICE {
 }
 
 export enum STATE_LAW_PROJECT {
-    OPEN = 'Ouvert',
-    CLOSE = 'Fermé'
+    IN_AMENDMENT = 'En amendement',
+    IN_REJECTION = 'En rejet',
+    IN_PROMULGATION = 'En promulgation',
+    IN_ADOPTION = 'En adoption'
 }
 
 export enum CATEGORY_FORM {

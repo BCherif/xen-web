@@ -10,6 +10,8 @@
 
     <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
 
+        <http-spinner></http-spinner>
+
         <form [formGroup]="axeForm">
 
             <div fxLayout="row" fxLayoutAlign="start start">
@@ -47,7 +49,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="axeForm.invalid"
+                [disabled]="axeForm.invalid || axeForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>

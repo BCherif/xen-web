@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -28,22 +30,6 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="save()"
-                    [disabled]="lawProjectForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button
-                    (click)="save()"
-                    class="save-product-button"
-                    [disabled]="lawProjectForm.invalid || lawProjectForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -65,29 +51,21 @@
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Année</mat-label>
-                                <input name="year" formControlName="year" matInput required>
-                            </mat-form-field>
-                        </div>
-
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                <mat-label>Contenu</mat-label>
-                                <textarea name="content" formControlName="content"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
+                                <mat-label>Date</mat-label>
+                                <input [matDatepicker]="year"
+                                       formControlName="year" matInput required
+                                       name="dateOfCharge">
+                                <mat-datepicker-toggle [for]="year" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #year></mat-datepicker>
                             </mat-form-field>
                         </div>
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Elus concerné</mat-label>
-                                <mat-select formControlName="elected"
-                                            (selectionChange)="findByElectedSelected($event.value)">
-                                    <mat-option *ngFor="let elected of electeds" [value]="elected.id">
-                                        {{elected.firstname}} {{elected.lastname}}
+                                <mat-label>Initiateur</mat-label>
+                                <mat-select formControlName="initiator" required>
+                                    <mat-option *ngFor="let ini of initiators" [value]="ini">
+                                       {{initiator[ini]}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -123,6 +101,25 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+                        <div>
+                            <ckeditor formControlName="projectContent" required></ckeditor>
+                        </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="save()"
+                                [disabled]="lawProjectForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                (click)="save()"
+                                color="primary"
+                                [disabled]="lawProjectForm.invalid || lawProjectForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
                     </div>
 
                 </form>

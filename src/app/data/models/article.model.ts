@@ -11,7 +11,7 @@ export class Article implements Deserializable {
     content: string;
     category: CATEGORY;
     subCategory: SUB_CATEGORY;
-    locality: Locality;
+    level: Locality;
     domain: Domain;
     createDate: Date = new Date();
     updateDate: Date;
@@ -23,7 +23,7 @@ export class Article implements Deserializable {
         this.content = article.content;
         this.category = article.category;
         this.subCategory = article.subCategory;
-        this.locality = article.locality;
+        this.level = article.level;
         this.domain = article.domain;
     }
 

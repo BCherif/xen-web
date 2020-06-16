@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -28,22 +30,6 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="saveOrUpdate()"
-                    [disabled]="programForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button
-                    (click)="saveOrUpdate()"
-                    class="save-product-button"
-                    [disabled]="programForm.invalid || programForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -98,7 +84,7 @@
 
                             <mat-form-field *ngIf="organCallSelected ==='ORGAN' || program.organ != null"
                                             appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Organ concerné</mat-label>
+                                <mat-label>Institution concerné</mat-label>
                                 <mat-select formControlName="organ"
                                             (selectionChange)="findOrganSelected($event.value)">
                                     <mat-option *ngFor="let organ of organs" [value]="organ.id">
@@ -107,6 +93,22 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="saveOrUpdate()"
+                                [disabled]="programForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                (click)="saveOrUpdate()"
+                                color="primary"
+                                [disabled]="programForm.invalid || programForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
 
                     </div>
 

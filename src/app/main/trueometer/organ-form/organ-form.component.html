@@ -10,18 +10,20 @@
 
     <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
 
+        <http-spinner></http-spinner>
+
         <form [formGroup]="organForm">
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Nom de l'organ</mat-label>
+                    <mat-label>Nom</mat-label>
                     <input name="name" formControlName="name" matInput required>
                 </mat-form-field>
             </div>
 
             <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Description de l'organ</mat-label>
+                    <mat-label>Description</mat-label>
                     <textarea name="description" formControlName="description" matInput type="text" max-rows="5"></textarea>
                 </mat-form-field>
             </div>

@@ -1,5 +1,5 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ToastrService} from "ngx-toastr";
 import {Jurisdiction} from '../../../data/models/jurisdiction.model';
@@ -66,7 +66,7 @@ export class CorryptometerJurisdictionFormDialogComponent
     {
         return this._formBuilder.group({
             id      : [this.jurisdiction.id],
-            name    : [this.jurisdiction.name],
+            name    : [this.jurisdiction.name, Validators.required],
             description: [this.jurisdiction.description]
         });
     }

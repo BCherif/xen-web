@@ -95,7 +95,7 @@ export const navigation: FuseNavigation[] = [
                 children: [
                     {
                         id: 'electeds',
-                        title: 'Elus',
+                        title: 'Membres',
                         type: 'item',
                         icon: 'person_add',
                         url: '/main/trueometer/electeds'
@@ -137,18 +137,18 @@ export const navigation: FuseNavigation[] = [
                         url: '/main/publications/forms'
                     },
                     {
-                        id: 'quizzes',
-                        title: 'Questions',
-                        type: 'item',
-                        icon: 'priority_high',
-                        url: '/main/publications/quizzes'
-                    },
-                    {
                         id: 'responses',
                         title: 'Réponses',
                         type: 'item',
                         icon: 'done_all',
                         url: '/main/publications/responses'
+                    },
+                    {
+                        id: 'quizzes',
+                        title: 'Questions',
+                        type: 'item',
+                        icon: 'priority_high',
+                        url: '/main/publications/quizzes'
                     }
                 ]
             },

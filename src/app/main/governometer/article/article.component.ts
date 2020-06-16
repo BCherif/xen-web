@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
-import {CATEGORY, SUB_CATEGORY} from '../../../data/enums/enums';
+import {CATEGORY, GOUV_SUB_CAT} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {ArticleService} from './article.service';
@@ -15,6 +15,7 @@ import {Locality} from '../../../data/models/locality.model';
 import {Domain} from '../../../data/models/domain.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {DomainsService} from '../../setting/domains/domains.service';
+import {ErrorStateMatcher} from '@angular/material/core';
 
 @Component({
     selector: 'governometer-article',
@@ -33,8 +34,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
     articleForm: FormGroup;
     category = CATEGORY;
     categories: any[];
-    subCategory = SUB_CATEGORY;
+    subCategory = GOUV_SUB_CAT;
     subCategories: any[];
+
+    matcher = new MyErrorStateMatcher();
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -93,7 +96,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
                     this.articleForm.get('title').setValue(article.title);
                     this.articleForm.get('content').setValue(article.content);
                     this.articleForm.get('subCategory').setValue(article.subCategory);
-                    this.articleForm.get('category').setValue(article.category);
                     this.articleForm.get('domain').setValue(article.domain.id);
                     this.articleForm.get('locality').setValue(article.locality.id);
                     this.article = new Article(article);
@@ -126,12 +128,11 @@ export class ArticleComponent implements OnInit, OnDestroy {
     createArticleForm() {
         this.articleForm = this._formBuilder.group({
             id: new FormControl(''),
-            title: new FormControl('', Validators.required),
-            content: new FormControl('', Validators.required),
-            subCategory: new FormControl('', Validators.required),
+            title: new FormControl('', [Validators.required,Validators.maxLength(400), Validators.minLength(3)]),
+            content: new FormControl('', [Validators.required,Validators.maxLength(999999), Validators.minLength(10)]),
             locality: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
-            category: new FormControl('', Validators.required)
+            subCategory: new FormControl('', Validators.required)
         });
     }
 
@@ -171,6 +172,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.article = this.articleForm.getRawValue();
         this.article.locality = this.locality;
+        this.article.category = this.categories[1];
         this.article.domain = this.domain;
         if (!this.article.id) {
             this._articleService.create(this.article).subscribe(data => {
@@ -196,4 +198,12 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
     }
 
+}
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+        const isSubmitted = form && form.submitted;
+        return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    }
 }

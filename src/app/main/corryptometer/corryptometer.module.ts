@@ -33,6 +33,8 @@ import {LegalFolderComponent} from './legal-folder/legal-folder.component';
 import {JurisdictionsService} from './jurisdictions/jurisdictions.service';
 import {JurisdictionsComponent} from './jurisdictions/jurisdictions.component';
 import {CorryptometerJurisdictionFormDialogComponent} from './jurisdiction-form/jurisdiction-form.component';
+import {SpinnerModule} from '../../shared/modules/spinner.module';
+import {CKEditorModule} from 'ckeditor4-angular';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -105,7 +107,9 @@ const routes: Routes = [
         MatDialogModule,
         MatToolbarModule,
         MatMenuModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        SpinnerModule,
+        CKEditorModule
     ],
     providers: [],
     entryComponents: [

@@ -7,6 +7,7 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -28,22 +29,6 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="save()"
-                    [disabled]="denunciationForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button
-                    (click)="save()"
-                    class="save-product-button"
-                    [disabled]="denunciationForm.invalid || denunciationForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -59,35 +44,13 @@
                     <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Titre</mat-label>
-                                <textarea name="title" formControlName="title"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
+                                <input name="title" formControlName="title" matInput required>
                             </mat-form-field>
-                        </div>
-
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                <mat-label>Contenu</mat-label>
-                                <textarea name="content" formControlName="content"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
-                            </mat-form-field>
-                        </div>
-
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Entité</mat-label>
                                 <input name="entity" formControlName="entity" matInput required>
-                            </mat-form-field>
-                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Justification</mat-label>
-                                <input name="justification" formControlName="justification" matInput required>
                             </mat-form-field>
                         </div>
 
@@ -113,6 +76,25 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+                        <div>
+                            <ckeditor formControlName="denunContent" required></ckeditor>
+                        </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="save()"
+                                [disabled]="denunciationForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                (click)="save()"
+                                color="primary"
+                                [disabled]="denunciationForm.invalid || denunciationForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
                     </div>
 
                 </form>

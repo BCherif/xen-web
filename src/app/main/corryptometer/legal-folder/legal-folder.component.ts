@@ -167,7 +167,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             stateFolder: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
             dateOfCharge: new FormControl('', Validators.required),
-            dateOfJudment: new FormControl('', Validators.required),
+            dateOfJudment: new FormControl(''),
             dateStopCA: new FormControl(''),
             dateStopCS: new FormControl(''),
             domain: new FormControl('', Validators.required),

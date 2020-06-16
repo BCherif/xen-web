@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -28,22 +30,6 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="saveOrUpdate()"
-                    [disabled]="interpellationForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button
-                    (click)="saveOrUpdate()"
-                    class="save-product-button"
-                    [disabled]="interpellationForm.invalid || interpellationForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -62,17 +48,6 @@
                             <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                 <mat-label>Titre</mat-label>
                                 <textarea name="title" formControlName="title"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
-                            </mat-form-field>
-                        </div>
-
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                <mat-label>Contenu</mat-label>
-                                <textarea name="content" formControlName="content"
                                           matInput type="text"
                                           required
                                           max-rows="5">
@@ -101,7 +76,7 @@
                                 </mat-select>
                             </mat-form-field>
 
-                            <mat-form-field *ngIf="organCallSelected ==='ELECTED' || interpellation.elected != null"
+                            <mat-form-field *ngIf="organCallSelected ==='ELECTED' && organCallSelected !='ORGAN'"
                                             appearance="outline" class="px-8" floatLabel="always" fxFlex="33">
                                 <mat-label>Elus concerné</mat-label>
                                 <mat-select formControlName="elected"
@@ -112,7 +87,7 @@
                                 </mat-select>
                             </mat-form-field>
 
-                            <mat-form-field *ngIf="organCallSelected ==='ORGAN' || interpellation.organ != null"
+                            <mat-form-field *ngIf="organCallSelected ==='ORGAN' && organCallSelected !='ELECTED'"
                                             appearance="outline" class="px-8" floatLabel="always" fxFlex="33">
                                 <mat-label>Organ concerné</mat-label>
                                 <mat-select formControlName="organ"
@@ -124,8 +99,9 @@
                             </mat-form-field>
                         </div>
 
-                        <div  fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field *ngIf="asCallSelected === 'NOT_ANONYMOUS'" appearance="outline" floatLabel="always" class="w-100-p">
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field *ngIf="asCallSelected === 'NOT_ANONYMOUS'" appearance="outline"
+                                            floatLabel="always" class="w-100-p">
                                 <mat-label>Auteur de l'interpellation</mat-label>
                                 <input name="author" formControlName="author" matInput required>
                             </mat-form-field>
@@ -153,6 +129,25 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+                        <div>
+                            <ckeditor formControlName="interContent" required></ckeditor>
+                        </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="saveOrUpdate()"
+                                [disabled]="interpellationForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                (click)="saveOrUpdate()"
+                                color="primary"
+                                [disabled]="interpellationForm.invalid || interpellationForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
                     </div>
 
                 </form>

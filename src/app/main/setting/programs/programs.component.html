@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -19,7 +21,7 @@
                     folder
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Programmes
+                   Liste de Programmes
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -53,14 +55,6 @@
                        matSort
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar>
-
-             <!--
-                <ng-container matColumnDef="years">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Période d'exécution</mat-header-cell>
-                    <mat-cell *matCellDef="let program">
-                        <p class="text-truncate">{{program.years}}</p>
-                    </mat-cell>
-                </ng-container>-->
 
                 <ng-container matColumnDef="startDate">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Date début</mat-header-cell>
@@ -96,22 +90,11 @@
 
                 <!-- Buttons Column -->
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let program">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
-
-                            <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item
-                                        [routerLink]="'/main/setting/programs/'+program.id+'/'+program.title">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>Modifier</span>
-                                </button>
-                            </mat-menu>
-                        </div>
+                        <a  [routerLink]="'/main/setting/programs/'+program.id+'/'+program.title">
+                            <mat-icon>edit</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 
@@ -119,7 +102,6 @@
 
                 <mat-row *matRowDef="let program; columns: displayedColumns;"
                          class="program"
-                         [routerLink]="'/main/setting/programs/'+program.id+'/'+program.title"
                          matRipple>
                 </mat-row>
 

@@ -23,7 +23,7 @@ export class LocalitiesComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'cutting'];
+    displayedColumns = ['name', 'cutting','levelSup','actions'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

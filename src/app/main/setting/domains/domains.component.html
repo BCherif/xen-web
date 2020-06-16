@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -19,7 +21,7 @@
                     home
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Domaines
+                    Liste de domaines
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -58,7 +60,7 @@
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
                     <mat-cell *matCellDef="let domain">
-                        <p class="text-truncate">{{domain.name}}</p>
+                        <p class="text-truncate">{{domain?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -66,14 +68,23 @@
                 <ng-container matColumnDef="axis">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Axe</mat-header-cell>
                     <mat-cell *matCellDef="let domain">
-                        <p class="text-truncate">{{domain.axis.name}}</p>
+                        <p class="text-truncate">{{domain?.axis?.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let domain">
+                        <a (click)="editDomain(domain)">
+                            <mat-icon>edit</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let domain; columns: displayedColumns;"
-                         (click)="editDomain(domain)"
                          class="domain"
                          matRipple>
                 </mat-row>

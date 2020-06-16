@@ -41,12 +41,12 @@ export class SettingOrganFormDialogComponent
 
         if ( this.action === 'edit' )
         {
-            this.dialogTitle = 'Modifier Un Organ';
+            this.dialogTitle = 'Modifier une institution';
             this.organ = _data.organ;
         }
         else
         {
-            this.dialogTitle = 'Ajouter Un Organ';
+            this.dialogTitle = 'Ajouter une institution';
             this.organ = new Organ({});
         }
 

@@ -23,7 +23,7 @@ export class AxesComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'description'];
+    displayedColumns = ['name', 'description','actions'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -75,7 +75,7 @@ export class AxesComponent implements OnInit
     /**
      * New domain
      */
-    newDomain(): void
+    newAxe(): void
     {
         this.dialogRef = this._matDialog.open(SettingAxeFormDialogComponent, {
             panelClass: 'axe-form-dialog',
@@ -86,7 +86,7 @@ export class AxesComponent implements OnInit
     }
 
 
-    editDomain(axis) {
+    editAxe(axis) {
         this.dialogRef = this._matDialog.open(SettingAxeFormDialogComponent, {
             panelClass: 'axe-form-dialog',
             data      : {

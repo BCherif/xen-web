@@ -10,6 +10,8 @@
 
     <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
 
+        <http-spinner></http-spinner>
+
         <form [formGroup]="localityForm">
 
             <div fxLayout="row" fxLayoutAlign="start start">
@@ -27,6 +29,18 @@
                                 required>
                         <mat-option *ngFor="let cutting of cuttings"
                                     [value]="cutting.id">{{cutting.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Localité superieure</mat-label>
+                    <mat-select formControlName="levelSup"
+                                (selectionChange)="findLevelSupSelected($event.value)">
+                        <mat-option *ngFor="let levelSup of levels"
+                                    [value]="levelSup.id">{{levelSup?.name}} - {{levelSup?.cutting.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -51,7 +65,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="localityForm.invalid"
+                [disabled]="localityForm.invalid || localityForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>
