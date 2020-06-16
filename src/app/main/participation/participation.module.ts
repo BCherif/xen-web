@@ -42,6 +42,9 @@ import {LawProjectService} from './law-project/law-project.service';
 import {LawProjectComponent} from './law-project/law-project.component';
 import {CitizenVoicesService} from './citizen-voices/citizen-voices.service';
 import {CitizenVoicesComponent} from './citizen-voices/citizen-voices.component';
+import {SpinnerModule} from '../../shared/modules/spinner.module';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {CKEditorModule} from 'ckeditor4-angular';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -181,7 +184,10 @@ const routes: Routes = [
         FuseWidgetModule,
         MatDialogModule,
         MatToolbarModule,
-        MatMenuModule
+        MatMenuModule,
+        SpinnerModule,
+        MatDatepickerModule,
+        CKEditorModule
     ],
     providers: [],
     entryComponents: []

@@ -1,37 +1,37 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule } from '@angular/material/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { AgmCoreModule } from '@agm/core';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatRippleModule} from '@angular/material/core';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {AgmCoreModule} from '@agm/core';
 
-import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import {NgxDaterangepickerMd} from 'ngx-daterangepicker-material';
 
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
-import {CategoriesService} from "./categories/categories.service";
-import {CategoriesComponent} from "./categories/categories.component";
-import {SettingCategoryFormDialogComponent} from "./category-form/category-form.component";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {CuttingsComponent} from "./cuttings/cuttings.component";
-import {CuttingsService} from "./cuttings/cuttings.service";
-import {SettingCuttingFormDialogComponent} from "./cutting-form/cutting-form.component";
-import {LocalitiesService} from "./localities/localities.service";
-import {LocalitiesComponent} from "./localities/localities.component";
-import {SettingLocalityFormDialogComponent} from "./locality-form/locality-form.component";
+import {FuseSharedModule} from '@fuse/shared.module';
+import {FuseWidgetModule} from '@fuse/components/widget/widget.module';
+import {CategoriesService} from './categories/categories.service';
+import {CategoriesComponent} from './categories/categories.component';
+import {SettingCategoryFormDialogComponent} from './category-form/category-form.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {CuttingsComponent} from './cuttings/cuttings.component';
+import {CuttingsService} from './cuttings/cuttings.service';
+import {SettingCuttingFormDialogComponent} from './cutting-form/cutting-form.component';
+import {LocalitiesService} from './localities/localities.service';
+import {LocalitiesComponent} from './localities/localities.component';
+import {SettingLocalityFormDialogComponent} from './locality-form/locality-form.component';
 import {AxesComponent} from './axes/axes.component';
 import {AxesService} from './axes/axes.service';
 import {SettingAxeFormDialogComponent} from './axe-form/axe-form.component';
@@ -45,47 +45,49 @@ import {ProgramComponent} from './program/program.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
 import {MatMenuModule} from '@angular/material/menu';
+import {SpinnerModule} from '../../shared/modules/spinner.module';
+
 
 const routes: Routes = [
     {
-        path     : 'categories',
+        path: 'categories',
         component: CategoriesComponent,
-        resolve  : {
+        resolve: {
             data: CategoriesService
         }
     },
     {
-        path     : 'cuttings',
+        path: 'cuttings',
         component: CuttingsComponent,
-        resolve  : {
+        resolve: {
             data: CuttingsService
         }
     },
     {
-        path     : 'localities',
+        path: 'localities',
         component: LocalitiesComponent,
-        resolve  : {
+        resolve: {
             data: LocalitiesService
         }
     },
     {
-        path     : 'axes',
+        path: 'axes',
         component: AxesComponent,
-        resolve  : {
+        resolve: {
             data: AxesService
         }
     },
     {
-        path     : 'domains',
+        path: 'domains',
         component: DomainsComponent,
-        resolve  : {
+        resolve: {
             data: DomainsService
         }
     },
     {
-        path     : 'programs',
+        path: 'programs',
         component: ProgramsComponent,
-        resolve  : {
+        resolve: {
             data: ProgramsService
         }
     },
@@ -150,9 +152,10 @@ const routes: Routes = [
         MatDatepickerModule,
         SatDatepickerModule,
         SatNativeDateModule,
-        MatMenuModule
+        MatMenuModule,
+        SpinnerModule
     ],
-    providers   : [],
+    providers: [],
     entryComponents: [
         SettingCategoryFormDialogComponent,
         SettingCuttingFormDialogComponent,
@@ -161,6 +164,5 @@ const routes: Routes = [
         SettingDomainFormDialogComponent
     ]
 })
-export class SettingModule
-{
+export class SettingModule {
 }

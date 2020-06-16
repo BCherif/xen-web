@@ -106,9 +106,9 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             .subscribe(legalFolder => {
 
                 if (legalFolder) {
-                    this.getJurisdictionById(legalFolder.jurisdiction.id);
-                    this.getDomainById(legalFolder.article.domain.id);
-                    this.getLocalityById(legalFolder.article.locality.id);
+                    this.getJurisdictionById(legalFolder?.jurisdiction?.id);
+                    this.getDomainById(legalFolder?.article?.domain?.id);
+                    this.getLocalityById(legalFolder?.article?.level?.id);
                     this.legalFolderForm.get('id').setValue(legalFolder.id);
                     this.legalFolderForm.get('title').setValue(legalFolder.article.title);
                     this.legalFolderForm.get('content').setValue(legalFolder.article.content);
@@ -123,9 +123,9 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                     this.legalFolderForm.get('dateStopCS').setValue(new Date(legalFolder.dateStopCS));
                     this.legalFolderForm.get('judgment').setValue(legalFolder.judgment);
                     this.legalFolderForm.get('article').setValue(legalFolder.article.id);
-                    this.legalFolderForm.get('domain').setValue(legalFolder.article.domain.id);
-                    this.legalFolderForm.get('locality').setValue(legalFolder.article.locality.id);
-                    this.legalFolderForm.get('jurisdiction').setValue(legalFolder.jurisdiction.id);
+                    this.legalFolderForm.get('domain').setValue(legalFolder?.article?.domain?.id);
+                    this.legalFolderForm.get('locality').setValue(legalFolder?.article?.level?.id);
+                    this.legalFolderForm.get('jurisdiction').setValue(legalFolder?.jurisdiction?.id);
                     this.legalFolder = new LegalFolder(legalFolder);
                     this.pageType = 'edit';
                 } else {
@@ -167,7 +167,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             stateFolder: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
             dateOfCharge: new FormControl('', Validators.required),
-            dateOfJudment: new FormControl('', Validators.required),
+            dateOfJudment: new FormControl(''),
             dateStopCA: new FormControl(''),
             dateStopCS: new FormControl(''),
             domain: new FormControl('', Validators.required),
@@ -244,7 +244,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.legalFolder.jurisdiction= this.jurisdiction;
         this.article.category = this.categories[0];
         this.article.subCategory = this.subCategories[8];
-        this.article.locality = this.locality;
+        this.article.level = this.locality;
         this.article.domain = this.domain;
         this.legalFolderSaveEntity.article= this.article;
         this.legalFolderSaveEntity.legalFolder = this.legalFolder;

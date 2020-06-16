@@ -7,6 +7,7 @@ export class Locality implements Deserializable{
     id: number;
     name: string;
     cutting: Cutting;
+    levelSup: Locality;
 
     constructor(locality?) {
         locality = locality || {};

@@ -9,7 +9,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
 import {MatDialog} from "@angular/material/dialog";
-import {STATE_LAW_PROJECT} from '../../../data/enums/enums';
+import {INITIATOR, STATE_LAW_PROJECT} from '../../../data/enums/enums';
 import {LawProjectsService} from './law-projects.service';
 
 @Component({
@@ -24,6 +24,7 @@ export class LawProjectsComponent implements OnInit
     dialogRef: any;
     dataSource: FilesDataSource | null;
     stateLawProject = STATE_LAW_PROJECT;
+    initiator = INITIATOR;
     displayedColumns = ['title','year','elected','stateLawProject','locality','domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})

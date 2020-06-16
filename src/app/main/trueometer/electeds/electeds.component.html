@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -19,7 +21,7 @@
                     person_add
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Membre
+                   Liste de membres
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -38,7 +40,7 @@
                     (click)="newElected()"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau Membre</span>
+                <span>Nouveau membre</span>
             </button>
             <!-- / ADD BUTTON -->
 
@@ -58,21 +60,21 @@
                 <ng-container matColumnDef="firstname">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Prénom</mat-header-cell>
                     <mat-cell *matCellDef="let elected">
-                        <p class="text-truncate">{{elected.firstname}}</p>
+                        <p class="text-truncate">{{elected?.firstname}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="lastname">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
                     <mat-cell *matCellDef="let elected">
-                        <p class="text-truncate">{{elected.lastname}}</p>
+                        <p class="text-truncate">{{elected?.lastname}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="sexe">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Sexe</mat-header-cell>
                     <mat-cell *matCellDef="let elected">
-                        <p class="text-truncate">{{elected.sexe}}</p>
+                        <p class="text-truncate">{{elected?.sexe}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -91,7 +93,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="organ">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Organ</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Institution</mat-header-cell>
                     <mat-cell *matCellDef="let elected">
                         <p class="text-truncate">{{elected?.organ?.name}}</p>
                     </mat-cell>
@@ -99,7 +101,7 @@
 
                 <!-- Buttons Column -->
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let elected">
                         <a (click)="editElected(elected)">
                             <mat-icon>edit</mat-icon>

@@ -10,7 +10,7 @@ export class Elected implements Deserializable{
     firstname: string;
     job: string;
     sexe: string;
-    locality: Locality;
+    level: Locality;
     organ: Organ;
 
     constructor(elected?) {
@@ -20,7 +20,7 @@ export class Elected implements Deserializable{
         this.firstname = elected.firstname;
         this.job = elected.levelOfEducation;
         this.sexe = elected.profession;
-        this.locality = elected.locality;
+        this.level = elected.level;
         this.organ = elected.organ;
     }
 

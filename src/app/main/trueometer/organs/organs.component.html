@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -19,7 +21,7 @@
                     people
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Organs
+                   Liste d'institutions
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -28,7 +30,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Rechercher un organ">
+                    <input #filter placeholder="Rechercher une institution">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -38,7 +40,7 @@
                     (click)="newOrgan()"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau Organ</span>
+                <span>Nouvelle institution</span>
             </button>
             <!-- / ADD BUTTON -->
 
@@ -72,21 +74,11 @@
 
                 <!-- Buttons Column -->
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let organ">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
-
-                            <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item (click)="editOrgan(organ)">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>Modifier</span>
-                                </button>
-                            </mat-menu>
-                        </div>
+                        <a (click)="editOrgan(organ)">
+                            <mat-icon>edit</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 

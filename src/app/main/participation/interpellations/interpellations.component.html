@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -19,7 +21,7 @@
                     volume_up
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    interpellations
+                   Liste d'interpellations
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -71,7 +73,7 @@
                 <ng-container matColumnDef="interpelDate">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
-                        <p class="text-truncate">{{interpellation.interpelDate | date: 'dd/MM/yyyy'}}</p>
+                        <p class="text-truncate">{{interpellation?.interpelDate | date: 'dd/MM/yyyy'}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -104,34 +106,23 @@
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
-                        <p class="text-truncate">{{interpellation?.article?.locality.name}}</p>
+                        <p class="text-truncate">{{interpellation?.article?.level?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="domain">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Domaine</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
-                        <p class="text-truncate">{{interpellation?.article?.domain.name}}</p>
+                        <p class="text-truncate">{{interpellation?.article?.domain?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
-
-                            <mat-menu #moreMenu="matMenu">
-                                  <button mat-menu-item
-                                          [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
-                                      <mat-icon>edit</mat-icon>
-                                      <span>Modifier</span>
-                                  </button>
-                            </mat-menu>
-                        </div>
+                        <a  [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
+                            <mat-icon>edit</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 

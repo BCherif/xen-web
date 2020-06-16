@@ -23,7 +23,7 @@ export class DomainsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'axis'];
+    displayedColumns = ['name', 'axis','actions'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

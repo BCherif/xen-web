@@ -7,6 +7,7 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -23,27 +24,11 @@
                         {{project.name}}
                     </div>
                     <div class="h2" *ngIf="pageType ==='new'">
-                        Nouveau Projet
+                        Nouveau projet
                     </div>
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    [disabled]="projectForm.invalid"
-                    (click)="saveOrUpdate()"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="saveOrUpdate()"
-                    [disabled]="projectForm.invalid || projectForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -83,7 +68,7 @@
                                             (selectionChange)="findProgramSelected($event.value)"
                                             required>
                                     <mat-option *ngFor="let program of programs" [value]="program.id">
-                                        {{program.years}}
+                                        {{program.title}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -121,8 +106,23 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-
                         </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                [disabled]="projectForm.invalid"
+                                (click)="saveOrUpdate()"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="saveOrUpdate()"
+                                [disabled]="projectForm.invalid || projectForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
 
                     </div>
 

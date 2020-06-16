@@ -7,6 +7,7 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayoutAlign="center center"
@@ -54,49 +55,38 @@
                 <ng-container matColumnDef="title">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Titre</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <p class="text-truncate">{{denunciation.article.title}}</p>
+                        <p class="text-truncate">{{denunciation?.article?.title}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="entity">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Entité</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <p class="text-truncate">{{denunciation.entity}}</p>
+                        <p class="text-truncate">{{denunciation?.entity}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <p class="text-truncate">{{denunciation?.article?.locality.name}}</p>
+                        <p class="text-truncate">{{denunciation?.article?.level?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="domain">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Domaine</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <p class="text-truncate">{{denunciation?.article?.domain.name}}</p>
+                        <p class="text-truncate">{{denunciation?.article?.domain?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <!-- Buttons Column -->
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
-
-                            <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item
-                                        [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>Modifier</span>
-                                </button>
-                            </mat-menu>
-                        </div>
+                        <a [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
+                            <mat-icon>edit</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 

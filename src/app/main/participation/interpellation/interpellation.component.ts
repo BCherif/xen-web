@@ -131,17 +131,17 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                         this.getOrganById(interpellation.organ.id);
                         this.interpellationForm.get('organ').setValue(interpellation.organ.id);
                     }
-                    this.getDomainById(interpellation.article.domain.id);
-                    this.getLocalityById(interpellation.article.locality.id);
+                    this.getDomainById(interpellation?.article?.domain?.id);
+                    this.getLocalityById(interpellation?.article?.level?.id);
                     this.interpellationForm.get('id').setValue(interpellation.id);
-                    this.interpellationForm.get('title').setValue(interpellation.article.title);
-                    this.interpellationForm.get('content').setValue(interpellation.article.content);
+                    this.interpellationForm.get('title').setValue(interpellation?.article?.title);
+                    this.interpellationForm.get('interContent').setValue(interpellation?.article?.content);
                     this.interpellationForm.get('organCall').setValue(interpellation.organCall);
                     this.interpellationForm.get('callAs').setValue(interpellation.callAs);
                     this.interpellationForm.get('author').setValue(interpellation.author);
-                    this.interpellationForm.get('article').setValue(interpellation.article.id);
-                    this.interpellationForm.get('domain').setValue(interpellation.article.domain.id);
-                    this.interpellationForm.get('locality').setValue(interpellation.article.locality.id);
+                    this.interpellationForm.get('article').setValue(interpellation?.article.id);
+                    this.interpellationForm.get('domain').setValue(interpellation?.article?.domain?.id);
+                    this.interpellationForm.get('locality').setValue(interpellation?.article?.level?.id);
                     this.interpellation = new Interpellation(interpellation);
                     this.pageType = 'edit';
                 } else {
@@ -174,7 +174,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             title: new FormControl(''),
             author: new FormControl(''),
-            content: new FormControl('', Validators.required),
+            interContent: new FormControl('', Validators.required),
             organCall: new FormControl('', Validators.required),
             callAs: new FormControl('', Validators.required),
             elected: new FormControl(''),
@@ -260,15 +260,13 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         this.interpellation.organCall = this.interpellationForm.get('organCall').value;
         this.interpellation.elected = this.elected;
         this.interpellation.organ = this.organ;
-        if (this.asCallSelected == 'NOT_ANONYMOUS') {
-            this.interpellation.user = this.currentUser;
-        }
+        this.interpellation.user = this.currentUser;
         this.article.title = this.interpellationForm.get('title').value;
         this.article.id = this.interpellationForm.get('article').value;
-        this.article.content = this.interpellationForm.get('content').value;
+        this.article.content = this.interpellationForm.get('interContent').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[7];
-        this.article.locality = this.locality;
+        this.article.level = this.locality;
         this.article.domain = this.domain;
         this.interpellationSaveEntity.article = this.article;
         this.interpellationSaveEntity.interpellation = this.interpellation;
@@ -281,7 +279,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                     this._toastr.error(data['message']);
                 }
             });
-        }else {
+        } else {
             this._interpellationService.update(this.interpellationSaveEntity).subscribe(data => {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
@@ -295,6 +293,13 @@ export class InterpellationComponent implements OnInit, OnDestroy {
 
     getOrganChoice(value) {
         this.organCallSelected = value;
+        if (this.organCallSelected === 'ELECTED') {
+            this.interpellationForm.get('elected').setValue(this.elected?.id);
+            this.interpellationForm.get('organ').setValue(null);
+        } else {
+            this.interpellationForm.get('elected').setValue(null);
+            this.interpellationForm.get('organ').setValue(this.organ?.id);
+        }
     }
 
     getasCallChoice(value) {

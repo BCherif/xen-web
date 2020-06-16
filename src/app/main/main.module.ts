@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { FuseSharedModule } from '@fuse/shared.module';
+import {AngularEditorModule} from '@kolkov/angular-editor';
 
 const routes = [
     {
@@ -41,7 +42,8 @@ const routes = [
 @NgModule({
     imports     : [
         RouterModule.forChild(routes),
-        FuseSharedModule
+        FuseSharedModule,
+        AngularEditorModule
     ]
 })
 export class MainModule
