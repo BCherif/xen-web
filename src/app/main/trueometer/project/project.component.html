@@ -24,7 +24,7 @@
                         {{project.name}}
                     </div>
                     <div class="h2" *ngIf="pageType ==='new'">
-                        Nouveau Projet
+                        Nouveau projet
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                                             (selectionChange)="findProgramSelected($event.value)"
                                             required>
                                     <mat-option *ngFor="let program of programs" [value]="program.id">
-                                        {{program.years}}
+                                        {{program.title}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>

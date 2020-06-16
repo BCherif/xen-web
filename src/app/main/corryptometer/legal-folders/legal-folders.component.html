@@ -65,14 +65,14 @@
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
                     <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal?.article?.locality.name}}</p>
+                        <p class="text-truncate">{{legal?.article?.level?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="domain">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Domaine</mat-header-cell>
                     <mat-cell *matCellDef="let legal">
-                        <p class="text-truncate">{{legal?.article?.domain.name}}</p>
+                        <p class="text-truncate">{{legal?.article?.domain?.name}}</p>
                     </mat-cell>
                 </ng-container>
 

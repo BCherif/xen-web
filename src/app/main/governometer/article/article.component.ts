@@ -90,14 +90,14 @@ export class ArticleComponent implements OnInit, OnDestroy {
             .subscribe(article => {
 
                 if (article) {
-                    this.getDomainById(article.domain.id);
-                    this.getLocalityById(article.locality.id);
+                    this.getDomainById(article?.domain?.id);
+                    this.getLocalityById(article?.level?.id);
                     this.articleForm.get('id').setValue(article.id);
                     this.articleForm.get('title').setValue(article.title);
                     this.articleForm.get('content').setValue(article.content);
                     this.articleForm.get('subCategory').setValue(article.subCategory);
-                    this.articleForm.get('domain').setValue(article.domain.id);
-                    this.articleForm.get('locality').setValue(article.locality.id);
+                    this.articleForm.get('domain').setValue(article?.domain?.id);
+                    this.articleForm.get('locality').setValue(article?.level?.id);
                     this.article = new Article(article);
                     this.pageType = 'edit';
                 } else {
@@ -171,7 +171,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
     save() {
         this.article = new Article();
         this.article = this.articleForm.getRawValue();
-        this.article.locality = this.locality;
+        this.article.level = this.locality;
         this.article.category = this.categories[1];
         this.article.domain = this.domain;
         if (!this.article.id) {
