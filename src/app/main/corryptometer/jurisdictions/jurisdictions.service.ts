@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {Jurisdiction} from '../../../data/models/jurisdiction.model';
+import {DEGREE} from '../../../data/enums/enums';
 
 @Injectable({
     providedIn: 'root'
@@ -77,6 +78,18 @@ export class JurisdictionsService implements Resolve<any>
 
     getById(id: number){
         return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
+    }
+
+    findByDegree(degree: DEGREE){
+        return this._httpClient.get(this.serviceURL + '/getByDegree/' + degree,this.httpOptions);
+    }
+
+    findAllByForAppeal() {
+        return this._httpClient.get(this.serviceURL + '/getByDegree/SECOND_LEVEL',this.httpOptions);
+    }
+
+    findAllByForProvide() {
+        return this._httpClient.get(this.serviceURL + '/getByDegree/CS',this.httpOptions);
     }
 
     create(jurisdiction: Jurisdiction) {

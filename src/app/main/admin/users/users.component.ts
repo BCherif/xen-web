@@ -21,7 +21,7 @@ import {UsersService} from './users.service';
 })
 export class UsersComponent implements OnInit, OnDestroy {
     dataSource: FilesDataSource | null;
-    displayedColumns = ['lastname', 'firstname', 'email'];
+    displayedColumns = ['lastname', 'firstname', 'email','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

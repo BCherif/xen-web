@@ -1,14 +1,14 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
 import {Form} from './form.model';
-import {TYPE_QUIZ} from '../enums/enums';
+import {TYPE_QUIZ_ANSWER} from '../enums/enums';
 
 @Injectable()
 export class Quiz implements Deserializable{
     id: number;
     name: string;
     description: string;
-    typeQuiz : TYPE_QUIZ;
+    typeQuiz : TYPE_QUIZ_ANSWER;
     form: Form;
 
     constructor(quiz?) {

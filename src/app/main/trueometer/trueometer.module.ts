@@ -47,6 +47,7 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import {ProjectService} from './project/project.service';
 import {ProjectComponent} from './project/project.component';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 const maskConfig: Partial<IConfig> = {
     validation: false,
@@ -190,7 +191,8 @@ const routes: Routes = [
         MatDialogModule,
         MatToolbarModule,
         MatMenuModule,
-        SpinnerModule
+        SpinnerModule,
+        NgxSpinnerModule
     ],
     providers   : [],
     entryComponents: [

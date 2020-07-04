@@ -6,8 +6,14 @@
 
     <!-- CENTER -->
     <div class="center">
-
-        <http-spinner></http-spinner>
+        <ngx-spinner
+            bdColor="rgba(51,51,51,0.8)"
+            size="medium"
+            color="#006400"
+            type="ball-scale-multiple"
+        >
+            <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+        </ngx-spinner>
 
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
@@ -47,11 +53,7 @@
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Titre</mat-label>
-                                <textarea name="title" formControlName="title"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
+                                <input name="title" formControlName="title" matInput required>
                             </mat-form-field>
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Sous-categorie</mat-label>
@@ -67,7 +69,7 @@
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Localité</mat-label>
-                                <mat-select formControlName="locality"
+                                <mat-select formControlName="level"
                                             (selectionChange)="findByLocalitySelected($event.value)"
                                             required>
                                     <mat-option *ngFor="let locality of localities"
@@ -86,6 +88,16 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+
+                       <!-- <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <ngx-mat-file-input formControlName="fileName"
+                                                    (change)="selectFile($event)"
+                                                    placeholder="Joindre un fichier" >
+                                </ngx-mat-file-input>
+                                <mat-icon matSuffix>attach_file</mat-icon>
+                            </mat-form-field>
+                        </div>-->
 
                         <div>
                             <ckeditor formControlName="content"></ckeditor>

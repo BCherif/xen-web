@@ -63,11 +63,19 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Description Column -->
-                <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                <!-- level Column -->
+                <ng-container matColumnDef="level">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
                     <mat-cell *matCellDef="let jurisdiction">
-                        <p class="text-truncate">{{jurisdiction.description}}</p>
+                        <p class="text-truncate">{{jurisdiction?.level?.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- level Column -->
+                <ng-container matColumnDef="degree">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Niveau</mat-header-cell>
+                    <mat-cell *matCellDef="let jurisdiction">
+                        <p class="text-truncate">{{degree[jurisdiction.degree]}}</p>
                     </mat-cell>
                 </ng-container>
 

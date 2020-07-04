@@ -21,7 +21,7 @@ import {MatDialog} from '@angular/material/dialog';
 export class RolesComponent implements OnInit {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'description'];
+    displayedColumns = ['name', 'description','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

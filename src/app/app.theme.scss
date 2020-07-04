@@ -83,6 +83,9 @@ $typography: mat-typography-config(
 @import "src/app/main/setting/categories/categories.theme";
 @import "src/app/main/setting/cuttings/cuttings.theme";
 @import "src/app/main/setting/axes/axes.theme";
+@import "src/app/main/corryptometer/appeals/appeals.theme";
+@import "src/app/main/corryptometer/provides/provides.theme";
+@import "src/app/main/corryptometer/traces-folder/traces-folder.theme";
 @import "src/app/main/setting/programs/programs.theme";
 @import "src/app/main/setting/domains/domains.theme";
 @import "src/app/main/setting/localities/localities.theme";
@@ -134,6 +137,9 @@ $typography: mat-typography-config(
     @include norme-laws-theme($theme);
     @include login-theme($theme);
     @include corryptometer-legal-folders-theme($theme);
+    @include corryptometer-appeals-theme($theme);
+    @include corryptometer-provides-theme($theme);
+    @include corryptometer-traces-folder-theme($theme);
     @include corryptometer-jurisdictions-theme($theme);
     @include participation-law-projects-theme($theme);
     @include participation-citizen-voices-theme($theme);

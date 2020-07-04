@@ -1,6 +1,13 @@
 export enum JUDGMENT {
+    IN_PROGRESS = 'En cours',
     CULPABLE = 'Coupable',
-    NOT_CULPABLE = 'Non coupable'
+    RELAX = 'Relaxer'
+}
+
+export enum CS_JUDGMENT {
+    IN_PROGRESS = 'En cours',
+    REJECTION = 'Rejet',
+    BROKEN = 'Casse'
 }
 
 export enum INITIATOR {
@@ -41,17 +48,15 @@ export enum SUB_CATEGORY {
 }
 
 export enum STATE_FOLDER {
-    WITHOUT_CONTINUATION = 'Sans Suite',
     CLOSE = 'Clos',
     IN_PROGRESS = 'En cours'
 }
 
-export enum TYPE_QUIZ {
+export enum TYPE_QUIZ_ANSWER {
     TEXT = 'Texte',
     NUMBER = 'Nombre',
-    CHECK = 'Checkbox',
-    RADIO = 'Radio Button',
-    SELECT = 'Select',
+    CHECK = 'Multiple choix',
+    SELECT = 'Selectionner',
     DATE = 'Date'
 }
 
@@ -66,9 +71,10 @@ export enum ORGAN_CALL {
     ORGAN = 'Organ'
 }
 
-export enum VOICE {
-    FOR = 'Pour',
-    AGAINST = 'Contre'
+export enum DEGREE {
+    CS = 'Cour suprême',
+    SECOND_LEVEL = '2eme degré',
+    FIRST_LEVEL = '1er degré'
 }
 
 export enum STATE_LAW_PROJECT {

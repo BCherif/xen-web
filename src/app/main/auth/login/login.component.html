@@ -2,9 +2,9 @@
 
     <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
 
-         <div class="logo" [@animate]="{value:'*',params:{scale:'0.2'}}">
+        <!-- <div class="logo" [@animate]="{value:'*',params:{scale:'0.2'}}">
              <img src="assets/images/logos/logo.png">
-         </div>
+         </div>-->
 
         <div class="title" [@animate]="{value:'*',params:{delay:'50ms',y:'25px'}}">
             La démocratie par la voix du peuple
@@ -29,7 +29,14 @@
 
             <div class="title">AUTHENTIFICATION</div>
 
-            <http-spinner-small></http-spinner-small>
+            <ngx-spinner
+                bdColor="rgba(51,51,51,0.8)"
+                size="medium"
+                color="#006400"
+                type="ball-scale-multiple"
+            >
+                <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+            </ngx-spinner>
 
             <form (ngSubmit)="onLogin()" name="loginForm" [formGroup]="loginForm" novalidate>
 

@@ -71,4 +71,12 @@ export class FormsService implements Resolve<any>
         });
     }
 
+    create(form: Form) {
+        return this._httpClient.post(this.serviceURL, form,this.httpOptions);
+    }
+
+    getById(id: number) {
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
+    }
+
 }

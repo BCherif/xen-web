@@ -22,7 +22,7 @@ export class ResponsesComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name','description','quiz'];
+    displayedColumns = ['name','quiz','isCorrect'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -197,8 +197,8 @@ export class FilesDataSource extends DataSource<any>
                 case 'name':
                     [propertyA, propertyB] = [a.name, b.name];
                     break;
-                case 'description':
-                    [propertyA, propertyB] = [a.description, b.description];
+                case 'quiz':
+                    [propertyA, propertyB] = [a.quiz, b.quiz];
                     break;
             }
 

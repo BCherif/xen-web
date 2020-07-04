@@ -1,0 +1,199 @@
+<div id="legal-folder" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+        <ngx-spinner
+            bdColor="rgba(51,51,51,0.8)"
+            size="medium"
+            color="#006400"
+            type="ball-scale-multiple">
+            <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+        </ngx-spinner>
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/main/corryptometer/legal-folders'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        Appel sur l'affaire {{legalFolder?.nameOfAccused}}
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+            <button mat-raised-button
+                    (click)="save()"
+                    class="save-product-button"
+                    [disabled]="appealForm.invalid">
+                <span>Enregistrer</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="publicationForm" [formGroup]="appealForm" class="product w-100-p"
+                      fxLayout="column" fxFlex>
+
+                    <mat-tab-group>
+                        <mat-tab label="Infos sur l'affaire">
+                            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+                                <div fxLayout="row" fxLayoutAlign="space-between">
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Entrée</mat-label>
+                                        <mat-select formControlName="degree"
+                                                    required>
+                                            <mat-option *ngFor="let dg of degrees"
+                                                        [value]="dg">{{degree[dg]}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Juridiction</mat-label>
+                                        <mat-select (selectionChange)="findByJurisdictionSelected($event.value)"
+                                                    formControlName="jurisdiction"
+                                                    required>
+                                            <mat-option *ngFor="let juridict of jurisdictions"
+                                                        [value]="juridict.id">{{juridict.name}}
+                                                de {{juridict?.level?.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between">
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Titre</mat-label>
+                                        <input name="title" formControlName="title" matInput required readonly>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Nom de l'accusé</mat-label>
+                                        <input name="nameOfAccused" formControlName="nameOfAccused" matInput required
+                                               readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between">
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Localité</mat-label>
+                                        <mat-select formControlName="locality"
+                                                    (selectionChange)="findByLocalitySelected($event.value)"
+                                                    required>
+                                            <mat-option *ngFor="let locality of localities"
+                                                        [value]="locality.id">{{locality.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Domaine</mat-label>
+                                        <mat-select formControlName="domain"
+                                                    (selectionChange)="findDomainSelected($event.value)"
+                                                    required>
+                                            <mat-option *ngFor="let domain of domains"
+                                                        [value]="domain.id">{{domain.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!--<div>
+                                    <ckeditor formControlName="content" required readonly></ckeditor>
+                                </div>-->
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Etat" [disabled]="!stateTabActive">
+                            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+                                <div fxLayout="row" fxLayoutAlign="space-between">
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Etat</mat-label>
+                                        <mat-select (selectionChange)="choiceState($event.value)"
+                                                    formControlName="stateFolder"
+                                                    required>
+                                            <mat-option *ngFor="let state of statefolders"
+                                                        [value]="state">{{statefolder[state]}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                        <mat-label>Jugement</mat-label>
+                                        <mat-select formControlName="judgment"
+                                                    (selectionChange)="choiceJudment($event.value)"
+                                                    required>
+                                            <mat-option *ngFor="let jud of judments"
+                                                        [value]="jud">{{judment[jud]}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <mat-form-field *ngIf="stateSelected != 'IN_PROGRESS'" appearance="outline"
+                                                floatLabel="always" class="w-100-p">
+                                    <mat-label>Montant en jeu</mat-label>
+                                    <input name="amountAtStake" formControlName="amountAtStake" matInput
+                                           mask="separator" type="text" required>
+                                </mat-form-field>
+                                <mat-form-field *ngIf="stateSelected != 'IN_PROGRESS'" appearance="outline"
+                                                floatLabel="always" class="w-100-p">
+                                    <mat-label>Décision</mat-label>
+                                    <textarea name="decisionOfJurisdiction" formControlName="decisionOfJurisdiction"
+                                              matInput type="text"
+                                              required
+                                              max-rows="5">
+                                </textarea>
+                                </mat-form-field>
+                                <mat-form-field *ngIf="stateSelected != 'IN_PROGRESS'" appearance="outline"
+                                                floatLabel="always" class="w-100-p">
+                                    <mat-label>Motivation</mat-label>
+                                    <textarea name="motivation" formControlName="motivation"
+                                              matInput type="text"
+                                              required
+                                              max-rows="5">
+                                </textarea>
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Date" [disabled]="!dateTabActive">
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Date d'appel</mat-label>
+                                    <input [matDatepicker]="dateAppeal"
+                                           (dateChange)="onChangeDate($event)"
+                                           formControlName="dateAppeal" matInput required
+                                           name="dateOfCharge">
+                                    <mat-datepicker-toggle [for]="dateAppeal" matSuffix></mat-datepicker-toggle>
+                                    <mat-datepicker #dateAppeal></mat-datepicker>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Date de jugement</mat-label>
+                                    <input [matDatepicker]="dateOfJudment"
+                                           formControlName="dateOfJudment" matInput required
+                                           name="dateOfJudment" [min]="minDate">
+                                    <mat-datepicker-toggle [for]="dateOfJudment" matSuffix></mat-datepicker-toggle>
+                                    <mat-datepicker #dateOfJudment></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

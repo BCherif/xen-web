@@ -7,6 +7,15 @@
     <!-- CENTER -->
     <div class="center">
 
+        <ngx-spinner
+            bdColor="rgba(51,51,51,0.8)"
+            size="medium"
+            color="#006400"
+            type="ball-scale-multiple"
+        >
+            <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+        </ngx-spinner>
+
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -22,26 +31,12 @@
                     <div class="h2" *ngIf="pageType ==='edit'">
                         {{user.firstname}} {{user.lastname}}
                     </div>
-                     <div class="h2" *ngIf="pageType ==='new'">
-                         Nouveau Utilisateur
-                     </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        Nouveau Utilisateur
+                    </div>
                 </div>
             </div>
             <!-- / APP TITLE -->
-
-            <button mat-raised-button (click)="save()"
-                    class="save-product-button"
-                    [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button (click)="update()"
-                    class="save-product-button"
-                    [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -84,6 +79,7 @@
                             <input matInput placeholder="Mot de Passe" type="password"
                                    name="password"
                                    formControlName="password"
+                                   required
                                    [required]='pageType === "new"'>
                         </mat-form-field>
 
@@ -102,12 +98,6 @@
                                    formControlName="email">
                         </mat-form-field>
 
-                        <!--<mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                            <mat-label>Objectif CA</mat-label>
-                            <input type="text" required name="turnoverTarget"
-                                   formControlName="turnoverTarget" mask="separator" matInput>
-                        </mat-form-field>-->
-
                         <div>
                             <p>Liste des profiles / roles</p>
                             <mat-divider></mat-divider>
@@ -121,6 +111,20 @@
                                               [formControlName]="i">{{roles[i].name}}</mat-checkbox>
                             </div>
                         </div>
+                        <br>
+                        <button mat-raised-button (click)="save()"
+                                color="primary"
+                                [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button (click)="update()"
+                                color="primary"
+                                [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
 
                     </div>
 

@@ -19,6 +19,7 @@ import {DenunciationSaveEntity} from '../../../data/wrapper/denunciation.save.en
 import {DenunciationService} from './denunciation.service';
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {User} from '../../../data/models/user.model';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'participation-denunciation',
@@ -59,6 +60,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
      * @param _localitiesService
      * @param _domainsService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -68,7 +70,8 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         private _denunciationService: DenunciationService,
         private _localitiesService: LocalitiesService,
         private _domainsService: DomainsService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.article = new Article();
@@ -178,6 +181,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
     }
 
     save() {
+        this._spinnerService.show();
         this.article = new Article();
         this.denunciation = new Denunciation();
         this.denunciationSaveEntity = new DenunciationSaveEntity();
@@ -199,6 +203,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/denunciations');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }
@@ -209,6 +214,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/denunciations');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }

@@ -8,7 +8,9 @@ import {Domain} from './domain.model';
 export class Article implements Deserializable {
     id: number;
     title: string;
+    fileName: string;
     content: string;
+    description: string;
     category: CATEGORY;
     subCategory: SUB_CATEGORY;
     level: Locality;
@@ -20,7 +22,9 @@ export class Article implements Deserializable {
         article = article || {};
         this.id = article.id;
         this.title = article.title;
+        this.fileName = article.fileName;
         this.content = article.content;
+        this.description = article.description;
         this.category = article.category;
         this.subCategory = article.subCategory;
         this.level = article.level;

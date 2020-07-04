@@ -34,6 +34,8 @@ import {AdminCrudRoleComponent} from './crud-role/crud-role.component';
 import {AdminCrudRoleService} from './crud-role/crud-role.service';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {SpinnerModule} from '../../shared/modules/spinner.module';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -122,7 +124,9 @@ const routes: Routes = [
         MatToolbarModule,
         MatMenuModule,
         MatDividerModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        NgxSpinnerModule,
+        SpinnerModule
     ],
     providers   : [],
     entryComponents: [

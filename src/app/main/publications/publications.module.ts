@@ -23,8 +23,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {FormsService} from './forms/forms.service';
 import {FormsComponent} from './forms/forms.component';
-import {FormComponent} from './form/form.component';
-import {FormService} from './form/form.service';
 import {QuizzesService} from './quizzes/quizzes.service';
 import {QuizzesComponent} from './quizzes/quizzes.component';
 import {MatMenuModule} from '@angular/material/menu';
@@ -33,6 +31,11 @@ import {ResponsesComponent} from './responses/responses.component';
 import {ResponseService} from './response/response.service';
 import {ResponseComponent} from './response/response.component';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {PublicationsAddFormDialogComponent} from './add-form/add-form.component';
+import {PublicationsAddQuizDialogComponent} from './add-quiz/add-quiz.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
 const routes: Routes = [
@@ -58,20 +61,6 @@ const routes: Routes = [
         }
     },
     {
-        path: 'forms/:id',
-        component: FormComponent,
-        resolve: {
-            data: FormService
-        }
-    },
-    {
-        path: 'forms/:id/:label',
-        component: FormComponent,
-        resolve: {
-            data: FormService
-        }
-    },
-    {
         path: 'responses/:id',
         component: ResponseComponent,
         resolve: {
@@ -91,9 +80,10 @@ const routes: Routes = [
     declarations: [
         QuizzesComponent,
         FormsComponent,
-        FormComponent,
         ResponsesComponent,
-        ResponseComponent
+        ResponseComponent,
+        PublicationsAddFormDialogComponent,
+        PublicationsAddQuizDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -122,10 +112,16 @@ const routes: Routes = [
         MatDialogModule,
         MatToolbarModule,
         MatMenuModule,
-        SpinnerModule
+        SpinnerModule,
+        NgxSpinnerModule,
+        MatCheckboxModule,
+        MatDatepickerModule
     ],
     providers: [],
-    entryComponents: []
+    entryComponents: [
+        PublicationsAddFormDialogComponent,
+        PublicationsAddQuizDialogComponent
+    ]
 })
 export class PublicationsModule {
 }

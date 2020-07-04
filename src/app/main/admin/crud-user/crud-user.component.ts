@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -14,6 +14,7 @@ import {Role} from '../../../data/models/role.model';
 import {environment} from '../../../../environments/environment';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatCheckboxChange} from '@angular/material/checkbox';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'admin-crud-user',
@@ -43,6 +44,7 @@ export class AdminCrudUserComponent implements OnInit, OnDestroy {
      * @param {MatSnackBar} _matSnackBar
      * @param _router
      * @param _toastrService
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -51,7 +53,8 @@ export class AdminCrudUserComponent implements OnInit, OnDestroy {
         private _rolesService: RolesService,
         private _matSnackBar: MatSnackBar,
         private _router: Router,
-        private _toastrService: ToastrService
+        private _toastrService: ToastrService,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.user = new User();
@@ -111,10 +114,10 @@ export class AdminCrudUserComponent implements OnInit, OnDestroy {
     createUserForm() {
         this.userForm = this._formBuilder.group({
             id: [this.user.id],
-            lastname: [this.user.lastname],
-            firstname: [this.user.firstname],
-            username: [this.user.username],
-            password: [this.user.password],
+            lastname: [this.user.lastname, Validators.required],
+            firstname: [this.user.firstname, Validators.required],
+            username: [this.user.username, Validators.required],
+            password: [this.user.password, Validators.required],
             telephone: [this.user.telephone],
 /*            turnoverTarget: [this.user.turnoverTarget?this.user.turnoverTarget:0],*/
             email: [this.user.email],
@@ -171,6 +174,7 @@ export class AdminCrudUserComponent implements OnInit, OnDestroy {
      * save Or update role
      */
     save(): void {
+        this._spinnerService.show();
         this.user = this.userForm.getRawValue();
         this.user.roles = this.selectedRoleValues;
         this._adminCrudUserService.save(this.user).subscribe((response: any) => {
@@ -178,6 +182,7 @@ export class AdminCrudUserComponent implements OnInit, OnDestroy {
                 this._adminCrudUserService.onUserChanged.next(this.user);
                 this._toastrService.success(response['message'], 'Utilisateur');
                 this._router.navigateByUrl('/main/admin/users');
+                this._spinnerService.hide();
             } else {
                 this._toastrService.error(response['message']);
             }

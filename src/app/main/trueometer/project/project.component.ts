@@ -17,6 +17,7 @@ import {DomainsService} from '../../setting/domains/domains.service';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {ProgramsService} from '../../setting/programs/programs.service';
 import {STATE_PROJECT} from '../../../data/enums/enums';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'trueometer-project',
@@ -54,6 +55,7 @@ export class ProjectComponent implements OnInit, OnDestroy
      * @param {MatSnackBar} _matSnackBar
      * @param _toastr
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _projectService: ProjectService,
@@ -64,7 +66,8 @@ export class ProjectComponent implements OnInit, OnDestroy
         private _location: Location,
         private _matSnackBar: MatSnackBar,
         private _toastr: ToastrService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the default
@@ -191,6 +194,7 @@ export class ProjectComponent implements OnInit, OnDestroy
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.project = new Project();
         this.project = this.projectForm.getRawValue();
         this.project.domain = this.domain;
@@ -201,6 +205,7 @@ export class ProjectComponent implements OnInit, OnDestroy
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/trueometer/projects');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }
@@ -210,6 +215,7 @@ export class ProjectComponent implements OnInit, OnDestroy
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/trueometer/projects');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }

@@ -46,6 +46,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
 import {MatMenuModule} from '@angular/material/menu';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 
 const routes: Routes = [
@@ -153,7 +154,8 @@ const routes: Routes = [
         SatDatepickerModule,
         SatNativeDateModule,
         MatMenuModule,
-        SpinnerModule
+        SpinnerModule,
+        NgxSpinnerModule
     ],
     providers: [],
     entryComponents: [

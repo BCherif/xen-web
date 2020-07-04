@@ -69,24 +69,24 @@
                      </mat-cell>
                  </ng-container>-->
 
-                <ng-container matColumnDef="category">
+               <!-- <ng-container matColumnDef="category">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
                     <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{category[article.category]}}</p>
+                        <p class="text-truncate">{{category[article?.category]}}</p>
                     </mat-cell>
-                </ng-container>
+                </ng-container>-->
 
                 <ng-container matColumnDef="subCategory">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Sous-categorie</mat-header-cell>
                     <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{subCategory[article.subCategory]}}</p>
+                        <p class="text-truncate">{{subCategory[article?.subCategory]}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
                     <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{article.locality.name}}</p>
+                        <p class="text-truncate">{{article?.level?.name}}</p>
                     </mat-cell>
                 </ng-container>
 

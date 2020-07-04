@@ -7,6 +7,7 @@ import {Domain} from '../../../data/models/domain.model';
 import {Axis} from '../../../data/models/axis.model';
 import {DomainsService} from '../domains/domains.service';
 import {AxesService} from '../axes/axes.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'setting-domain-form-dialog',
@@ -34,6 +35,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
      * @param _domainsService
      * @param _axesService
      * @param _toastr
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<SettingDomainFormDialogComponent>,
@@ -42,6 +44,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
         private _domainsService: DomainsService,
         private _axesService: AxesService,
         private _toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the defaults
@@ -123,6 +126,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.domain = new Domain();
         this.domain = this.domainForm.getRawValue();
         this.domain.axis = this.axis;
@@ -131,6 +135,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
                 if (data['status'] === 'OK') {
                     this._domainsService.getDomains();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
@@ -142,6 +147,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
                 if (data['status'] === 'OK') {
                     this._domainsService.getDomains();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);

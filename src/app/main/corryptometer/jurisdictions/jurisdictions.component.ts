@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/internal/operators';
 import {MatDialog} from "@angular/material/dialog";
 import {JurisdictionsService} from './jurisdictions.service';
 import {CorryptometerJurisdictionFormDialogComponent} from '../jurisdiction-form/jurisdiction-form.component';
+import {DEGREE} from '../../../data/enums/enums';
 
 @Component({
     selector     : 'corryptometer-jurisdictions',
@@ -21,9 +22,10 @@ import {CorryptometerJurisdictionFormDialogComponent} from '../jurisdiction-form
 })
 export class JurisdictionsComponent implements OnInit
 {
+    degree = DEGREE;
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'description','buttons'];
+    displayedColumns = ['name', 'level','degree','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -216,8 +218,11 @@ export class FilesDataSource extends DataSource<any>
                 case 'name':
                     [propertyA, propertyB] = [a.name, b.name];
                     break;
-                case 'description':
-                    [propertyA, propertyB] = [a.description, b.description];
+                case 'degree':
+                    [propertyA, propertyB] = [a.degree, b.degree];
+                    break;
+                case 'level':
+                    [propertyA, propertyB] = [a.level.name, b.level.name];
                     break;
             }
 

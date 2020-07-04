@@ -13,6 +13,7 @@ import {Response} from '../../../data/models/response.model';
 import {ResponseSaveEntity} from '../../../data/wrapper/response.save.entity.model';
 import {ResponseService} from './response.service';
 import {QuizzesService} from '../quizzes/quizzes.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'publications-response',
@@ -44,6 +45,7 @@ export class ResponseComponent implements OnInit, OnDestroy
      * @param {MatSnackBar} _matSnackBar
      * @param _toastr
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _responseService: ResponseService,
@@ -52,7 +54,8 @@ export class ResponseComponent implements OnInit, OnDestroy
         private _location: Location,
         private _matSnackBar: MatSnackBar,
         private _toastr: ToastrService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the default
@@ -159,6 +162,7 @@ export class ResponseComponent implements OnInit, OnDestroy
     }
 
     save() {
+        this._spinnerService.show();
         this.responseSaveEntity = new ResponseSaveEntity();
         this.responseSaveEntity.quiz = this.quiz;
         this.responseSaveEntity.responses = this.responses;
@@ -166,6 +170,7 @@ export class ResponseComponent implements OnInit, OnDestroy
             if (data['status'] === 'OK') {
                 this._toastr.success(data['message']);
                 this._router.navigateByUrl('/main/publications/responses');
+                this._spinnerService.hide();
             } else {
                 this._toastr.error(data['message']);
             }

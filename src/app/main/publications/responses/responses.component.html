@@ -35,12 +35,12 @@
             </div>
             <!-- / SEARCH -->
 
-            <button mat-raised-button
-                    [routerLink]="'/main/publications/responses/new'"
-                    class="add-product-button fuse-white mt-24 mt-md-0">
-                <mat-icon>add</mat-icon>
-                <span>Nouvelle Réponse</span>
-            </button>
+            <!-- <button mat-raised-button
+                     [routerLink]="'/main/publications/responses/new'"
+                     class="add-product-button fuse-white mt-24 mt-md-0">
+                 <mat-icon>add</mat-icon>
+                 <span>Nouvelle Réponse</span>
+             </button>-->
 
         </div>
         <!-- / HEADER -->
@@ -56,45 +56,49 @@
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Type réponse</mat-header-cell>
                     <mat-cell *matCellDef="let response">
-                        <p class="text-truncate">{{response.name}}</p>
+                        <p *ngIf="response?.name" class="text-truncate">{{response?.name}}</p>
+                        <p *ngIf="response?.numberFiled" class="text-truncate">{{response?.numberFiled}}</p>
+                        <p *ngIf="response?.dateField" class="text-truncate">{{response?.dateField | date: 'dd/MM/yyyy'}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
-                    <mat-cell *matCellDef="let response">
-                        <p class="text-truncate">{{response.description}}</p>
-                    </mat-cell>
-                </ng-container>
 
                 <ng-container matColumnDef="quiz">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Question</mat-header-cell>
                     <mat-cell *matCellDef="let response">
-                        <p class="text-truncate">{{response.quiz.name}}</p>
+                        <p class="text-truncate">{{response?.quiz?.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="isCorrect">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Est correcte</mat-header-cell>
+                    <mat-cell *matCellDef="let response">
+                        <mat-icon *ngIf="response.isCorrect" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="!response.isCorrect" class="active-icon red-500 s-16">close</mat-icon>
                     </mat-cell>
                 </ng-container>
 
                 <!-- Buttons Column -->
-               <!-- <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let quiz">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
+                <!-- <ng-container matColumnDef="buttons">
+                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                     <mat-cell *matCellDef="let quiz">
+                         <div fxFlex="row" fxLayoutAlign="end center">
+                             <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                     (click)="$event.stopPropagation();">
+                                 <mat-icon class="secondary-text">more_vert</mat-icon>
+                             </button>
 
-                            <mat-menu #moreMenu="matMenu">
-                                <button  mat-menu-item>
-                                    <mat-icon>add</mat-icon>
-                                    <span>Assigner Réponse</span>
-                                </button>
-                            </mat-menu>
-                        </div>
-                    </mat-cell>
-                </ng-container>-->
+                             <mat-menu #moreMenu="matMenu">
+                                 <button  mat-menu-item>
+                                     <mat-icon>add</mat-icon>
+                                     <span>Assigner Réponse</span>
+                                 </button>
+                             </mat-menu>
+                         </div>
+                     </mat-cell>
+                 </ng-container>-->
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 

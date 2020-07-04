@@ -12,13 +12,14 @@ import { ToolbarComponent } from 'app/layout/components/toolbar/toolbar.componen
 import {AuthResetPasswordFormDialogComponent} from '../../../main/auth/reset-password-form/reset-password-form.component';
 import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
     declarations: [
         ToolbarComponent,
         AuthResetPasswordFormDialogComponent
     ],
-    imports     : [
+    imports: [
         RouterModule,
         MatButtonModule,
         MatIconModule,
@@ -28,7 +29,8 @@ import {MatDialogModule} from '@angular/material/dialog';
         MatDialogModule,
         FuseSharedModule,
         FuseSearchBarModule,
-        FuseShortcutsModule
+        FuseShortcutsModule,
+        NgxSpinnerModule
     ],
     entryComponents: [
         AuthResetPasswordFormDialogComponent

@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayout.gt-xs="row"
@@ -73,11 +75,20 @@
                     </mat-cell>
                 </ng-container>
 
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="buttons">
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let user">
+                        <a  [routerLink]="'/main/admin/users/'+user.id+'/'+user.firstname">
+                            <mat-icon>edit</mat-icon>
+                        </a>
+                    </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let user; columns: displayedColumns;"
                          class="user"
-                         [routerLink]="'/main/admin/users/'+user.id+'/'+user.firstname"
                          matRipple>
                 </mat-row>
             </mat-table>

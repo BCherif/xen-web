@@ -3,17 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
-import {Form} from '../../../data/models/form.model';
-import {FormSaveEntity} from '../../../data/wrapper/form.save.entity.model';
+import {XensaUtils} from '../../../utils/xensa-utils';
+import {LegalFolder} from '../../../data/models/legal.folder.model';
+import {Appeal} from '../../../data/models/appeal.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class FormService implements Resolve<any>
+export class AppealOnFolderService implements Resolve<any>
 {
     routeParams: any;
-    form: Form;
-    onFormChanged: BehaviorSubject<any>;
+    legalFolder: LegalFolder;
+    onLegalFolderChanged: BehaviorSubject<any>;
     readonly httpOptions: any;
     readonly serviceURL: string;
 
@@ -27,8 +28,9 @@ export class FormService implements Resolve<any>
     )
     {
         // Set the defaults
-        this.onFormChanged = new BehaviorSubject({});
-        this.serviceURL = environment.serviceUrl + '/forms';
+        this.onLegalFolderChanged = new BehaviorSubject({});
+        this.serviceURL = environment.serviceUrl + '/legal-folders';
+        this.httpOptions = new XensaUtils().httpHeaders();
     }
 
     /**
@@ -45,7 +47,7 @@ export class FormService implements Resolve<any>
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getForm()
+                this.getLegalFolder()
             ]).then(
                 () => {
                     resolve();
@@ -56,35 +58,24 @@ export class FormService implements Resolve<any>
     }
 
     /**
-     * Get form
+     * Get legalFolder
      *
      * @returns {Promise<any>}
      */
-    getForm(): Promise<any> {
+    getLegalFolder(): Promise<any> {
         return new Promise((resolve, reject) => {
-            if (this.routeParams.id === 'new') {
-                this.onFormChanged.next(false);
-                resolve(false);
-            } else {
-                this._httpClient.get(this.serviceURL + '/' + this.routeParams.id, this.httpOptions)
-                    .subscribe((response: any) => {
-                        this.form = response['response'];
-                        this.onFormChanged.next(this.form);
-                        resolve(response['response']);
-                    }, reject);
-            }
+            this._httpClient.get(this.serviceURL + '/' + this.routeParams.id, this.httpOptions)
+                .subscribe((response: any) => {
+                    this.legalFolder = response['response'];
+                    this.onLegalFolderChanged.next(this.legalFolder);
+                    resolve(response['response']);
+                }, reject);
         });
     }
 
-
-    getById(id: number){
-        return this._httpClient.get(this.serviceURL + '/' + id);
+    create(appeal: Appeal) {
+        return this._httpClient.post(environment.serviceUrl+'/appeals', appeal,this.httpOptions);
     }
 
-    create(formSaveEntity: FormSaveEntity) {
-        return this._httpClient.post(this.serviceURL, formSaveEntity);
-    }
-    update(formSaveEntity: FormSaveEntity) {
-        return this._httpClient.put(this.serviceURL, formSaveEntity);
-    }
+
 }

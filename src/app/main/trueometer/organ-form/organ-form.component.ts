@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ToastrService} from "ngx-toastr";
 import {Organ} from "../../../data/models/organ.model";
 import {OrgansService} from "../organs/organs.service";
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'trueometer-organ-form-dialog',
@@ -27,13 +28,15 @@ export class SettingOrganFormDialogComponent
      * @param {FormBuilder} _formBuilder
      * @param _organsService
      * @param _toastr
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<SettingOrganFormDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private _data: any,
         private _formBuilder: FormBuilder,
         private _organsService: OrgansService,
-        private _toastr: ToastrService
+        private _toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the defaults
@@ -72,6 +75,7 @@ export class SettingOrganFormDialogComponent
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.organ = new Organ();
         this.organ = this.organForm.getRawValue();
         if (!this.organ.id) {
@@ -79,6 +83,7 @@ export class SettingOrganFormDialogComponent
                 if (data['status'] === 'OK') {
                     this._organsService.getOrgans();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
@@ -90,6 +95,7 @@ export class SettingOrganFormDialogComponent
                 if (data['status'] === 'OK') {
                     this._organsService.getOrgans();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);

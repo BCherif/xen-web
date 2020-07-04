@@ -31,6 +31,8 @@ import {ArticleService} from './article/article.service';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
 import {AngularEditorModule} from '@kolkov/angular-editor';
 import {CKEditorModule} from 'ckeditor4-angular';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {MaterialFileInputModule} from 'ngx-material-file-input';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -96,7 +98,9 @@ const routes: Routes = [
         MatMenuModule,
         SpinnerModule,
         CKEditorModule,
-        AngularEditorModule
+        AngularEditorModule,
+        NgxSpinnerModule,
+        MaterialFileInputModule
     ],
     providers   : [],
     entryComponents: [

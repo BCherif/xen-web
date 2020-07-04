@@ -6,7 +6,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
-import {CATEGORY, JUDGMENT, STATE_FOLDER, SUB_CATEGORY} from '../../../data/enums/enums';
+import {CATEGORY, DEGREE, JUDGMENT, STATE_FOLDER, SUB_CATEGORY} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {Article} from '../../../data/models/article.model';
@@ -19,6 +19,7 @@ import {LocalitiesService} from '../../setting/localities/localities.service';
 import {DomainsService} from '../../setting/domains/domains.service';
 import {JurisdictionsService} from '../jurisdictions/jurisdictions.service';
 import {Jurisdiction} from '../../../data/models/jurisdiction.model';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'corryptometer-denunciation',
@@ -30,6 +31,9 @@ import {Jurisdiction} from '../../../data/models/jurisdiction.model';
 export class LegalFolderComponent implements OnInit, OnDestroy {
     legalFolder: LegalFolder;
     article: Article;
+    stateTabActive = false;
+    dateTabActive = false;
+    stateSelected: any;
     legalFolderSaveEntity: LegalFolderSaveEntity;
     pageType: string;
     legalFolderForm: FormGroup;
@@ -40,7 +44,11 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     judment = JUDGMENT;
     judments: any[];
     statefolder = STATE_FOLDER;
+    judmentChoice: any;
     statefolders: any[];
+    degree = DEGREE;
+    selectedDegree: any;
+    degrees: any[];
     domains: Domain[];
     domain: Domain;
     localities: Locality[];
@@ -64,6 +72,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
      * @param _jurisdictionsService
      * @param _domainsService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -74,7 +83,8 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         private _localitiesService: LocalitiesService,
         private _jurisdictionsService: JurisdictionsService,
         private _domainsService: DomainsService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.article = new Article();
@@ -96,10 +106,10 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.judments = Object.keys(this.judment);
         this.subCategories = Object.keys(this.subCategory);
         this.statefolders = Object.keys(this.statefolder);
+        this.degrees = Object.keys(this.degree);
         this.createLegalFolderForm();
         this.getLocalities();
         this.getDomains();
-        this.getJurisdictions();
         // Subscribe to update interpellation on changes
         this._legalFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -110,6 +120,8 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                     this.getDomainById(legalFolder?.article?.domain?.id);
                     this.getLocalityById(legalFolder?.article?.level?.id);
                     this.legalFolderForm.get('id').setValue(legalFolder.id);
+                    this.legalFolderForm.get('degree').setValue(legalFolder.degree);
+                    this.getJurisdictions(legalFolder.degree);
                     this.legalFolderForm.get('title').setValue(legalFolder.article.title);
                     this.legalFolderForm.get('content').setValue(legalFolder.article.content);
                     this.legalFolderForm.get('nameOfAccused').setValue(legalFolder.nameOfAccused);
@@ -119,10 +131,8 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                     this.legalFolderForm.get('stateFolder').setValue(legalFolder.stateFolder);
                     this.legalFolderForm.get('dateOfCharge').setValue(new Date(legalFolder.dateOfCharge));
                     this.legalFolderForm.get('dateOfJudment').setValue(new Date(legalFolder.dateOfJudment));
-                    this.legalFolderForm.get('dateStopCA').setValue(new Date(legalFolder.dateStopCA));
-                    this.legalFolderForm.get('dateStopCS').setValue(new Date(legalFolder.dateStopCS));
                     this.legalFolderForm.get('judgment').setValue(legalFolder.judgment);
-                    this.legalFolderForm.get('article').setValue(legalFolder.article.id);
+                    this.legalFolderForm.get('article').setValue(legalFolder?.article?.id);
                     this.legalFolderForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                     this.legalFolderForm.get('locality').setValue(legalFolder?.article?.level?.id);
                     this.legalFolderForm.get('jurisdiction').setValue(legalFolder?.jurisdiction?.id);
@@ -156,7 +166,9 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     createLegalFolderForm() {
         this.legalFolderForm = this._formBuilder.group({
             id: new FormControl(''),
+            degree: new FormControl('', Validators.required),
             title: new FormControl('', Validators.required),
+            description: new FormControl(''),
             nameOfAccused: new FormControl('', Validators.required),
             judgment: new FormControl('', Validators.required),
             jurisdiction: new FormControl('', Validators.required),
@@ -167,16 +179,14 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             stateFolder: new FormControl('', Validators.required),
             locality: new FormControl('', Validators.required),
             dateOfCharge: new FormControl('', Validators.required),
-            dateOfJudment: new FormControl(''),
-            dateStopCA: new FormControl(''),
-            dateStopCS: new FormControl(''),
+            dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             article: new FormControl('')
         });
     }
 
-    getJurisdictions() {
-        this._jurisdictionsService.getAll().subscribe(value => {
+    getJurisdictions(degree: DEGREE) {
+        this._jurisdictionsService.findByDegree(degree).subscribe(value => {
             this.jurisdictions = value['response'];
         }, error => console.log(error));
     }
@@ -224,46 +234,62 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     }
 
     save() {
+        this._spinnerService.show();
         this.article = new Article();
         this.legalFolder = new LegalFolder();
         this.legalFolderSaveEntity = new LegalFolderSaveEntity();
         this.article.id = this.legalFolderForm.get('article').value;
         this.article.title = this.legalFolderForm.get('title').value;
         this.article.content = this.legalFolderForm.get('content').value;
+        this.article.description = this.legalFolderForm.get('description').value;
+        this.article.category = this.categories[0];
+        this.article.subCategory = this.subCategories[8];
+        this.article.level = this.locality;
+        this.article.domain = this.domain;
         this.legalFolder.id = this.legalFolderForm.get('id').value;
         this.legalFolder.stateFolder = this.legalFolderForm.get('stateFolder').value;
         this.legalFolder.judgment = this.legalFolderForm.get('judgment').value;
+        this.legalFolder.degree = this.legalFolderForm.get('degree').value;
         this.legalFolder.nameOfAccused = this.legalFolderForm.get('nameOfAccused').value;
         this.legalFolder.decisionOfJurisdiction = this.legalFolderForm.get('decisionOfJurisdiction').value;
         this.legalFolder.motivation = this.legalFolderForm.get('motivation').value;
         this.legalFolder.amountAtStake = this.legalFolderForm.get('amountAtStake').value;
         this.legalFolder.dateOfCharge = this.legalFolderForm.get('dateOfCharge').value;
         this.legalFolder.dateOfJudment = this.legalFolderForm.get('dateOfJudment').value;
-        this.legalFolder.dateStopCA = this.legalFolderForm.get('dateStopCA').value;
-        this.legalFolder.dateStopCS = this.legalFolderForm.get('dateStopCS').value;
-        this.legalFolder.jurisdiction= this.jurisdiction;
-        this.article.category = this.categories[0];
-        this.article.subCategory = this.subCategories[8];
-        this.article.level = this.locality;
-        this.article.domain = this.domain;
-        this.legalFolderSaveEntity.article= this.article;
+        this.legalFolder.jurisdiction = this.jurisdiction;
+        console.log(this.legalFolder.jurisdiction);
+        this.legalFolderSaveEntity.article = this.article;
         this.legalFolderSaveEntity.legalFolder = this.legalFolder;
         if (!this.legalFolder.id) {
             this._legalFolderService.create(this.legalFolderSaveEntity).subscribe(data => {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
-                    this._router.navigateByUrl('/main/corryptometer/legal-folders');
+                    this._router.navigateByUrl('/main/corryptometer/legal-folders').then(r => {
+                        if (r) {
+                            this._spinnerService.hide();
+                        } else {
+                            console.log('La navigation a échoué!');
+                        }
+                    });
                 } else {
+                    this._spinnerService.hide();
                     this._toastr.error(data['message']);
                 }
             });
-        }else {
+        } else {
             this.legalFolderSaveEntity.legalFolder.updateDate = new Date();
             this._legalFolderService.update(this.legalFolderSaveEntity).subscribe(data => {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
-                    this._router.navigateByUrl('/main/corryptometer/legal-folders');
+                    this._router.navigateByUrl('/main/corryptometer/legal-folders').then(e => {
+                        if (e) {
+                            this._spinnerService.hide();
+                        } else {
+                            console.log('La navigation a échoué!');
+                        }
+                    });
                 } else {
+                    this._spinnerService.hide();
                     this._toastr.error(data['message']);
                 }
             });
@@ -272,5 +298,23 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
 
     onChangeDate(e) {
         this.minDate = new Date(e.value);
+    }
+
+    enterChoice(value) {
+        this.selectedDegree = value;
+        this.getJurisdictions(value);
+        this.stateTabActive = true;
+    }
+
+    choiceJudment(value) {
+        this.judmentChoice = value;
+    }
+
+    choiceState(value) {
+        this.stateSelected = value;
+        this.dateTabActive = true;
+        if (value === 'IN_PROGRESS') {
+            this.legalFolderForm.get('judgment').setValue(this.judments[0]);
+        }
     }
 }

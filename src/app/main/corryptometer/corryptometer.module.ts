@@ -35,6 +35,17 @@ import {JurisdictionsComponent} from './jurisdictions/jurisdictions.component';
 import {CorryptometerJurisdictionFormDialogComponent} from './jurisdiction-form/jurisdiction-form.component';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
 import {CKEditorModule} from 'ckeditor4-angular';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {AppealOnFolderComponent} from './appeal-on-folder/appeal-on-folder.component';
+import {AppealOnFolderService} from './appeal-on-folder/appeal-on-folder.service';
+import {ProvideOnFolderComponent} from './provide-on-folder/provide-on-folder.component';
+import {ProvideOnFolderService} from './provide-on-folder/provide-on-folder.service';
+import {AppealsComponent} from './appeals/appeals.component';
+import {AppealsService} from './appeals/appeals.service';
+import {ProvidesComponent} from './provides/provides.component';
+import {ProvidesService} from './provides/provides.service';
+import {TracesFolderComponent} from './traces-folder/traces-folder.component';
+import {TracesFolderService} from './traces-folder/traces-folder.service';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -57,6 +68,27 @@ const routes: Routes = [
         }
     },
     {
+        path: 'appeals',
+        component: AppealsComponent,
+        resolve: {
+            data: AppealsService
+        }
+    },
+    {
+        path: 'provides',
+        component: ProvidesComponent,
+        resolve: {
+            data: ProvidesService
+        }
+    },
+    {
+        path: 'traces-folder',
+        component: TracesFolderComponent,
+        resolve: {
+            data: TracesFolderService
+        }
+    },
+    {
         path: 'legal-folders/:id',
         component: LegalFolderComponent,
         resolve: {
@@ -69,6 +101,20 @@ const routes: Routes = [
         resolve: {
             data: LegalFolderService
         }
+    },
+    {
+        path     : 'appeal-on-folder/:id',
+        component: AppealOnFolderComponent,
+        resolve  : {
+            data: AppealOnFolderService
+        }
+    },
+    {
+        path     : 'provide-on-folder/:id',
+        component: ProvideOnFolderComponent,
+        resolve  : {
+            data: ProvideOnFolderService
+        }
     }
 ];
 
@@ -77,6 +123,11 @@ const routes: Routes = [
         JurisdictionsComponent,
         LegalFoldersComponent,
         LegalFolderComponent,
+        AppealOnFolderComponent,
+        ProvideOnFolderComponent,
+        AppealsComponent,
+        ProvidesComponent,
+        TracesFolderComponent,
         CorryptometerJurisdictionFormDialogComponent
     ],
     imports: [
@@ -109,7 +160,8 @@ const routes: Routes = [
         MatMenuModule,
         MatDatepickerModule,
         SpinnerModule,
-        CKEditorModule
+        CKEditorModule,
+        NgxSpinnerModule
     ],
     providers: [],
     entryComponents: [

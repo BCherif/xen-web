@@ -2,10 +2,10 @@ import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Category} from "../../../data/models/category.model";
-import {CategoriesService} from "../categories/categories.service";
 import {ToastrService} from "ngx-toastr";
 import {Cutting} from "../../../data/models/cutting.model";
 import {CuttingsService} from "../cuttings/cuttings.service";
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'setting-cutting-form-dialog',
@@ -28,6 +28,7 @@ export class SettingCuttingFormDialogComponent
      * @param {FormBuilder} _formBuilder
      * @param _cuttingsService
      * @param _toastr
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<SettingCuttingFormDialogComponent>,
@@ -35,6 +36,7 @@ export class SettingCuttingFormDialogComponent
         private _formBuilder: FormBuilder,
         private _cuttingsService: CuttingsService,
         private _toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the defaults
@@ -73,6 +75,7 @@ export class SettingCuttingFormDialogComponent
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.cutting = new Category();
         this.cutting = this.cuttingForm.getRawValue();
         if (!this.cutting.id) {
@@ -80,6 +83,7 @@ export class SettingCuttingFormDialogComponent
                 if (data['status'] === 'OK') {
                     this._cuttingsService.getCuttings();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
@@ -91,6 +95,7 @@ export class SettingCuttingFormDialogComponent
                 if (data['status'] === 'OK') {
                     this._cuttingsService.getCuttings();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);

@@ -19,6 +19,7 @@ import {User} from '../../../data/models/user.model';
 import {Petition} from '../../../data/models/petition.model';
 import {PetitionSaveEntity} from '../../../data/wrapper/petition.save.entity.model';
 import {PetitionService} from './petition.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'participation-petition',
@@ -59,6 +60,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
      * @param _localitiesService
      * @param _domainsService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -68,7 +70,8 @@ export class PetitionComponent implements OnInit, OnDestroy {
         private _petitionService: PetitionService,
         private _localitiesService: LocalitiesService,
         private _domainsService: DomainsService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.article = new Article();
@@ -178,6 +181,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
     }
 
     save() {
+        this._spinnerService.show();
         this.article = new Article();
         this.petition = new Petition();
         this.petitionSaveEntity = new PetitionSaveEntity();
@@ -199,6 +203,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/petitions');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }
@@ -209,6 +214,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/petitions');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }

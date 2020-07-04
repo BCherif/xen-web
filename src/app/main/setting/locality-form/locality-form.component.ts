@@ -7,6 +7,7 @@ import {CuttingsService} from "../cuttings/cuttings.service";
 import {Locality} from "../../../data/models/locality.model";
 import {LocalitiesService} from "../localities/localities.service";
 import {Subject} from "rxjs";
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'setting-locality-form-dialog',
@@ -36,6 +37,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
      * @param _cuttingsService
      * @param _localitiesService
      * @param _toastr
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<SettingLocalityFormDialogComponent>,
@@ -44,6 +46,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
         private _cuttingsService: CuttingsService,
         private _localitiesService: LocalitiesService,
         private _toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the defaults
@@ -145,6 +148,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.locality = new Locality();
         this.locality = this.localityForm.getRawValue();
         this.locality.cutting = this.cutting;
@@ -154,6 +158,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
                 if (data['status'] === 'OK') {
                     this._localitiesService.getLocalities();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
@@ -165,13 +170,12 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
                 if (data['status'] === 'OK') {
                     this._localitiesService.getLocalities();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
                     this.matDialogRef.close();
                 }
-            }, error => {
-                // console.log(error);
             });
         }
     }

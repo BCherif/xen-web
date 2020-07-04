@@ -9,6 +9,7 @@ import {OrgansService} from "../organs/organs.service";
 import {ElectedsService} from "../electeds/electeds.service";
 import {Elected} from "../../../data/models/elected.model";
 import {LocalitiesService} from "../../setting/localities/localities.service";
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'trueometer-elected-form-dialog',
@@ -39,6 +40,7 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
      * @param _localitiesService
      * @param _organsService
      * @param _toastr
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<SettingElectedFormDialogComponent>,
@@ -48,6 +50,7 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
         private _localitiesService: LocalitiesService,
         private _organsService: OrgansService,
         private _toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the defaults
@@ -155,6 +158,7 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.elected = new Elected();
         this.elected = this.electedForm.getRawValue();
         this.elected.level = this.locality;
@@ -164,6 +168,7 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
                 if (data['status'] === 'OK') {
                     this._electedsService.getElecteds();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
@@ -175,6 +180,7 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
                 if (data['status'] === 'OK') {
                     this._electedsService.getElecteds();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);

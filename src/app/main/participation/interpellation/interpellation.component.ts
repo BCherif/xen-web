@@ -24,6 +24,7 @@ import {User} from '../../../data/models/user.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {DomainsService} from '../../setting/domains/domains.service';
 import {InterpellationSaveEntity} from '../../../data/wrapper/interpellation.save.entity.model';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'participation-interpellation',
@@ -78,6 +79,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
      * @param _domainsService
      * @param _localitiesService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _interpellationService: InterpellationService,
@@ -90,7 +92,8 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         private _toastr: ToastrService,
         private _domainsService: DomainsService,
         private _localitiesService: LocalitiesService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.interpellation = new Interpellation();
@@ -250,6 +253,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.interpellation = new Interpellation();
         this.article = new Article();
         this.interpellationSaveEntity = new InterpellationSaveEntity();
@@ -275,6 +279,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/interpellations');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }
@@ -284,6 +289,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/interpellations');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }

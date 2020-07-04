@@ -22,6 +22,7 @@ import {Elected} from '../../../data/models/elected.model';
 import {LawProjectService} from './law-project.service';
 import {ElectedsService} from '../../trueometer/electeds/electeds.service';
 import {MatDatepicker} from '@angular/material/datepicker';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'participation-law-project',
@@ -68,6 +69,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
      * @param _localitiesService
      * @param _domainsService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -78,7 +80,8 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         private _electedsService: ElectedsService,
         private _localitiesService: LocalitiesService,
         private _domainsService: DomainsService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.article = new Article();
@@ -195,6 +198,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
     }
 
     save() {
+        this._spinnerService.show();
         this.article = new Article();
         this.lawProject = new LawProject();
         this.lawProjectSaveEntity = new LawProjectSaveEntity();
@@ -216,6 +220,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/law-projects');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }
@@ -226,6 +231,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/participation/law-projects');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }

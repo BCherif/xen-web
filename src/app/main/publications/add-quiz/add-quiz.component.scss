@@ -1,0 +1,88 @@
+@import "src/@fuse/scss/fuse";
+
+.add-quiz-dialog {
+
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+
+    @include media-breakpoint('gt-xs') {
+        width: 600px;
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+
+        .mat-toolbar {
+            flex: 1 0 auto;
+            color: #006400 !important;
+            min-height: initial;
+        }
+
+        .toolbar-bottom {
+            height: auto;
+        }
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        #table {
+            border-collapse: separate;
+        }
+
+        .example-section {
+            display: flex;
+            align-content: center;
+            align-items: center;
+            height: 60px;
+        }
+
+        .example-margin {
+            margin: 0 10px;
+        }
+
+        #table th, #table td {
+            border: 1px solid #000;
+        }
+        .responsiveTbl table {
+            text-align: center;
+            width: 100%;
+        }
+
+        tr {
+            background: #FFFFFF;
+
+            &:nth-child(2n) {
+                background: darken(#FFFFFF, 5%);
+            }
+
+            &:hover {
+                .msg {
+                    opacity: 1;
+                    top: 0;
+                }
+            }
+        }
+
+        th,
+        td {
+            padding: 8px 13px;
+            vertical-align: middle;
+
+            &:nth-child(2) {
+                text-align: left;
+            }
+        }
+
+        th {
+            background: #7f7f80;
+            color: #FFFFFF;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 21px 13px;
+        }
+
+    }
+}

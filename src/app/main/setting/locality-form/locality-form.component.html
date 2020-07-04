@@ -10,7 +10,14 @@
 
     <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
 
-        <http-spinner></http-spinner>
+        <ngx-spinner
+            bdColor="rgba(51,51,51,0.8)"
+            size="medium"
+            color="#006400"
+            type="ball-scale-multiple"
+        >
+            <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+        </ngx-spinner>
 
         <form [formGroup]="localityForm">
 
@@ -34,7 +41,7 @@
                 </mat-form-field>
             </div>
 
-            <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
+            <div fxLayout="row" *ngIf="cutting?.name.toLocaleLowerCase() != 'Région'.toLocaleLowerCase()" class="textarea-wrapper" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Localité superieure</mat-label>
                     <mat-select formControlName="levelSup"

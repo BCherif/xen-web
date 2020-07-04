@@ -39,7 +39,7 @@
                     [routerLink]="'/main/corryptometer/legal-folders/new'"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau dossier</span>
+                <span>Nouvelle affaire</span>
             </button>
 
         </div>
@@ -87,25 +87,19 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let legal">
-                        <a [routerLink]="'/main/corryptometer/legal-folders/'+legal.id+'/'+legal.nameOfAccused">
+                        <a matTooltip="Modifier"
+                           *ngIf="legal.stateFolder ==='IN_PROGRESS'"
+                           [routerLink]="'/main/corryptometer/legal-folders/'+legal.id+'/'+legal.nameOfAccused">
                             <mat-icon>edit</mat-icon>
                         </a>
-<!--
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
-
-                            <mat-menu #moreMenu="matMenu">
-                                <button mat-menu-item
-                                        [routerLink]="'/main/corryptometer/legal-folders/'+legal.id+'/'+legal.nameOfAccused">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>Modifier</span>
-                                </button>
-                            </mat-menu>
-                        </div>
--->
+                        <a matTooltip="Faire un appel" *ngIf="!legal.appeal"
+                           [routerLink]="'/main/corryptometer/appeal-on-folder/'+legal.id">
+                            <mat-icon>add</mat-icon>
+                        </a>
+                        <a matTooltip="Faire un pourvoir" *ngIf="!legal.provide && legal.appeal"
+                           [routerLink]="'/main/corryptometer/provide-on-folder/'+legal.id">
+                            <mat-icon>add</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 

@@ -7,6 +7,15 @@
     <!-- CENTER -->
     <div class="center">
 
+        <ngx-spinner
+            bdColor="rgba(51,51,51,0.8)"
+            size="medium"
+            color="#006400"
+            type="ball-scale-multiple"
+        >
+            <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+        </ngx-spinner>
+
         <!-- HEADER -->
         <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -29,19 +38,6 @@
             </div>
             <!-- / APP TITLE -->
 
-            <button mat-raised-button
-                    class="save-product-button"
-                    [disabled]="roleForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
-
-            <button mat-raised-button (click)="update()"
-                    class="save-product-button"
-                    [disabled]="roleForm.invalid"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
         </div>
         <!-- / HEADER -->
 
@@ -80,6 +76,20 @@
                                               [formControlName]="i">{{privileges[i].name}}</mat-checkbox>
                             </div>
                         </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                [disabled]="roleForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button (click)="update()"
+                                color="primary"
+                                [disabled]="roleForm.invalid"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
                     </div>
 
                 </form>

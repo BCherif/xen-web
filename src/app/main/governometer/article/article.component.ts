@@ -5,6 +5,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+
 import {fuseAnimations} from '@fuse/animations';
 import {CATEGORY, GOUV_SUB_CAT} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
@@ -15,7 +16,7 @@ import {Locality} from '../../../data/models/locality.model';
 import {Domain} from '../../../data/models/domain.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {DomainsService} from '../../setting/domains/domains.service';
-import {ErrorStateMatcher} from '@angular/material/core';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'governometer-article',
@@ -31,13 +32,14 @@ export class ArticleComponent implements OnInit, OnDestroy {
     localities: Locality[];
     locality: Locality;
     pageType: string;
+    fileSelected : File;
+    selectedFiles: FileList;
+    currentFile: File;
     articleForm: FormGroup;
     category = CATEGORY;
     categories: any[];
     subCategory = GOUV_SUB_CAT;
     subCategories: any[];
-
-    matcher = new MyErrorStateMatcher();
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -53,6 +55,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
      * @param _localitiesService
      * @param _domainsService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -62,7 +65,8 @@ export class ArticleComponent implements OnInit, OnDestroy {
         private _articleService: ArticleService,
         private _localitiesService: LocalitiesService,
         private _domainsService: DomainsService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.article = new Article();
@@ -97,7 +101,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
                     this.articleForm.get('content').setValue(article.content);
                     this.articleForm.get('subCategory').setValue(article.subCategory);
                     this.articleForm.get('domain').setValue(article?.domain?.id);
-                    this.articleForm.get('locality').setValue(article?.level?.id);
+                    this.articleForm.get('level').setValue(article?.level?.id);
                     this.article = new Article(article);
                     this.pageType = 'edit';
                 } else {
@@ -130,8 +134,9 @@ export class ArticleComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             title: new FormControl('', [Validators.required,Validators.maxLength(400), Validators.minLength(3)]),
             content: new FormControl('', [Validators.required,Validators.maxLength(999999), Validators.minLength(10)]),
-            locality: new FormControl('', Validators.required),
+            level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
+          /*  fileName: new FormControl(''),*/
             subCategory: new FormControl('', Validators.required)
         });
     }
@@ -168,7 +173,18 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.getDomainById(value);
     }
 
+    onSelectFile(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.fileSelected = file;
+        }
+    }
+
+    selectFile(event) {
+        this.selectedFiles = event.target.files;
+    }
     save() {
+        this._spinnerService.show();
         this.article = new Article();
         this.article = this.articleForm.getRawValue();
         this.article.level = this.locality;
@@ -179,8 +195,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/governometer/articles');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         } else {
@@ -189,8 +207,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/governometer/articles');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
 
@@ -200,10 +220,3 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
 }
 
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-        const isSubmitted = form && form.submitted;
-        return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-    }
-}

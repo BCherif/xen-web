@@ -10,7 +10,13 @@
 
     <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
 
-        <http-spinner></http-spinner>
+        <ngx-spinner
+            bdColor="rgba(51,51,51,0.8)"
+            size="medium"
+            color="#006400"
+            type="ball-scale-multiple">
+            <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
+        </ngx-spinner>
 
         <form [formGroup]="jurisdictionForm">
 
@@ -18,6 +24,31 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Nom</mat-label>
                     <input name="name" formControlName="name" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Niveau</mat-label>
+                    <mat-select formControlName="degree"
+                                required>
+                        <mat-option *ngFor="let deg of degrees"
+                                    [value]="deg">{{degree[deg]}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Localité</mat-label>
+                    <mat-select formControlName="level"
+                                (selectionChange)="findByLocalitySelected($event.value)"
+                                required>
+                        <mat-option *ngFor="let locality of localities"
+                                    [value]="locality.id">{{locality.name}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
 

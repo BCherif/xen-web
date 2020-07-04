@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from '../../../../environments/environment';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'login',
@@ -28,13 +29,15 @@ export class LoginComponent implements OnInit {
      * @param router
      * @param authService
      * @param toastr
+     * @param _spinnerService
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
         private router: Router,
         private authService: AuthService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Configure the layout
         this._fuseConfigService.config = {
@@ -76,6 +79,7 @@ export class LoginComponent implements OnInit {
     }
 
     onLogin(): void {
+        this._spinnerService.show();
 
         this.authBody.username = this.loginForm.value.username;
         this.authBody.password = this.loginForm.value.password;
@@ -89,7 +93,13 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('app-token', btoa(JSON.stringify(ret['response'])));
                 localStorage.setItem('isLoggedin', 'true');
 
-                this.router.navigate(['/main/governometer/articles']);
+                this.router.navigateByUrl('/main/governometer/articles').then(r => {
+                    if (r) {
+                        this._spinnerService.hide();
+                    }else {
+                        console.log("La navigation a échoué!");
+                    }
+                });
             } else {
                 this.toastr.error(ret['message']);
                 // console.log(ret['message']);

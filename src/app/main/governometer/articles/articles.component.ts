@@ -24,7 +24,7 @@ export class ArticlesComponent implements OnInit {
     dataSource: FilesDataSource | null;
     category = CATEGORY;
     subCategory = SUB_CATEGORY;
-    displayedColumns = ['title', 'category', 'subCategory', 'locality', 'domain','buttons'];
+    displayedColumns = ['title', 'subCategory', 'locality', 'domain','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

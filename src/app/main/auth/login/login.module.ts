@@ -5,6 +5,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {LoginComponent} from './login.component';
@@ -26,6 +27,7 @@ const routes = [
         RouterModule.forChild(routes),
 
         MatButtonModule,
+        NgxSpinnerModule,
         MatCheckboxModule,
         MatFormFieldModule,
         MatIconModule,

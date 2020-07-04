@@ -18,6 +18,7 @@ import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'auth-reset-password-form-dialog',
@@ -51,6 +52,7 @@ export class AuthResetPasswordFormDialogComponent implements OnInit {
      * @param _fuseNavigationService
      * @param _fuseSidebarService
      * @param {FormBuilder} _formBuilder
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<AuthResetPasswordFormDialogComponent>,
@@ -60,7 +62,8 @@ export class AuthResetPasswordFormDialogComponent implements OnInit {
         private _fuseSidebarService: FuseSidebarService,
         private _toastr: ToastrService,
         private router: Router,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _spinnerService: NgxSpinnerService
     ) {
 
         this.dialogTitle = 'Changement de mot de passe';
@@ -100,6 +103,7 @@ export class AuthResetPasswordFormDialogComponent implements OnInit {
     }
 
     onResetPassword() {
+        this._spinnerService.show();
         let authBody = new AuthBody();
         authBody.userId = this.currentUser.id;
         authBody.oldPassword = this.resetForm.value.oldPassword;
@@ -110,8 +114,10 @@ export class AuthResetPasswordFormDialogComponent implements OnInit {
                 this.matDialogRef.close();
 
                 this.router.navigate(['/auth/login']);
+                this._spinnerService.hide();
             } else {
                 this._toastr.error(ret['message']);
+                this._spinnerService.hide();
             }
         }, e => {
             // console.log(e);

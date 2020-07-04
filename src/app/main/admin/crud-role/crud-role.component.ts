@@ -14,6 +14,7 @@ import {Router} from '@angular/router';
 import {PrivilegeService} from '../../../services/privilege.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatCheckboxChange} from '@angular/material/checkbox';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'admin-crud-role',
@@ -43,6 +44,7 @@ export class AdminCrudRoleComponent implements OnInit, OnDestroy {
      * @param _matSnackBar
      * @param _router
      * @param _toastrService
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -51,7 +53,8 @@ export class AdminCrudRoleComponent implements OnInit, OnDestroy {
         private _privilegeService: PrivilegeService,
         private _matSnackBar: MatSnackBar,
         private _router: Router,
-        private _toastrService: ToastrService
+        private _toastrService: ToastrService,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.role = new Role();
@@ -157,6 +160,7 @@ export class AdminCrudRoleComponent implements OnInit, OnDestroy {
     }
 
     update(): void {
+        this._spinnerService.show();
         this.role = this.roleForm.getRawValue();
         this.role.privileges = this.selectedPrivilegeValues;
         this._adminCrudRoleService.update(this.role).subscribe((response: any) => {
@@ -164,6 +168,7 @@ export class AdminCrudRoleComponent implements OnInit, OnDestroy {
                 this._adminCrudRoleService.onRoleChanged.next(this.role);
                 this._toastrService.success(response['message'], 'Rôle');
                 this._router.navigateByUrl('/main/admin/roles');
+                this._spinnerService.hide();
             } else {
                 this._toastrService.error(response['message']);
             }

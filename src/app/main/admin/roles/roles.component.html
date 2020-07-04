@@ -7,6 +7,8 @@
     <!-- CENTER -->
     <div class="center">
 
+        <http-spinner></http-spinner>
+
         <!-- HEADER -->
         <div class="header accent"
              fxLayout="column" fxLayout.gt-sm="row"
@@ -34,14 +36,14 @@
             <!-- / SEARCH -->
 
             <!-- ADD BUTTON -->
-           <!-- <div>
-                <button mat-fab class="accent"
-                        id="add-contact-button"
-                        [routerLink]="'/views/admin/roles/new'"
-                        [@animate]="{value:'*', params:{delay:'300ms',scale:'.2'}}">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>-->
+            <!-- <div>
+                 <button mat-fab class="accent"
+                         id="add-contact-button"
+                         [routerLink]="'/views/admin/roles/new'"
+                         [@animate]="{value:'*', params:{delay:'300ms',scale:'.2'}}">
+                     <mat-icon>add</mat-icon>
+                 </button>
+             </div>-->
             <!-- / ADD BUTTON -->
 
         </div>
@@ -71,12 +73,21 @@
                     </mat-cell>
                 </ng-container>
 
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="buttons">
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let role">
+                        <a [routerLink]="'/main/admin/roles/'+ '/by-name/' +role.name">
+                            <mat-icon>edit</mat-icon>
+                        </a>
+                    </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
                 <mat-row *matRowDef="let role; columns: displayedColumns;"
                          class="role"
-                         matRipple
-                         [routerLink]="'/main/admin/roles/'+ '/by-name/' +role.name">
+                         matRipple>
                 </mat-row>
 
             </mat-table>
@@ -86,7 +97,7 @@
                            [pageIndex]="0"
                            [pageSize]="10"
                            [pageSizeOptions]="[5, 10, 25, 100]"
-                           >
+            >
             </mat-paginator>
 
         </div>

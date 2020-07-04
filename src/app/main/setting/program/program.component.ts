@@ -15,6 +15,7 @@ import {Organ} from '../../../data/models/organ.model';
 import {ElectedsService} from '../../trueometer/electeds/electeds.service';
 import {OrgansService} from '../../trueometer/organs/organs.service';
 import {ORGAN_CALL} from '../../../data/enums/enums';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector: 'setting-program',
@@ -51,6 +52,7 @@ export class ProgramComponent implements OnInit, OnDestroy {
      * @param _electedsService
      * @param _organsService
      * @param _router
+     * @param _spinnerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -60,7 +62,8 @@ export class ProgramComponent implements OnInit, OnDestroy {
         private _programService: ProgramService,
         private _electedsService: ElectedsService,
         private _organsService: OrgansService,
-        private _router: Router
+        private _router: Router,
+        private _spinnerService: NgxSpinnerService
     ) {
         // Set the default
         this.program = new Program();
@@ -178,20 +181,19 @@ export class ProgramComponent implements OnInit, OnDestroy {
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.program = new Program();
         this.program = this.programForm.getRawValue();
         this.program.elected = this.elected;
         this.program.startDate = this.startDate;
         this.program.endDate = this.endDate;
-/*
-        this.program.years = this.selected;
-*/
         this.program.organ = this.organ;
         if (!this.program.id) {
             this._programService.create(this.program).subscribe(data => {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/setting/programs');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }
@@ -201,6 +203,7 @@ export class ProgramComponent implements OnInit, OnDestroy {
                 if (data['status'] === 'OK') {
                     this._toastr.success(data['message']);
                     this._router.navigateByUrl('/main/setting/programs');
+                    this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
                 }

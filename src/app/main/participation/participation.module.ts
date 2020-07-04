@@ -45,6 +45,7 @@ import {CitizenVoicesComponent} from './citizen-voices/citizen-voices.component'
 import {SpinnerModule} from '../../shared/modules/spinner.module';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {CKEditorModule} from 'ckeditor4-angular';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -187,7 +188,8 @@ const routes: Routes = [
         MatMenuModule,
         SpinnerModule,
         MatDatepickerModule,
-        CKEditorModule
+        CKEditorModule,
+        NgxSpinnerModule
     ],
     providers: [],
     entryComponents: []

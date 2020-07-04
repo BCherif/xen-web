@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ToastrService} from "ngx-toastr";
 import {Axis} from '../../../data/models/axis.model';
 import {AxesService} from '../axes/axes.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
     selector     : 'setting-axe-form-dialog',
@@ -27,6 +28,7 @@ export class SettingAxeFormDialogComponent
      * @param {FormBuilder} _formBuilder
      * @param _axesService
      * @param _toastr
+     * @param _spinnerService
      */
     constructor(
         public matDialogRef: MatDialogRef<SettingAxeFormDialogComponent>,
@@ -34,6 +36,7 @@ export class SettingAxeFormDialogComponent
         private _formBuilder: FormBuilder,
         private _axesService: AxesService,
         private _toastr: ToastrService,
+        private _spinnerService: NgxSpinnerService
     )
     {
         // Set the defaults
@@ -72,6 +75,7 @@ export class SettingAxeFormDialogComponent
     }
 
     saveOrUpdate() {
+        this._spinnerService.show();
         this.axis = new Axis();
         this.axis = this.axeForm.getRawValue();
         if (!this.axis.id) {
@@ -79,6 +83,7 @@ export class SettingAxeFormDialogComponent
                 if (data['status'] === 'OK') {
                     this._axesService.getAxies();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
@@ -90,6 +95,7 @@ export class SettingAxeFormDialogComponent
                 if (data['status'] === 'OK') {
                     this._axesService.getAxies();
                     this._toastr.success(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);

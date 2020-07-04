@@ -41,6 +41,27 @@ export const navigation: FuseNavigation[] = [
                         type: 'item',
                         icon: 'folder',
                         url: '/main/corryptometer/legal-folders'
+                    },
+                    {
+                        id: 'appeals',
+                        title: 'Appels',
+                        type: 'item',
+                        icon: 'folder',
+                        url: '/main/corryptometer/appeals'
+                    },
+                    {
+                        id: 'provides',
+                        title: 'Pourvoirs',
+                        type: 'item',
+                        icon: 'folder',
+                        url: '/main/corryptometer/provides'
+                    },
+                    {
+                        id: 'traces-folder',
+                        title: 'Historiques',
+                        type: 'item',
+                        icon: 'folder',
+                        url: '/main/corryptometer/traces-folder'
                     }
                 ]
             },
@@ -137,18 +158,18 @@ export const navigation: FuseNavigation[] = [
                         url: '/main/publications/forms'
                     },
                     {
-                        id: 'responses',
-                        title: 'Réponses',
-                        type: 'item',
-                        icon: 'done_all',
-                        url: '/main/publications/responses'
-                    },
-                    {
                         id: 'quizzes',
                         title: 'Questions',
                         type: 'item',
                         icon: 'priority_high',
                         url: '/main/publications/quizzes'
+                    },
+                    {
+                        id: 'responses',
+                        title: 'Réponses',
+                        type: 'item',
+                        icon: 'done_all',
+                        url: '/main/publications/responses'
                     }
                 ]
             },

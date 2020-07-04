@@ -10,6 +10,8 @@ import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
 import {MatDialog} from "@angular/material/dialog";
 import {FormsService} from './forms.service';
+import {PublicationsAddFormDialogComponent} from '../add-form/add-form.component';
+import {PublicationsAddQuizDialogComponent} from '../add-quiz/add-quiz.component';
 import {CATEGORY_FORM} from '../../../data/enums/enums';
 
 @Component({
@@ -24,7 +26,7 @@ export class FormsComponent implements OnInit
     dialogRef: any;
     categoryForm = CATEGORY_FORM;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name','categoryForm'];
+    displayedColumns = ['name','categoryForm','actions'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -72,6 +74,36 @@ export class FormsComponent implements OnInit
 
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
+    }
+
+    addForm(): void {
+        this.dialogRef = this._matDialog.open(PublicationsAddFormDialogComponent, {
+            panelClass: 'add-form-dialog',
+            data      : {
+                action: 'new'
+            }
+        });
+    }
+
+
+    editForm(form) {
+        this.dialogRef = this._matDialog.open(PublicationsAddFormDialogComponent, {
+            panelClass: 'add-form-dialog',
+            data      : {
+                action: 'edit',
+                form:form
+            }
+        });
+    }
+
+    addQuiz(form) {
+        this.dialogRef = this._matDialog.open(PublicationsAddQuizDialogComponent, {
+            panelClass: 'add-quiz-dialog',
+            data      : {
+                action: 'addQUiz',
+                form:form
+            }
+        });
     }
 
 }

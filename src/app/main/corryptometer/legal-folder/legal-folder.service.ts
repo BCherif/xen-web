@@ -78,6 +78,10 @@ export class LegalFolderService implements Resolve<any>
         });
     }
 
+    getById(id: number){
+        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
+    }
+
     create(legalFolderSaveEntity: LegalFolderSaveEntity) {
         return this._httpClient.post(this.serviceURL, legalFolderSaveEntity,this.httpOptions);
     }

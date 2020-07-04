@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Quiz} from '../../../data/models/quiz.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {QuizSaveEntity} from '../../../data/wrapper/quiz.save.entity.model';
 
 @Injectable({
     providedIn: 'root'
@@ -69,6 +70,10 @@ export class QuizzesService implements Resolve<any>
                     }
                 }, reject);
         });
+    }
+
+    create(quizSaveEntity: QuizSaveEntity) {
+        return this._httpClient.post(this.serviceURL, quizSaveEntity,this.httpOptions);
     }
 
     getAll() {
