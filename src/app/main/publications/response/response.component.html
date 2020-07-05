@@ -39,7 +39,7 @@
 
             <button mat-raised-button
                     class="save-product-button"
-                    [disabled]="responseForm.invalid || !isLinesCorrect()"
+                    [disabled]="responseForm.invalid"
                     (click)="save()"
                     *ngIf="pageType ==='new'">
                 <span>Enregistrer</span>
@@ -92,9 +92,9 @@
                                 <td>
                                     <textarea [(ngModel)]="reponse.name" id="name_{{i}}" matInput></textarea>
                                 </td>
-                                <td>
+                                <!--<td>
                                     <textarea [(ngModel)]="reponse.description" id="description_{{i}}" matInput></textarea>
-                                </td>
+                                </td>-->
                                 <td>
                                     <span>
                                         <a (click)="delete(i)" href="javascript:void(0)">

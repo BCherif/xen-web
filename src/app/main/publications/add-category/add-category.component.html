@@ -19,7 +19,7 @@
             <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
         </ngx-spinner>
 
-        <form [formGroup]="addForm">
+        <form [formGroup]="quizCatForm">
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
@@ -28,32 +28,10 @@
                 </mat-form-field>
             </div>
 
-            <div fxLayout="row" fxLayoutAlign="start start">
+            <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Type</mat-label>
-                    <mat-select formControlName="categoryForm"
-                                required>
-                        <mat-option *ngFor="let cat of categories"
-                                    [value]="cat">{{categoryForm[cat]}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Catégorie</mat-label>
-                    <mat-select formControlName="quizCategories" multiple required>
-                        <mat-select-trigger>
-                            {{addForm.get('quizCategories').value ? addForm.get('quizCategories').value[0].name : ''}}
-                            <span *ngIf="addForm.get('quizCategories').value?.length > 1"
-                                  class="example-additional-selection">
-        (+{{addForm.get('quizCategories').value.length - 1}} {{addForm.get('quizCategories').value?.length === 2 ? 'autres' : 'autres'}}
-                                )
-      </span>
-                        </mat-select-trigger>
-                        <mat-option *ngFor="let quizCat of categoriesQuiz"
-                                    [value]="quizCat">{{quizCat?.name}}</mat-option>
-                    </mat-select>
+                    <mat-label>Description</mat-label>
+                    <textarea name="description" formControlName="description" matInput type="text" max-rows="5"></textarea>
                 </mat-form-field>
             </div>
 
@@ -67,7 +45,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="addForm.invalid"
+                [disabled]="quizCatForm.invalid"
                 matTooltip="Enregistrer">
             Enregistrer
         </button>
@@ -75,7 +53,7 @@
         <button *ngIf="action === 'edit'"
                 mat-button
                 class="save-button"
-                [disabled]="addForm.invalid || addForm.pristine"
+                [disabled]="quizCatForm.invalid || quizCatForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>

@@ -1,13 +1,13 @@
 @import "src/@fuse/scss/fuse";
 
-.add-form-dialog {
+.add-category-dialog {
 
     @include media-breakpoint('xs') {
         width: 100%;
     }
 
     @include media-breakpoint('gt-xs') {
-        width: 600px;
+        width: 400px;
     }
 
     .mat-dialog-container {

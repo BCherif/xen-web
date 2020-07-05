@@ -77,7 +77,7 @@ export class QuizzesService implements Resolve<any>
     }
 
     getAll() {
-        return this._httpClient.get(this.serviceURL);
+        return this._httpClient.get(this.serviceURL,this.httpOptions);
     }
 
     getById(id: number){

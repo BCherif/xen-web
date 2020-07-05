@@ -147,7 +147,7 @@ export class ResponseComponent implements OnInit, OnDestroy
         this.responses.splice(size+1,0,newResponse);
     }
 
-    isLinesCorrect(): boolean {
+    /*isLinesCorrect(): boolean {
         let ret: boolean = true;
         if (this.responses.length < 1) {
             ret = false;
@@ -159,7 +159,7 @@ export class ResponseComponent implements OnInit, OnDestroy
             }
         }
         return ret;
-    }
+    }*/
 
     save() {
         this._spinnerService.show();
@@ -176,21 +176,5 @@ export class ResponseComponent implements OnInit, OnDestroy
             }
         })
     }
-
-  /*  save() {
-        this.form = new Form();
-        this.formSaveEntity = new FormSaveEntity();
-        this.form = this.crudForm.getRawValue();
-        this.formSaveEntity.form = this.form;
-        this.formSaveEntity.quizList = this.quizs;
-        this._formService.create(this.formSaveEntity).subscribe(data=>{
-            if (data['status'] === 'OK') {
-                this._toastr.success(data['message']);
-                this._router.navigateByUrl('/main/publications/forms');
-            } else {
-                this._toastr.error(data['message']);
-            }
-        })
-    }*/
 
 }

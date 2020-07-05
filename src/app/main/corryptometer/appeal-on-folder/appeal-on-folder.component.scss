@@ -41,6 +41,14 @@
             height: 64px;
         }
 
+        .readonly-wrapper {
+            cursor: not-allowed;
+        }
+
+        .readonly-wrapper .readonly-block {
+            pointer-events: none;
+        }
+
         .appel-on-folder-image {
             overflow: hidden;
             width: 128px;

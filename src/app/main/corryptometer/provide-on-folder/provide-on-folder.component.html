@@ -54,9 +54,10 @@
                         <mat-tab label="Infos sur l'affaire">
                             <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
                                 <div fxLayout="row" fxLayoutAlign="space-between">
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                    <mat-form-field class="readonly-wrapper" appearance="outline" floatLabel="always" fxFlex="50">
                                         <mat-label>Entrée</mat-label>
                                         <mat-select formControlName="degree"
+                                                    [disabled]="true"
                                                     required>
                                             <mat-option *ngFor="let dg of degrees"
                                                         [value]="dg">{{degree[dg]}}

@@ -35,12 +35,12 @@
             </div>
             <!-- / SEARCH -->
 
-         <!--   <button mat-raised-button
-                    [routerLink]="'/main/publications/quizzes/new'"
+            <button mat-raised-button
+                    (click)="newQuiz()"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau Formulaire</span>
-            </button>-->
+                <span>Nouvelle question</span>
+            </button>
 
         </div>
         <!-- / HEADER -->
@@ -58,7 +58,7 @@
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
                     <mat-cell *matCellDef="let quiz">
-                        <p class="text-truncate">{{quiz.name}}</p>
+                        <p class="text-truncate">{{quiz?.name}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -69,10 +69,10 @@
                     </mat-cell>
                 </ng-container>-->
 
-                <ng-container matColumnDef="form">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Formulaire</mat-header-cell>
+                <ng-container matColumnDef="type">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
                     <mat-cell *matCellDef="let quiz">
-                        <p class="text-truncate">{{quiz?.form?.name}}</p>
+                        <p class="text-truncate">{{typeQuiz[quiz?.typeQuiz]}}</p>
                     </mat-cell>
                 </ng-container>
 

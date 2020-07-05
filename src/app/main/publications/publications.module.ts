@@ -36,6 +36,10 @@ import {PublicationsAddFormDialogComponent} from './add-form/add-form.component'
 import {PublicationsAddQuizDialogComponent} from './add-quiz/add-quiz.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {QuizCategoriesService} from './quiz-categories/quiz-categories.service';
+import {QuizCategoriesComponent} from './quiz-categories/quiz-categories.component';
+import {PublicationsAddCategoryDialogComponent} from './add-category/add-category.component';
+import {PublicationsAffectQuizDialogComponent} from './affect-quiz/affect-quiz.component';
 
 
 const routes: Routes = [
@@ -44,6 +48,13 @@ const routes: Routes = [
         component: QuizzesComponent,
         resolve: {
             data: QuizzesService
+        }
+    },
+    {
+        path: 'quiz-categories',
+        component: QuizCategoriesComponent,
+        resolve: {
+            data: QuizCategoriesService
         }
     },
     {
@@ -82,8 +93,11 @@ const routes: Routes = [
         FormsComponent,
         ResponsesComponent,
         ResponseComponent,
+        QuizCategoriesComponent,
         PublicationsAddFormDialogComponent,
-        PublicationsAddQuizDialogComponent
+        PublicationsAddQuizDialogComponent,
+        PublicationsAddCategoryDialogComponent,
+        PublicationsAffectQuizDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -120,7 +134,9 @@ const routes: Routes = [
     providers: [],
     entryComponents: [
         PublicationsAddFormDialogComponent,
-        PublicationsAddQuizDialogComponent
+        PublicationsAddQuizDialogComponent,
+        PublicationsAddCategoryDialogComponent,
+        PublicationsAffectQuizDialogComponent
     ]
 })
 export class PublicationsModule {

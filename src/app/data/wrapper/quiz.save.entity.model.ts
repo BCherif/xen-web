@@ -7,6 +7,4 @@ import {Response} from '../models/response.model';
 export class QuizSaveEntity{
     quiz?: Quiz;
     responses?: Response[];
-
-
 }

@@ -1,11 +1,13 @@
 import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ToastrService} from "ngx-toastr";
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Form} from '../../../data/models/form.model';
 import {FormsService} from '../forms/forms.service';
 import {CATEGORY_FORM} from '../../../data/enums/enums';
+import {QuizCategoriesService} from '../quiz-categories/quiz-categories.service';
+import {QuizCategory} from '../../../data/models/quiz.category.model';
 
 @Component({
     selector     : 'publications-add-form-dialog',
@@ -20,6 +22,7 @@ export class PublicationsAddFormDialogComponent implements OnInit
     form: Form;
     addForm: FormGroup;
     categoryForm = CATEGORY_FORM;
+    categoriesQuiz : QuizCategory[];
     categories : any[];
     dialogTitle: string;
 
@@ -30,6 +33,7 @@ export class PublicationsAddFormDialogComponent implements OnInit
      * @param _data
      * @param {FormBuilder} _formBuilder
      * @param _formsService
+     * @param _quizCategoriesService
      * @param _toastr
      * @param _spinnerService
      */
@@ -38,6 +42,7 @@ export class PublicationsAddFormDialogComponent implements OnInit
         @Inject(MAT_DIALOG_DATA) private _data: any,
         private _formBuilder: FormBuilder,
         private _formsService: FormsService,
+        private _quizCategoriesService: QuizCategoriesService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService
     )
@@ -61,6 +66,7 @@ export class PublicationsAddFormDialogComponent implements OnInit
 
     ngOnInit() {
         this.categories = Object.keys(this.categoryForm);
+        this.getAllQuizCategorie();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -72,13 +78,20 @@ export class PublicationsAddFormDialogComponent implements OnInit
      *
      * @returns {FormGroup}
      */
-    createForm(): FormGroup
+    createForm()
     {
         return this._formBuilder.group({
-            id      : [this.form.id],
-            name    : [this.form.name, Validators.required],
-            categoryForm: [this.form.categoryForm, Validators.required]
+            id      : new FormControl(this.form.id),
+            name    : new FormControl(this.form.name, Validators.required),
+            categoryForm:new FormControl(this.form.categoryForm, Validators.required),
+            quizCategories:new FormControl(this.form.quizCategories, Validators.required)
         });
+    }
+
+    getAllQuizCategorie(){
+        this._quizCategoriesService.getAll().subscribe(value => {
+            this.categoriesQuiz = value['response'];
+        },error => console.error(error));
     }
 
     saveOrUpdate() {

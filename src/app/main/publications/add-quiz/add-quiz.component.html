@@ -37,10 +37,10 @@
                 </mat-form-field>
             </div>
 
-            <div class="responsiveTbl">
+            <div *ngIf="typeSelected ==='CHECK' || typeSelected ==='SELECT'" class="responsiveTbl">
                 <table formArrayName="answers">
                     <tr>
-                        <th colspan="2">Ajouter une réponse:</th>
+                        <th colspan="1">Ajouter une réponse:</th>
                         <th width="150px">
                             <button (click)="addAnswer()" class="submit-button" color="#fff" mat-stroked-button>
                                 <mat-icon>add</mat-icon>
@@ -49,29 +49,29 @@
                     </tr>
                     <tr *ngFor="let answer of answers().controls; let i=index" [formGroupName]="i">
                         <td>
-                            <mat-form-field *ngIf="typeSelected === 'DATE'" appearance="outline" fxFlex>
+                            <!--<mat-form-field *ngIf="typeSelected === 'DATE'" appearance="outline" fxFlex>
                                 <mat-label>Date</mat-label>
                                 <input [matDatepicker]="date"
                                        formControlName="dateField" matInput
                                        name="date">
                                 <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
                                 <mat-datepicker #date></mat-datepicker>
-                            </mat-form-field>
-                            <mat-form-field *ngIf="typeSelected ==='TEXT'" appearance="outline" fxFlex>
+                            </mat-form-field>-->
+                            <mat-form-field appearance="outline" fxFlex>
                                 <mat-label>Libéllé :</mat-label>
                                 <input name="name" formControlName="name" matInput required>
                             </mat-form-field>
-                            <mat-form-field *ngIf="typeSelected ==='NUMBER'" appearance="outline" fxFlex>
+                            <!--<mat-form-field *ngIf="typeSelected ==='NUMBER'" appearance="outline" fxFlex>
                                 <mat-label>Nombre :</mat-label>
                                 <input name="name" formControlName="numberFiled" matInput required>
-                            </mat-form-field>
+                            </mat-form-field>-->
                         </td>
-                        <td>
-                            <div class="example-section">
-                                <mat-checkbox class="example-margin" formControlName="isCorrect">Est correcte
-                                </mat-checkbox>
-                            </div>
-                        </td>
+                        <!-- <td>
+                             <div class="example-section">
+                                 <mat-checkbox class="example-margin" formControlName="isCorrect">Est correcte
+                                 </mat-checkbox>
+                             </div>
+                         </td>-->
                         <td>
                             <button (click)="removeAnswer(i)" class="submit-button" color="#C00000" mat-stroked-button>
                                 <mat-icon>delete</mat-icon>
@@ -87,8 +87,7 @@
 
     <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="center">
 
-        <button *ngIf="action !== 'edit'"
-                mat-button
+        <button mat-button
                 (click)="saveQuiz()"
                 class="save-button"
                 [disabled]="quizForm.invalid"

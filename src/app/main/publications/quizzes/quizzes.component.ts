@@ -10,6 +10,8 @@ import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
 import {MatDialog} from "@angular/material/dialog";
 import {QuizzesService} from './quizzes.service';
+import {PublicationsAddQuizDialogComponent} from '../add-quiz/add-quiz.component';
+import {TYPE_QUIZ_ANSWER} from '../../../data/enums/enums';
 
 @Component({
     selector     : 'publications-quizzes',
@@ -21,8 +23,9 @@ import {QuizzesService} from './quizzes.service';
 export class QuizzesComponent implements OnInit
 {
     dialogRef: any;
+    typeQuiz = TYPE_QUIZ_ANSWER;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name','form'];
+    displayedColumns = ['name','type'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -72,6 +75,14 @@ export class QuizzesComponent implements OnInit
             });
     }
 
+    newQuiz() {
+        this.dialogRef = this._matDialog.open(PublicationsAddQuizDialogComponent, {
+            panelClass: 'add-quiz-dialog',
+            data      : {
+                action: 'new'
+            }
+        });
+    }
 }
 
 export class FilesDataSource extends DataSource<any>
@@ -197,8 +208,8 @@ export class FilesDataSource extends DataSource<any>
                 case 'name':
                     [propertyA, propertyB] = [a.name, b.name];
                     break;
-                case 'form':
-                    [propertyA, propertyB] = [a.form, b.form];
+                case 'type':
+                    [propertyA, propertyB] = [a.type, b.type];
                     break;
             }
 

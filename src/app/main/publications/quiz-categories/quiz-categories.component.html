@@ -1,4 +1,4 @@
-<div id="forms" class="page-layout carded fullwidth inner-scroll">
+<div id="quiz-categories" class="page-layout carded fullwidth inner-scroll">
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
@@ -6,8 +6,6 @@
 
     <!-- CENTER -->
     <div class="center">
-
-        <http-spinner></http-spinner>
 
         <!-- HEADER -->
         <div class="header accent"
@@ -18,10 +16,10 @@
             <div class="logo mb-24 mb-md-0"
                  fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    edit
+                    create
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Liste de formulaires
+                    Categories
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -30,17 +28,19 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Rechercher un formulaire">
+                    <input #filter placeholder="Rechercher une categorie">
                 </div>
             </div>
             <!-- / SEARCH -->
 
+            <!-- ADD BUTTON -->
             <button mat-raised-button
-                    (click)="addForm()"
+                    (click)="newCategory()"
                     class="add-product-button fuse-white mt-24 mt-md-0">
                 <mat-icon>add</mat-icon>
-                <span>Nouveau Formulaire</span>
+                <span>Nouvelle catégorie</span>
             </button>
+            <!-- / ADD BUTTON -->
 
         </div>
         <!-- / HEADER -->
@@ -48,7 +48,7 @@
         <!-- CONTENT CARD -->
         <div class="content-card">
 
-            <mat-table class="forms-table"
+            <mat-table class="quiz-categories-table"
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"
@@ -57,36 +57,23 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
-                    <mat-cell *matCellDef="let form">
-                        <p class="text-truncate">{{form.name}}</p>
+                    <mat-cell *matCellDef="let category">
+                        <p class="text-truncate">{{category.name}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="categoryForm">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
-                    <mat-cell *matCellDef="let form">
-                        <p class="text-truncate">{{categoryForm[form.categoryForm]}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Buttons Column -->
-                <ng-container matColumnDef="actions">
-                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-                    <mat-cell *matCellDef="let form">
-                       <!-- <a matTooltip="Modifier" (click)="editForm(form)">
-                            <mat-icon>edit</mat-icon>
-                        </a>&nbsp;-->
-                        <br><br>
-                        <a matTooltip="Affeter une question" (click)="affectQuiz(form)">
-                            <mat-icon>add</mat-icon>
-                        </a>&nbsp;
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                    <mat-cell *matCellDef="let category">
+                        <p class="text-truncate">{{category.description}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let form; columns: displayedColumns;"
-                         class="form"
+                <mat-row *matRowDef="let category; columns: displayedColumns;"
+                         class="quiz-category"
                          matRipple>
                 </mat-row>
 

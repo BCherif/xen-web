@@ -1,18 +1,17 @@
 import {Deserializable} from "../wrapper/deserializable.wrapper";
 import {Injectable} from "@angular/core";
-import {Quiz} from './quiz.model';
 
 @Injectable()
-export class Response implements Deserializable{
+export class QuizCategory implements Deserializable{
     id: number;
     name: string;
-    quiz: Quiz;
+    description: string;
 
-    constructor(response?) {
-        response = response || {};
-        this.id = response.id;
-        this.name = response.name;
-        this.quiz = response.quiz;
+    constructor(quizCategory?) {
+        quizCategory = quizCategory || {};
+        this.id = quizCategory.id;
+        this.name = quizCategory.name ;
+        this.description = quizCategory.description;
     }
 
     deserialize(input: any): this {

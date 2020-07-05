@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ToastrService} from "ngx-toastr";
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Form} from '../../../data/models/form.model';
-import {FormsService} from '../forms/forms.service';
 import {Quiz} from '../../../data/models/quiz.model';
 import {QuizzesService} from '../quizzes/quizzes.service';
 import {TYPE_QUIZ_ANSWER} from '../../../data/enums/enums';
@@ -38,7 +37,6 @@ export class PublicationsAddQuizDialogComponent implements OnInit
      * @param {MatDialogRef<PublicationsAddQuizDialogComponent>} matDialogRef
      * @param _data
      * @param {FormBuilder} _formBuilder
-     * @param _formsService
      * @param _quizzesService
      * @param _toastr
      * @param _spinnerService
@@ -48,7 +46,6 @@ export class PublicationsAddQuizDialogComponent implements OnInit
         public matDialogRef: MatDialogRef<PublicationsAddQuizDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private _data: any,
         private _formBuilder: FormBuilder,
-        private _formsService: FormsService,
         private _quizzesService: QuizzesService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService,
@@ -58,7 +55,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit
         // Set the defaults
         this.action = _data.action;
 
-        if ( this.action === 'addQUiz' )
+        if ( this.action === 'new' )
         {
             this.dialogTitle = 'Ajouter une question';
             this.form = _data.form;
@@ -96,10 +93,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit
 
     newAnswer(): FormGroup {
         return this._formBuilder.group({
-            name: [this.response.name],
-            numberFiled: [this.response.numberFiled],
-            dateField: [this.response.dateField],
-            isCorrect: [this.response.isCorrect],
+            name: [this.response.name]
         })
     }
 
@@ -115,11 +109,10 @@ export class PublicationsAddQuizDialogComponent implements OnInit
         this._spinnerService.show();
         this.quizSaveEntity = new QuizSaveEntity();
         this.quizSaveEntity.quiz = this.quizForm.getRawValue();
-        this.quizSaveEntity.quiz.form = this.form;
         this.quizSaveEntity.responses = this.quizForm.get('answers').value;
         this._quizzesService.create(this.quizSaveEntity).subscribe(data=>{
             if (data['status'] === 'OK') {
-                this._router.navigateByUrl('/main/publications/forms')
+                this._quizzesService.getQuizzes();
                 this._toastr.success(data['message']);
                 this._spinnerService.hide();
                 this.matDialogRef.close();

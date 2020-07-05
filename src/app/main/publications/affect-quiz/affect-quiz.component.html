@@ -19,40 +19,32 @@
             <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
         </ngx-spinner>
 
-        <form [formGroup]="addForm">
-
+        <form [formGroup]="affectQuizForm">
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Nom</mat-label>
-                    <input name="name" formControlName="name" matInput required>
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row" fxLayoutAlign="start start">
-                <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Type</mat-label>
-                    <mat-select formControlName="categoryForm"
+                    <mat-label>Catégorie</mat-label>
+                    <mat-select (selectionChange)="findCat($event.value)" formControlName="quizCategory"
                                 required>
-                        <mat-option *ngFor="let cat of categories"
-                                    [value]="cat">{{categoryForm[cat]}}
+                        <mat-option *ngFor="let cat of form.quizCategories"
+                                    [value]="cat.id">{{cat.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div>
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Catégorie</mat-label>
-                    <mat-select formControlName="quizCategories" multiple required>
+                    <mat-label>Questions</mat-label>
+                    <mat-select formControlName="quizzes" multiple required>
                         <mat-select-trigger>
-                            {{addForm.get('quizCategories').value ? addForm.get('quizCategories').value[0].name : ''}}
-                            <span *ngIf="addForm.get('quizCategories').value?.length > 1"
+                            {{affectQuizForm.get('quizzes').value ? affectQuizForm.get('quizzes').value[0].name : ''}}
+                            <span *ngIf="affectQuizForm.get('quizzes').value?.length > 1"
                                   class="example-additional-selection">
-        (+{{addForm.get('quizCategories').value.length - 1}} {{addForm.get('quizCategories').value?.length === 2 ? 'autres' : 'autres'}}
+        (+{{affectQuizForm.get('quizzes').value.length - 1}} {{affectQuizForm.get('quizzes').value?.length === 2 ? 'autres' : 'autres'}}
                                 )
       </span>
                         </mat-select-trigger>
-                        <mat-option *ngFor="let quizCat of categoriesQuiz"
-                                    [value]="quizCat">{{quizCat?.name}}</mat-option>
+                        <mat-option *ngFor="let quiz of quizzes"
+                                    [value]="quiz">{{quiz?.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -63,22 +55,14 @@
 
     <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="center">
 
-        <button *ngIf="action !== 'edit'"
-                mat-button
+        <button mat-button
                 class="save-button"
-                (click)="saveOrUpdate()"
-                [disabled]="addForm.invalid"
+                (click)="affect()"
+                [disabled]="affectQuizForm.invalid"
                 matTooltip="Enregistrer">
             Enregistrer
         </button>
 
-        <button *ngIf="action === 'edit'"
-                mat-button
-                class="save-button"
-                [disabled]="addForm.invalid || addForm.pristine"
-                matTooltip="Modifier">
-            Modifier
-        </button>
 
         <button (click)="matDialogRef.close()"
                 class="mr-8"

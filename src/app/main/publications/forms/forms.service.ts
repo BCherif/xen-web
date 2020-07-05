@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {environment} from "../../../../environments/environment";
 import {Form} from '../../../data/models/form.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {FormCatQuizSaveEntity} from '../../../data/wrapper/form.cat.quiz.save.entity.model';
 
 @Injectable({
     providedIn: 'root'
@@ -73,6 +74,10 @@ export class FormsService implements Resolve<any>
 
     create(form: Form) {
         return this._httpClient.post(this.serviceURL, form,this.httpOptions);
+    }
+
+    affectQuiz(formCatQuizSaveEntity: FormCatQuizSaveEntity) {
+        return this._httpClient.post(this.serviceURL+'/add-quizzes',formCatQuizSaveEntity,this.httpOptions);
     }
 
     getById(id: number) {

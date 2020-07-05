@@ -1,32 +1,28 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {DataSource} from '@angular/cdk/collections';
+import {BehaviorSubject, fromEvent, merge, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import { FuseUtils } from '@fuse/utils';
-import { takeUntil } from 'rxjs/internal/operators';
-import {MatDialog} from "@angular/material/dialog";
-import {FormsService} from './forms.service';
-import {PublicationsAddFormDialogComponent} from '../add-form/add-form.component';
-import {CATEGORY_FORM} from '../../../data/enums/enums';
-import {PublicationsAffectQuizDialogComponent} from '../affect-quiz/affect-quiz.component';
+import {fuseAnimations} from '@fuse/animations';
+import {FuseUtils} from '@fuse/utils';
+import {takeUntil} from 'rxjs/internal/operators';
+import {MatDialog} from '@angular/material/dialog';
+import {QuizCategoriesService} from './quiz-categories.service';
+import {PublicationsAddCategoryDialogComponent} from '../add-category/add-category.component';
 
 @Component({
-    selector     : 'publications-forms',
-    templateUrl  : './forms.component.html',
-    styleUrls    : ['./forms.component.scss'],
-    animations   : fuseAnimations,
+    selector: 'publications-quiz-categories',
+    templateUrl: './quiz-categories.component.html',
+    styleUrls: ['./quiz-categories.component.scss'],
+    animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class FormsComponent implements OnInit
-{
+export class QuizCategoriesComponent implements OnInit {
     dialogRef: any;
-    categoryForm = CATEGORY_FORM;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name','categoryForm','actions'];
+    displayedColumns = ['name', 'description'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -41,10 +37,9 @@ export class FormsComponent implements OnInit
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _formsService: FormsService,
+        private _quizCategoriesService: QuizCategoriesService,
         private _matDialog: MatDialog
-    )
-    {
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -57,8 +52,7 @@ export class FormsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        document.title = 'XENSA | Formulaires';
-        this.dataSource = new FilesDataSource(this._formsService, this.paginator, this.sort);
+        this.dataSource = new FilesDataSource(this._quizCategoriesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -67,8 +61,7 @@ export class FormsComponent implements OnInit
                 distinctUntilChanged()
             )
             .subscribe(() => {
-                if ( !this.dataSource )
-                {
+                if (!this.dataSource) {
                     return;
                 }
 
@@ -76,58 +69,35 @@ export class FormsComponent implements OnInit
             });
     }
 
-    addForm(): void {
-        this.dialogRef = this._matDialog.open(PublicationsAddFormDialogComponent, {
-            panelClass: 'add-form-dialog',
-            data      : {
+    newCategory() {
+        this.dialogRef = this._matDialog.open(PublicationsAddCategoryDialogComponent, {
+            panelClass: 'add-category-dialog',
+            data: {
                 action: 'new'
             }
         });
     }
-
-
-    editForm(form) {
-        this.dialogRef = this._matDialog.open(PublicationsAddFormDialogComponent, {
-            panelClass: 'add-form-dialog',
-            data      : {
-                action: 'edit',
-                form:form
-            }
-        });
-    }
-
-    affectQuiz(form) {
-        this.dialogRef = this._matDialog.open(PublicationsAffectQuizDialogComponent, {
-            panelClass: 'affect-quiz-dialog',
-            data      : {
-                form:form
-            }
-        });
-    }
-
 }
 
-export class FilesDataSource extends DataSource<any>
-{
+export class FilesDataSource extends DataSource<any> {
     private _filterChange = new BehaviorSubject('');
     private _filteredDataChange = new BehaviorSubject('');
 
     /**
      * Constructor
      *
-     * @param _formsService
+     * @param {QuizCategoriesService} _quizCategoriesService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _formsService: FormsService,
+        private _quizCategoriesService: QuizCategoriesService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
-    )
-    {
+    ) {
         super();
 
-        this.filteredData = this._formsService.forms;
+        this.filteredData = this._quizCategoriesService.quizCategories;
     }
 
     /**
@@ -135,10 +105,9 @@ export class FilesDataSource extends DataSource<any>
      *
      * @returns {Observable<any[]>}
      */
-    connect(): Observable<any[]>
-    {
+    connect(): Observable<any[]> {
         const displayDataChanges = [
-            this._formsService.onFormsChanged,
+            this._quizCategoriesService.onQuizCategoriesChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -147,7 +116,7 @@ export class FilesDataSource extends DataSource<any>
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._formsService.forms.slice();
+                        let data = this._quizCategoriesService.quizCategories.slice();
 
                         data = this.filterData(data);
 
@@ -167,24 +136,20 @@ export class FilesDataSource extends DataSource<any>
     // -----------------------------------------------------------------------------------------------------
 
     // Filtered data
-    get filteredData(): any
-    {
+    get filteredData(): any {
         return this._filteredDataChange.value;
     }
 
-    set filteredData(value: any)
-    {
+    set filteredData(value: any) {
         this._filteredDataChange.next(value);
     }
 
     // Filter
-    get filter(): string
-    {
+    get filter(): string {
         return this._filterChange.value;
     }
 
-    set filter(filter: string)
-    {
+    set filter(filter: string) {
         this._filterChange.next(filter);
     }
 
@@ -198,10 +163,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any}
      */
-    filterData(data): any
-    {
-        if ( !this.filter )
-        {
+    filterData(data): any {
+        if (!this.filter) {
             return data;
         }
         return FuseUtils.filterArrayByString(data, this.filter);
@@ -213,10 +176,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any[]}
      */
-    sortData(data): any[]
-    {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
+    sortData(data): any[] {
+        if (!this._matSort.active || this._matSort.direction === '') {
             return data;
         }
 
@@ -224,13 +185,12 @@ export class FilesDataSource extends DataSource<any>
             let propertyA: number | string = '';
             let propertyB: number | string = '';
 
-            switch ( this._matSort.active )
-            {
+            switch (this._matSort.active) {
                 case 'name':
                     [propertyA, propertyB] = [a.name, b.name];
                     break;
-                case 'categoryForm':
-                    [propertyA, propertyB] = [a.categoryForm, b.categoryForm];
+                case 'description':
+                    [propertyA, propertyB] = [a.description, b.description];
                     break;
             }
 
@@ -244,7 +204,6 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Disconnect
      */
-    disconnect(): void
-    {
+    disconnect(): void {
     }
 }
