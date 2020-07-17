@@ -71,13 +71,13 @@ export const navigation: FuseNavigation[] = [
                 type: 'collapsable',
                 icon: 'person_add',
                 children: [
-                    {
+                    /*{
                         id: 'citizen-voices',
                         title: 'Voix citoyen',
                         type: 'item',
                         icon: 'people',
                         url: '/main/participation/citizen-voices'
-                    },
+                    },*/
                     {
                         id: 'law-projects',
                         title: 'Projet de Lois',

@@ -52,17 +52,40 @@
                     <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                 <mat-label>Titre</mat-label>
                                 <input name="title" formControlName="title" matInput required>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Initiateur</mat-label>
-                                <input name="decisionMaker" formControlName="decisionMaker" matInput required>
+                                <mat-label>Objectif</mat-label>
+                                <input type="number" name="objective" formControlName="objective" matInput required>
                             </mat-form-field>
                         </div>
-
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-chip-list #chipList>
+                                    <mat-chip *ngFor="let decisionMaker of decisions;let indx=index;"
+                                              [selectable]="selectable"
+                                              [removable]="removable" (removed)="remove(decisionMaker,indx)">
+                                        {{decisionMaker.name}}
+                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                    </mat-chip>
+                                    <input placeholder="Destinateur de la pétition..." #decisionInput
+                                           formControlName="decisionMakers" required
+                                           [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                           [matChipInputAddOnBlur]="addOnBlur"
+                                           (matChipInputTokenEnd)="add($event)">
+                                </mat-chip-list>
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                    <mat-option *ngFor="let decisonFilter of filteredDecisionMakers | async"
+                                                [value]="decisonFilter">
+                                        {{decisonFilter.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Localité</mat-label>
@@ -92,7 +115,6 @@
                         <button mat-raised-button
                                 color="primary"
                                 (click)="save()"
-                                [disabled]="petitionForm.invalid"
                                 *ngIf="pageType ==='new'">
                             <span>Enregistrer</span>
                         </button>
@@ -100,7 +122,7 @@
                         <button mat-raised-button
                                 (click)="save()"
                                 color="primary"
-                                [disabled]="petitionForm.invalid || petitionForm.pristine"
+                                [disabled]="petitionForm.pristine"
                                 *ngIf="pageType ==='edit'">
                             <span>Modifier</span>
                         </button>

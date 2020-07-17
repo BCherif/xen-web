@@ -1,31 +1,37 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {DataSource} from '@angular/cdk/collections';
+import {BehaviorSubject, fromEvent, merge, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import { FuseUtils } from '@fuse/utils';
-import { takeUntil } from 'rxjs/internal/operators';
-import {InterpellationsService} from "./interpellations.service";
-import {MatDialog} from "@angular/material/dialog";
+import {fuseAnimations} from '@fuse/animations';
+import {FuseUtils} from '@fuse/utils';
+import {takeUntil} from 'rxjs/internal/operators';
+import {InterpellationsService} from './interpellations.service';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {CALL_AS, ORGAN_CALL} from '../../../data/enums/enums';
+import {Denunciation} from '../../../data/models/denunciation.model';
+import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
+import {Interpellation} from '../../../data/models/interpellation.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
-    selector     : 'participation-interpellations',
-    templateUrl  : './interpellations.component.html',
-    styleUrls    : ['./interpellations.component.scss'],
-    animations   : fuseAnimations,
+    selector: 'participation-interpellations',
+    templateUrl: './interpellations.component.html',
+    styleUrls: ['./interpellations.component.scss'],
+    animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class InterpellationsComponent implements OnInit
-{
+export class InterpellationsComponent implements OnInit {
     dialogRef: any;
     callAs = CALL_AS;
     organCall = ORGAN_CALL;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['interpelDate','callAs','elected','organ','locality','domain','buttons'];
+    displayedColumns = ['interpelDate', 'callAs', 'elected', 'organ', 'locality', 'domain', 'buttons'];
+
+    confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
+
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -41,9 +47,9 @@ export class InterpellationsComponent implements OnInit
 
     constructor(
         private _interpellationsService: InterpellationsService,
-        private _matDialog: MatDialog
-    )
-    {
+        private _matDialog: MatDialog,
+        private _toastr: ToastrService
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -66,8 +72,7 @@ export class InterpellationsComponent implements OnInit
                 distinctUntilChanged()
             )
             .subscribe(() => {
-                if ( !this.dataSource )
-                {
+                if (!this.dataSource) {
                     return;
                 }
 
@@ -75,10 +80,32 @@ export class InterpellationsComponent implements OnInit
             });
     }
 
+    validation(interpellation: Interpellation) {
+        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            disableClose: false
+        });
+
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de valider l\'interpellation N°' + interpellation.id + '?';
+
+        this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this._interpellationsService.publish(interpellation).subscribe(data => {
+                    if (data['status'] === 'OK') {
+                        this._toastr.success(data['message']);
+                        const interpellationIndex = this._interpellationsService.interpellations.indexOf(interpellation);
+                        this._interpellationsService.interpellations.splice(interpellationIndex, 1, data['response']);
+                        this._interpellationsService.onInterpellationsChanged.next(this._interpellationsService.interpellations);
+                    } else {
+                        this._toastr.error(data['message']);
+                    }
+                }, error => console.log(error));
+            }
+        });
+    }
+
 }
 
-export class FilesDataSource extends DataSource<any>
-{
+export class FilesDataSource extends DataSource<any> {
     private _filterChange = new BehaviorSubject('');
     private _filteredDataChange = new BehaviorSubject('');
 
@@ -93,8 +120,7 @@ export class FilesDataSource extends DataSource<any>
         private _interpellationsService: InterpellationsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
-    )
-    {
+    ) {
         super();
 
         this.filteredData = this._interpellationsService.interpellations;
@@ -105,8 +131,7 @@ export class FilesDataSource extends DataSource<any>
      *
      * @returns {Observable<any[]>}
      */
-    connect(): Observable<any[]>
-    {
+    connect(): Observable<any[]> {
         const displayDataChanges = [
             this._interpellationsService.onInterpellationsChanged,
             this._matPaginator.page,
@@ -137,24 +162,20 @@ export class FilesDataSource extends DataSource<any>
     // -----------------------------------------------------------------------------------------------------
 
     // Filtered data
-    get filteredData(): any
-    {
+    get filteredData(): any {
         return this._filteredDataChange.value;
     }
 
-    set filteredData(value: any)
-    {
+    set filteredData(value: any) {
         this._filteredDataChange.next(value);
     }
 
     // Filter
-    get filter(): string
-    {
+    get filter(): string {
         return this._filterChange.value;
     }
 
-    set filter(filter: string)
-    {
+    set filter(filter: string) {
         this._filterChange.next(filter);
     }
 
@@ -168,10 +189,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any}
      */
-    filterData(data): any
-    {
-        if ( !this.filter )
-        {
+    filterData(data): any {
+        if (!this.filter) {
             return data;
         }
         return FuseUtils.filterArrayByString(data, this.filter);
@@ -183,10 +202,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any[]}
      */
-    sortData(data): any[]
-    {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
+    sortData(data): any[] {
+        if (!this._matSort.active || this._matSort.direction === '') {
             return data;
         }
 
@@ -194,8 +211,7 @@ export class FilesDataSource extends DataSource<any>
             let propertyA: number | string = '';
             let propertyB: number | string = '';
 
-            switch ( this._matSort.active )
-            {
+            switch (this._matSort.active) {
                 case 'locality':
                     [propertyA, propertyB] = [a.locality.name, b.locality.name];
                     break;
@@ -217,7 +233,6 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Disconnect
      */
-    disconnect(): void
-    {
+    disconnect(): void {
     }
 }

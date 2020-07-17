@@ -56,19 +56,19 @@
                        fusePerfectScrollbar>
 
                 <!-- Name Column -->
-              <!--  <ng-container matColumnDef="subject">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</mat-header-cell>
-                    <mat-cell *matCellDef="let interpellation">
-                        <p class="text-truncate">{{interpellation.subject}}</p>
-                    </mat-cell>
-                </ng-container>-->
+                <!--  <ng-container matColumnDef="subject">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</mat-header-cell>
+                      <mat-cell *matCellDef="let interpellation">
+                          <p class="text-truncate">{{interpellation.subject}}</p>
+                      </mat-cell>
+                  </ng-container>-->
 
-               <!-- <ng-container matColumnDef="content">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Contenu</mat-header-cell>
-                    <mat-cell *matCellDef="let interpellation">
-                        <p class="text-truncate">{{interpellation.content}}</p>
-                    </mat-cell>
-                </ng-container>-->
+                <!-- <ng-container matColumnDef="content">
+                     <mat-header-cell *matHeaderCellDef mat-sort-header>Contenu</mat-header-cell>
+                     <mat-cell *matCellDef="let interpellation">
+                         <p class="text-truncate">{{interpellation.content}}</p>
+                     </mat-cell>
+                 </ng-container>-->
 
                 <ng-container matColumnDef="interpelDate">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
@@ -120,8 +120,13 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
-                        <a  [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
+                        <a [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
                             <mat-icon>edit</mat-icon>
+                        </a>
+                        <a style="margin: 1em 0;" *ngIf="!interpellation.ischeck"
+                           [routerLink]="" matTooltip="Valider"
+                           (click)="validation(interpellation)">
+                            <mat-icon>check</mat-icon>
                         </a>
                     </mat-cell>
                 </ng-container>

@@ -15,6 +15,7 @@ export class Article implements Deserializable {
     subCategory: SUB_CATEGORY;
     level: Locality;
     domain: Domain;
+    ischeck: boolean;
     createDate: Date = new Date();
     updateDate: Date;
 
@@ -24,6 +25,7 @@ export class Article implements Deserializable {
         this.title = article.title;
         this.fileName = article.fileName;
         this.content = article.content;
+        this.ischeck = article.ischeck;
         this.description = article.description;
         this.category = article.category;
         this.subCategory = article.subCategory;

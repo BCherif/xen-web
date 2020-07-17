@@ -1,16 +1,17 @@
-import {Deserializable} from "../wrapper/deserializable.wrapper";
-import {Injectable} from "@angular/core";
+import {Deserializable} from '../wrapper/deserializable.wrapper';
+import {Injectable} from '@angular/core';
 import {Article} from './article.model';
 import {DEGREE, JUDGMENT, STATE_FOLDER} from '../enums/enums';
 import {Jurisdiction} from './jurisdiction.model';
 
 @Injectable()
-export class LegalFolder implements Deserializable{
+export class LegalFolder implements Deserializable {
     id: number;
     stateFolder: STATE_FOLDER;
     judgment: JUDGMENT;
     degree: DEGREE;
     nameOfAccused: string;
+    ischeck: boolean;
     decisionOfJurisdiction: string;
     motivation: string;
     amountAtStake: number;
@@ -30,9 +31,9 @@ export class LegalFolder implements Deserializable{
         this.id = legalFolder.id;
         this.stateFolder = legalFolder.stateFolder;
         this.judgment = legalFolder.judgment;
+        this.degree = legalFolder.degree;
         this.article = legalFolder.article;
-        this.article = legalFolder.article;
-        this.article = legalFolder.article;
+        this.ischeck = legalFolder.ischeck;
         this.jurisdiction = legalFolder.jurisdiction;
         this.nameOfAccused = legalFolder.nameOfAccused;
         this.decisionOfJurisdiction = legalFolder.decisionOfJurisdiction;

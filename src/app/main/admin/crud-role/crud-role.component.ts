@@ -121,7 +121,7 @@ export class AdminCrudRoleComponent implements OnInit, OnDestroy {
 
     private addCheckboxes() {
         let names = [];
-        this.role.privileges.forEach(privilege => {
+        this.role.permissions.forEach(privilege => {
             names.push(privilege.name);
         });
 
@@ -162,7 +162,7 @@ export class AdminCrudRoleComponent implements OnInit, OnDestroy {
     update(): void {
         this._spinnerService.show();
         this.role = this.roleForm.getRawValue();
-        this.role.privileges = this.selectedPrivilegeValues;
+        this.role.permissions = this.selectedPrivilegeValues;
         this._adminCrudRoleService.update(this.role).subscribe((response: any) => {
             if (response['status'] == 'OK') {
                 this._adminCrudRoleService.onRoleChanged.next(this.role);

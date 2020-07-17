@@ -11,6 +11,7 @@ export class Denunciation implements Deserializable{
     justification: string;
     article: Article;
     user: User;
+    ischeck: boolean;
     createDate: Date = new Date();
     updateDate: Date;
     

@@ -10,6 +10,7 @@ export class LawProject implements Deserializable{
     stateLawProject: STATE_LAW_PROJECT;
     article: Article;
     initiator: INITIATOR;
+    ischeck: boolean;
     createDate: Date = new Date();
     updateDate: Date;
     
@@ -20,6 +21,7 @@ export class LawProject implements Deserializable{
         this.stateLawProject = lawProject.stateLawProject;
         this.article = lawProject.article;
         this.initiator = lawProject.initiator;
+        this.ischeck = lawProject.ischeck;
         this.createDate = lawProject.createDate;
         this.updateDate = lawProject.updateDate;
     }

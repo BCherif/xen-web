@@ -246,6 +246,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.article.subCategory = this.subCategories[8];
         this.article.level = this.locality;
         this.article.domain = this.domain;
+        this.article.ischeck = true;
         this.legalFolder.id = this.legalFolderForm.get('id').value;
         this.legalFolder.stateFolder = this.legalFolderForm.get('stateFolder').value;
         this.legalFolder.judgment = this.legalFolderForm.get('judgment').value;
@@ -256,8 +257,8 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.legalFolder.amountAtStake = this.legalFolderForm.get('amountAtStake').value;
         this.legalFolder.dateOfCharge = this.legalFolderForm.get('dateOfCharge').value;
         this.legalFolder.dateOfJudment = this.legalFolderForm.get('dateOfJudment').value;
+        this.legalFolder.ischeck = true;
         this.legalFolder.jurisdiction = this.jurisdiction;
-        console.log(this.legalFolder.jurisdiction);
         this.legalFolderSaveEntity.article = this.article;
         this.legalFolderSaveEntity.legalFolder = this.legalFolder;
         if (!this.legalFolder.id) {

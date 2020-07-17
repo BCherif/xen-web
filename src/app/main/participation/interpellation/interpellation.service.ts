@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {environment} from "../../../../environments/environment";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
 import {Interpellation} from '../../../data/models/interpellation.model';
 import {InterpellationSaveEntity} from '../../../data/wrapper/interpellation.save.entity.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {Denunciation} from '../../../data/models/denunciation.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class InterpellationService implements Resolve<any>
-{
+export class InterpellationService implements Resolve<any> {
     routeParams: any;
     interpellation: Interpellation;
     onInterpellationChanged: BehaviorSubject<any>;
@@ -25,8 +25,7 @@ export class InterpellationService implements Resolve<any>
      */
     constructor(
         private _httpClient: HttpClient
-    )
-    {
+    ) {
         // Set the defaults
         this.onInterpellationChanged = new BehaviorSubject({});
         this.serviceURL = environment.serviceUrl + '/interpellations';
@@ -40,8 +39,7 @@ export class InterpellationService implements Resolve<any>
      * @param {RouterStateSnapshot} state
      * @returns {Observable<any> | Promise<any> | any}
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         this.routeParams = route.params;
 
         return new Promise((resolve, reject) => {
@@ -79,15 +77,16 @@ export class InterpellationService implements Resolve<any>
     }
 
 
-   /* getById(id: number){
-        return this._httpClient.get(this.serviceURL + '/' + id);
-    }*/
+    /* getById(id: number){
+         return this._httpClient.get(this.serviceURL + '/' + id);
+     }*/
 
     create(interpellationSaveEntity: InterpellationSaveEntity) {
-        return this._httpClient.post(this.serviceURL, interpellationSaveEntity,this.httpOptions);
+        return this._httpClient.post(this.serviceURL, interpellationSaveEntity, this.httpOptions);
     }
 
     update(interpellationSaveEntity: InterpellationSaveEntity) {
-        return this._httpClient.put(this.serviceURL, interpellationSaveEntity,this.httpOptions);
+        return this._httpClient.put(this.serviceURL, interpellationSaveEntity, this.httpOptions);
     }
+
 }

@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {fuseAnimations} from '@fuse/animations';
 import {CATEGORY, SUB_CATEGORY} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
@@ -20,6 +20,9 @@ import {Petition} from '../../../data/models/petition.model';
 import {PetitionSaveEntity} from '../../../data/wrapper/petition.save.entity.model';
 import {PetitionService} from './petition.service';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {DecisionMarkerService} from '../../../services/decision.marker.service';
+import {MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
     selector: 'participation-petition',
@@ -43,8 +46,20 @@ export class PetitionComponent implements OnInit, OnDestroy {
     localities: Locality[];
     locality: Locality;
 
+    decisions: any = [];
+    allDecisionMakers: any[] = [];
+    filteredDecisionMakers: Observable<any[]>;
+    visible = true;
+    selectable = true;
+    removable = true;
+    addOnBlur = false;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
+
+    @ViewChild('decisionInput') decisionInput: ElementRef<HTMLInputElement>;
+    @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -61,6 +76,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
      * @param _domainsService
      * @param _router
      * @param _spinnerService
+     * @param _decisionMarkerService
      */
     constructor(
         private _formBuilder: FormBuilder,
@@ -71,7 +87,8 @@ export class PetitionComponent implements OnInit, OnDestroy {
         private _localitiesService: LocalitiesService,
         private _domainsService: DomainsService,
         private _router: Router,
-        private _spinnerService: NgxSpinnerService
+        private _spinnerService: NgxSpinnerService,
+        private _decisionMarkerService: DecisionMarkerService
     ) {
         // Set the default
         this.article = new Article();
@@ -94,6 +111,10 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.createPetitionForm();
         this.getLocalities();
         this.getDomains();
+        this.getDecisions();
+        this.filteredDecisionMakers = this.petitionForm.get('decisionMakers').valueChanges.pipe(
+            startWith(null),
+            map((value: any | null) => value ? this._filter(value) : this.allDecisionMakers.slice()));
         // Subscribe to update interpellation on changes
         this._petitionService.onPetitionChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -105,7 +126,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this.petitionForm.get('id').setValue(petition.id);
                     this.petitionForm.get('title').setValue(petition?.article?.title);
                     this.petitionForm.get('petitionContent').setValue(petition?.article?.content);
-                    this.petitionForm.get('decisionMaker').setValue(petition?.decisionMaker);
+                    this.petitionForm.get('decisionMakers').setValue(petition?.decisionMakers);
                     this.petitionForm.get('article').setValue(petition?.article?.id);
                     this.petitionForm.get('domain').setValue(petition?.article?.domain?.id);
                     this.petitionForm.get('locality').setValue(petition?.article?.level?.id);
@@ -141,11 +162,52 @@ export class PetitionComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             title: new FormControl('', Validators.required),
             petitionContent: new FormControl('', Validators.required),
-            decisionMaker: new FormControl('', Validators.required),
+            decisionMakers: new FormControl(''),
             locality: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
+            objective: new FormControl('', Validators.required),
             article: new FormControl('')
         });
+    }
+
+    getDecisions() {
+        this._decisionMarkerService.findAll().subscribe(value => {
+            this.allDecisionMakers = value['response'];
+        }, error => console.log(error));
+    }
+
+    add(event: MatChipInputEvent): void {
+        debugger
+        const input = event.input;
+        const value = event.value;
+        // Add our decisonMarker
+        if ((value || '').trim()) {
+            this.decisions.push({
+                id: null,
+                name: value.trim()
+            });
+        }
+
+        // Reset the input value
+        if (input) {
+            input.value = '';
+        }
+
+        this.petitionForm.get('decisionMakers').setValue(null);
+    }
+
+    remove(fruit, indx): void {
+        this.decisions.splice(indx, 1);
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        this.decisions.push(event.option.value);
+        this.decisionInput.nativeElement.value = '';
+        this.petitionForm.get('decisionMakers').setValue(null);
+    }
+
+    private _filter(value: any): any[] {
+        return this.allDecisionMakers.filter(decision => decision.name.includes(value));
     }
 
     getLocalities() {
@@ -190,13 +252,14 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.article.content = this.petitionForm.get('petitionContent').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[6];
+        this.petition.decisionMakers = this.decisions;
+        this.petition.objective = this.petitionForm.get('objective').value;
         this.article.level = this.locality;
         this.article.domain = this.domain;
         this.petition.id = this.petitionForm.get('id').value;
-        this.petition.decisionMaker = this.petitionForm.get('decisionMaker').value;
         this.petition.petitionDate = new Date();
         this.petition.user = this.currentUser;
-        this.petitionSaveEntity.article= this.article;
+        this.petitionSaveEntity.article = this.article;
         this.petitionSaveEntity.petition = this.petition;
         if (!this.petition.id) {
             this._petitionService.create(this.petitionSaveEntity).subscribe(data => {
@@ -208,7 +271,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this._toastr.error(data['message']);
                 }
             });
-        }else {
+        } else {
             this.petitionSaveEntity.petition.updateDate = new Date();
             this._petitionService.update(this.petitionSaveEntity).subscribe(data => {
                 if (data['status'] === 'OK') {

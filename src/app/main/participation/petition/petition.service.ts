@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {environment} from "../../../../environments/environment";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {Petition} from '../../../data/models/petition.model';
 import {PetitionSaveEntity} from '../../../data/wrapper/petition.save.entity.model';
+import {Interpellation} from '../../../data/models/interpellation.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class PetitionService implements Resolve<any>
-{
+export class PetitionService implements Resolve<any> {
     routeParams: any;
     petition: Petition;
     onPetitionChanged: BehaviorSubject<any>;
@@ -25,8 +25,7 @@ export class PetitionService implements Resolve<any>
      */
     constructor(
         private _httpClient: HttpClient
-    )
-    {
+    ) {
         // Set the defaults
         this.onPetitionChanged = new BehaviorSubject({});
         this.serviceURL = environment.serviceUrl + '/petitions';
@@ -40,8 +39,7 @@ export class PetitionService implements Resolve<any>
      * @param {RouterStateSnapshot} state
      * @returns {Observable<any> | Promise<any> | any}
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         this.routeParams = route.params;
 
         return new Promise((resolve, reject) => {
@@ -79,10 +77,10 @@ export class PetitionService implements Resolve<any>
     }
 
     create(petitionSaveEntity: PetitionSaveEntity) {
-        return this._httpClient.post(this.serviceURL, petitionSaveEntity,this.httpOptions);
+        return this._httpClient.post(this.serviceURL, petitionSaveEntity, this.httpOptions);
     }
 
     update(petitionSaveEntity: PetitionSaveEntity) {
-        return this._httpClient.put(this.serviceURL, petitionSaveEntity,this.httpOptions);
+        return this._httpClient.put(this.serviceURL, petitionSaveEntity, this.httpOptions);
     }
 }

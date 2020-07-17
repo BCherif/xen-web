@@ -46,6 +46,8 @@ import {SpinnerModule} from '../../shared/modules/spinner.module';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {CKEditorModule} from 'ckeditor4-angular';
 import {NgxSpinnerModule} from 'ngx-spinner';
+import {ConfirmDialogModule} from '../confirm-dialog/confirm-dialog.module';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -189,7 +191,9 @@ const routes: Routes = [
         SpinnerModule,
         MatDatepickerModule,
         CKEditorModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        ConfirmDialogModule,
+        MatAutocompleteModule
     ],
     providers: [],
     entryComponents: []

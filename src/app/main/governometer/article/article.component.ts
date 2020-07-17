@@ -32,7 +32,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
     localities: Locality[];
     locality: Locality;
     pageType: string;
-    fileSelected : File;
+    fileSelected: File;
     selectedFiles: FileList;
     currentFile: File;
     articleForm: FormGroup;
@@ -132,11 +132,11 @@ export class ArticleComponent implements OnInit, OnDestroy {
     createArticleForm() {
         this.articleForm = this._formBuilder.group({
             id: new FormControl(''),
-            title: new FormControl('', [Validators.required,Validators.maxLength(400), Validators.minLength(3)]),
-            content: new FormControl('', [Validators.required,Validators.maxLength(999999), Validators.minLength(10)]),
+            title: new FormControl('', [Validators.required, Validators.maxLength(400), Validators.minLength(3)]),
+            content: new FormControl('', [Validators.required, Validators.maxLength(999999), Validators.minLength(10)]),
             level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
-          /*  fileName: new FormControl(''),*/
+            /*  fileName: new FormControl(''),*/
             subCategory: new FormControl('', Validators.required)
         });
     }
@@ -183,6 +183,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
     selectFile(event) {
         this.selectedFiles = event.target.files;
     }
+
     save() {
         this._spinnerService.show();
         this.article = new Article();
@@ -190,6 +191,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.article.level = this.locality;
         this.article.category = this.categories[1];
         this.article.domain = this.domain;
+        this.article.ischeck = true;
         if (!this.article.id) {
             this._articleService.create(this.article).subscribe(data => {
                 if (data['status'] === 'OK') {

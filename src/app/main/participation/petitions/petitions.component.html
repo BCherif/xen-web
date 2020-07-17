@@ -62,12 +62,12 @@
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="decisionMaker">
+               <!-- <ng-container matColumnDef="decisionMaker">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Decideur</mat-header-cell>
                     <mat-cell *matCellDef="let petition">
                         <p class="text-truncate">{{petition.decisionMaker}}</p>
                     </mat-cell>
-                </ng-container>
+                </ng-container>-->
 
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
@@ -87,8 +87,15 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let petition">
-                        <a [routerLink]="'/main/participation/petitions/'+petition.id+'/'+petition.decisionMaker">
+                        <a matTooltip="Valider"
+                           [routerLink]="'/main/participation/petitions/'+petition.id+'/'+petition?.article?.title">
                             <mat-icon>edit</mat-icon>
+                        </a>
+                        <br><br>
+                        <a *ngIf="!petition.ischeck"
+                           [routerLink]="" matTooltip="Valider"
+                           (click)="validation(petition)">
+                            <mat-icon>check</mat-icon>
                         </a>
                     </mat-cell>
                 </ng-container>

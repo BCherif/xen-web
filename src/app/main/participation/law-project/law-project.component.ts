@@ -208,12 +208,14 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[4];
         this.article.level = this.locality;
+        this.article.ischeck = true;
         this.article.domain = this.domain;
         this.lawProject.id = this.lawProjectForm.get('id').value;
         this.lawProject.year = this.lawProjectForm.get('year').value;
         this.lawProject.initiator = this.lawProjectForm.get('initiator').value;
         this.lawProject.stateLawProject = this.lawProjectForm.get('stateLawProject').value;
-        this.lawProjectSaveEntity.article= this.article;
+        this.lawProject.ischeck = true;
+        this.lawProjectSaveEntity.article = this.article;
         this.lawProjectSaveEntity.lawProject = this.lawProject;
         if (!this.lawProject.id) {
             this._lawProjectService.create(this.lawProjectSaveEntity).subscribe(data => {
@@ -225,7 +227,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                     this._toastr.error(data['message']);
                 }
             });
-        }else {
+        } else {
             this.lawProjectSaveEntity.lawProject.updateDate = new Date();
             this._lawProjectService.update(this.lawProjectSaveEntity).subscribe(data => {
                 if (data['status'] === 'OK') {

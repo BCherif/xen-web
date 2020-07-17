@@ -87,6 +87,12 @@
                         <a [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
                             <mat-icon>edit</mat-icon>
                         </a>
+                        <br><br>
+                        <a *ngIf="!denunciation.ischeck"
+                           [routerLink]="" matTooltip="Valider"
+                           (click)="validation(denunciation)">
+                            <mat-icon>check</mat-icon>
+                        </a>
                     </mat-cell>
                 </ng-container>
 

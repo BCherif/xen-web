@@ -8,7 +8,7 @@ export class Role implements Deserializable{
     name: string;
     description: string;
     checked: boolean;
-    privileges: Privilege[];
+    permissions: Privilege[];
 
     constructor(role?) {
         role = role || {};
@@ -16,7 +16,7 @@ export class Role implements Deserializable{
         this.name = role.name ;
         this.checked = role.checked || false;
         this.description = role.description;
-        this.privileges = role.privileges || [];
+        this.permissions = role.permissions || [];
     }
 
     deserialize(input: any): this {
