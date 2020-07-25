@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>{{interpellation?.article?.title}}</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="leadership_event_icon">
+        <span><i class="fa fa-calendar"></i>{{interpellation?.article?.createDate | date: 'dd/MM/yyyy'}}</span>
+        <span><i class="fa fa-map-marker"></i>{{interpellation?.article?.level?.name}}</span>
+        <span><a href="#" class="tagcloud">{{interpellation?.article?.domain?.name}}</a></span>
+    </div>
+    <br>
+    <!--<h3><strong>Interpellé :</strong></h3>-->
+    <!--<p *ngIf="interpellation?.elected"> {{interpellation?.elected?.firstname}} {{interpellation?.elected?.lastname}}</p>
+    <p *ngIf="interpellation?.organ"> {{interpellation?.organ?.name}}</p>-->
+
+    <h3><strong>Auteur :</strong></h3>
+    <p>{{interpellation?.author}}</p>
+    <h3><strong>Contenu :</strong></h3>
+    <p [innerHTML]="interpellation?.article?.content"></p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Fermer</button>
+</mat-dialog-actions>

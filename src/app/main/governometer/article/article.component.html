@@ -68,14 +68,14 @@
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Localité</mat-label>
-                                <mat-select formControlName="level"
-                                            (selectionChange)="findByLocalitySelected($event.value)"
-                                            required>
-                                    <mat-option *ngFor="let locality of localities"
-                                                [value]="locality.id">{{locality.name}}
+                                <mat-label>Localié</mat-label>
+                                <input type="text" matInput formControlName="level" [matAutocomplete]="auto">
+                                <mat-autocomplete (optionSelected)="getLevel($event.option.value)"
+                                                  #auto="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{option.name}}
                                     </mat-option>
-                                </mat-select>
+                                </mat-autocomplete>
                             </mat-form-field>
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Domaine</mat-label>
@@ -89,15 +89,15 @@
                             </mat-form-field>
                         </div>
 
-                       <!-- <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                <ngx-mat-file-input formControlName="fileName"
-                                                    (change)="selectFile($event)"
-                                                    placeholder="Joindre un fichier" >
-                                </ngx-mat-file-input>
-                                <mat-icon matSuffix>attach_file</mat-icon>
-                            </mat-form-field>
-                        </div>-->
+                        <!-- <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                             <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                 <ngx-mat-file-input formControlName="fileName"
+                                                     (change)="selectFile($event)"
+                                                     placeholder="Joindre un fichier" >
+                                 </ngx-mat-file-input>
+                                 <mat-icon matSuffix>attach_file</mat-icon>
+                             </mat-form-field>
+                         </div>-->
 
                         <div>
                             <ckeditor formControlName="content"></ckeditor>

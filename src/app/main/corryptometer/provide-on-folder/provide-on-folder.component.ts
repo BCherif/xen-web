@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {CS_JUDGMENT, DEGREE, STATE_FOLDER} from '../../../data/enums/enums';
@@ -54,6 +54,8 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
     // Private
     private _unsubscribeAll: Subject<any>;
 
+    filteredOptions: Observable<Locality[]>;
+
     /**
      * Constructor
      *
@@ -103,6 +105,12 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
         this.getLocalities();
         this.getJurisdictions();
         this.getDomains();
+        this.filteredOptions = this.provideForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.localities.slice())
+            );
         // Subscribe to update interpellation on changes
         this._provideOnFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -125,7 +133,7 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
                     this.provideForm.get('dateOfJudment').setValue('');
                     this.provideForm.get('jurisdiction').setValue('');
                     this.provideForm.get('judgment').setValue('');
-                    this.provideForm.get('locality').setValue(legalFolder?.article?.level?.id);
+                    this.provideForm.get('level').setValue(legalFolder?.article?.level?.id);
                     this.provideForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                 }
             });
@@ -161,7 +169,7 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
             amountAtStake: new FormControl('', Validators.required),
             motivation: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            locality: new FormControl('', Validators.required),
+            level: new FormControl('', Validators.required),
             dateProvide: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required)
@@ -178,6 +186,19 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
         }, error => console.log(error));
+    }
+
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filter(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
     }
 
     getDomains() {

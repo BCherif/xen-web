@@ -84,7 +84,7 @@
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="elected">
+                <!--<ng-container matColumnDef="elected">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Elus</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
                         <p *ngIf="interpellation?.elected" class="text-truncate">
@@ -102,7 +102,7 @@
                         <p class="text-truncate">{{interpellation?.organ ? interpellation.organ?.name : 'Ne concerna pas un organ'}}</p>
                     </mat-cell>
                 </ng-container>
-
+-->
                 <ng-container matColumnDef="locality">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Localité</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
@@ -122,8 +122,11 @@
                     <mat-cell *matCellDef="let interpellation">
                         <a [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
                             <mat-icon>edit</mat-icon>
-                        </a>
-                        <a style="margin: 1em 0;" *ngIf="!interpellation.ischeck"
+                        </a>&nbsp;&nbsp;
+                        <a (click)="showDetail(interpellation)">
+                            <mat-icon>visibility</mat-icon>
+                        </a>&nbsp;&nbsp;
+                        <a *ngIf="!interpellation.ischeck"
                            [routerLink]="" matTooltip="Valider"
                            (click)="validation(interpellation)">
                             <mat-icon>check</mat-icon>

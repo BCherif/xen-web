@@ -8,6 +8,8 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {DEGREE} from '../../../data/enums/enums';
 import {Locality} from '../../../data/models/locality.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
     selector     : 'corryptometer-jurisdiction-form-dialog',
@@ -22,10 +24,12 @@ export class CorryptometerJurisdictionFormDialogComponent
     jurisdiction: Jurisdiction;
     degree = DEGREE;
     degrees: any[];
-    localities: Locality[];
+    localities: Locality[] = [];
     locality: Locality;
     jurisdictionForm: FormGroup;
     dialogTitle: string;
+
+    filteredOptions: Observable<Locality[]>;
 
     /**
      * Constructor
@@ -66,6 +70,12 @@ export class CorryptometerJurisdictionFormDialogComponent
         }
         this.degrees = Object.keys(this.degree);
         this.getLocalities();
+        this.filteredOptions = this.jurisdictionForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.localities.slice())
+            );
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -105,6 +115,19 @@ export class CorryptometerJurisdictionFormDialogComponent
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
         }, error => console.log(error));
+    }
+
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filter(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
     }
 
     getLocalityById(id: number) {

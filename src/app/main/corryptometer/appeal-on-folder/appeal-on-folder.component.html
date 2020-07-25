@@ -54,7 +54,8 @@
                         <mat-tab label="Infos sur l'affaire">
                             <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
                                 <div fxLayout="row" fxLayoutAlign="space-between">
-                                    <mat-form-field class="readonly-wrapper" appearance="outline" floatLabel="always" fxFlex="50">
+                                    <mat-form-field class="readonly-wrapper" appearance="outline" floatLabel="always"
+                                                    fxFlex="50">
                                         <mat-label>Entrée</mat-label>
                                         <mat-select formControlName="degree"
                                                     [disabled]="true"
@@ -89,14 +90,14 @@
                                 </div>
                                 <div fxLayout="row" fxLayoutAlign="space-between">
                                     <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Localité</mat-label>
-                                        <mat-select formControlName="locality"
-                                                    (selectionChange)="findByLocalitySelected($event.value)"
-                                                    required>
-                                            <mat-option *ngFor="let locality of localities"
-                                                        [value]="locality.id">{{locality.name}}
+                                        <mat-label>Localié</mat-label>
+                                        <input type="text" matInput formControlName="level" [matAutocomplete]="auto">
+                                        <mat-autocomplete (optionSelected)="getLevel($event.option.value)"
+                                                          #auto="matAutocomplete" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                                {{option.name}}
                                             </mat-option>
-                                        </mat-select>
+                                        </mat-autocomplete>
                                     </mat-form-field>
                                     <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
                                         <mat-label>Domaine</mat-label>

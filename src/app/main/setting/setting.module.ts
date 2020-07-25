@@ -15,14 +15,9 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {AgmCoreModule} from '@agm/core';
-
 import {NgxDaterangepickerMd} from 'ngx-daterangepicker-material';
-
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseWidgetModule} from '@fuse/components/widget/widget.module';
-import {CategoriesService} from './categories/categories.service';
-import {CategoriesComponent} from './categories/categories.component';
-import {SettingCategoryFormDialogComponent} from './category-form/category-form.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -50,13 +45,6 @@ import {NgxSpinnerModule} from 'ngx-spinner';
 
 
 const routes: Routes = [
-    {
-        path: 'categories',
-        component: CategoriesComponent,
-        resolve: {
-            data: CategoriesService
-        }
-    },
     {
         path: 'cuttings',
         component: CuttingsComponent,
@@ -110,11 +98,9 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        CategoriesComponent,
         CuttingsComponent,
         ProgramsComponent,
         ProgramComponent,
-        SettingCategoryFormDialogComponent,
         SettingCuttingFormDialogComponent,
         LocalitiesComponent,
         AxesComponent,
@@ -145,7 +131,6 @@ const routes: Routes = [
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyD81ecsCj4yYpcXSLFcYU97PvRsE_X8Bx8'
         }),
-
         FuseSharedModule,
         FuseWidgetModule,
         MatDialogModule,
@@ -159,7 +144,6 @@ const routes: Routes = [
     ],
     providers: [],
     entryComponents: [
-        SettingCategoryFormDialogComponent,
         SettingCuttingFormDialogComponent,
         SettingLocalityFormDialogComponent,
         SettingAxeFormDialogComponent,

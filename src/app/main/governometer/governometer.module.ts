@@ -1,28 +1,28 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule } from '@angular/material/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { AgmCoreModule } from '@agm/core';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatRippleModule} from '@angular/material/core';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {AgmCoreModule} from '@agm/core';
 
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatToolbarModule} from "@angular/material/toolbar";
+import {FuseSharedModule} from '@fuse/shared.module';
+import {FuseWidgetModule} from '@fuse/components/widget/widget.module';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
-import { NgxMaskModule, IConfig } from 'ngx-mask';
+import {NgxMaskModule, IConfig} from 'ngx-mask';
 import {MatMenuModule} from '@angular/material/menu';
 import {ArticlesComponent} from './articles/articles.component';
 import {ArticlesService} from './articles/articles.service';
@@ -33,6 +33,8 @@ import {AngularEditorModule} from '@kolkov/angular-editor';
 import {CKEditorModule} from 'ckeditor4-angular';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {MaterialFileInputModule} from 'ngx-material-file-input';
+import {ArticleDetailsComponent} from './article-details/article-details.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -66,7 +68,8 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         ArticlesComponent,
-        ArticleComponent
+        ArticleComponent,
+        ArticleDetailsComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -100,12 +103,13 @@ const routes: Routes = [
         CKEditorModule,
         AngularEditorModule,
         NgxSpinnerModule,
-        MaterialFileInputModule
+        MaterialFileInputModule,
+        MatAutocompleteModule
     ],
-    providers   : [],
+    providers: [],
     entryComponents: [
+        ArticleDetailsComponent
     ]
 })
-export class GovernometerModule
-{
+export class GovernometerModule {
 }

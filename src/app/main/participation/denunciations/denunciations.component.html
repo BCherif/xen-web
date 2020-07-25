@@ -86,8 +86,10 @@
                     <mat-cell *matCellDef="let denunciation">
                         <a [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
                             <mat-icon>edit</mat-icon>
-                        </a>
-                        <br><br>
+                        </a>&nbsp;&nbsp;
+                        <a (click)="showDetail(denunciation)">
+                            <mat-icon>visibility</mat-icon>
+                        </a>&nbsp;&nbsp;
                         <a *ngIf="!denunciation.ischeck"
                            [routerLink]="" matTooltip="Valider"
                            (click)="validation(denunciation)">

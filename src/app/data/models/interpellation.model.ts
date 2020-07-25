@@ -1,23 +1,22 @@
-import {Deserializable} from "../wrapper/deserializable.wrapper";
-import {Injectable} from "@angular/core";
-import {Elected} from "./elected.model";
-import {Organ} from "./organ.model";
+import {Deserializable} from '../wrapper/deserializable.wrapper';
+import {Injectable} from '@angular/core';
+import {Elected} from './elected.model';
+import {Organ} from './organ.model';
 import {CALL_AS, ORGAN_CALL} from '../enums/enums';
 import {Article} from './article.model';
-import {User} from './user.model';
 
 @Injectable()
-export class Interpellation implements Deserializable{
+export class Interpellation implements Deserializable {
     id: number;
     interpelDate: Date = new Date();
     response: string;
     author: string;
+    answered: boolean;
     callAs: CALL_AS;
     organCall: ORGAN_CALL;
-    elected: Elected;
+    electeds: Elected[];
+    organs: Organ[];
     article: Article;
-    organ: Organ;
-    user: User;
     ischeck: boolean;
     createDate: Date = new Date();
     updateDate: Date;
@@ -28,13 +27,13 @@ export class Interpellation implements Deserializable{
         this.interpelDate = interpellation.interpelDate;
         this.response = interpellation.response;
         this.author = interpellation.author;
+        this.answered = interpellation.answered;
         this.callAs = interpellation.callAs;
         this.organCall = interpellation.organCall;
-        this.elected = interpellation.elected;
-        this.article = interpellation.article;
-        this.organ = interpellation.organ;
-        this.user = interpellation.user;
+        this.electeds = interpellation.electeds;
+        this.organs = interpellation.organs;
         this.ischeck = interpellation.ischeck;
+        this.article = interpellation.article;
         this.createDate = interpellation.createDate;
         this.updateDate = interpellation.updateDate;
     }

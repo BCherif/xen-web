@@ -9,8 +9,12 @@ import {fuseAnimations} from '@fuse/animations';
 import {FuseUtils} from '@fuse/utils';
 import {takeUntil} from 'rxjs/internal/operators';
 import {ArticlesService} from './articles.service';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {CATEGORY, SUB_CATEGORY} from '../../../data/enums/enums';
+import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
+import {Article} from '../../../data/models/article.model';
+import {ToastrService} from 'ngx-toastr';
+import {ArticleDetailsComponent} from '../article-details/article-details.component';
 
 @Component({
     selector: 'governometer-articles',
@@ -24,7 +28,9 @@ export class ArticlesComponent implements OnInit {
     dataSource: FilesDataSource | null;
     category = CATEGORY;
     subCategory = SUB_CATEGORY;
-    displayedColumns = ['title', 'subCategory', 'locality', 'domain','buttons'];
+    displayedColumns = ['title', 'subCategory', 'locality', 'domain', 'buttons'];
+
+    confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -40,7 +46,8 @@ export class ArticlesComponent implements OnInit {
 
     constructor(
         private _articlesService: ArticlesService,
-        private _matDialog: MatDialog
+        private _matDialog: MatDialog,
+        private _toastr: ToastrService
     ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
@@ -70,6 +77,39 @@ export class ArticlesComponent implements OnInit {
 
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
+    }
+
+    validation(article: Article) {
+        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            disableClose: false
+        });
+
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de valider cet article';
+
+        this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this._articlesService.publish(article).subscribe(data => {
+                    if (data['status'] === 'OK') {
+                        this._toastr.success(data['message']);
+                        const articleIndex = this._articlesService.articles.indexOf(article);
+                        this._articlesService.articles.splice(articleIndex, 1, data['response']);
+                        this._articlesService.onArticlesChanged.next(this._articlesService.articles);
+                    } else {
+                        this._toastr.error(data['message']);
+                    }
+                }, error => console.log(error));
+            }
+        });
+    }
+
+    showDetail(article) {
+        const dialogRef = this._matDialog.open(ArticleDetailsComponent, {
+            width: '700px',
+            data: {
+                article: article
+            }
+        });
+
     }
 
 }

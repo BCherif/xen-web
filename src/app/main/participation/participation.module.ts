@@ -40,14 +40,15 @@ import {PetitionComponent} from './petition/petition.component';
 import {PetitionService} from './petition/petition.service';
 import {LawProjectService} from './law-project/law-project.service';
 import {LawProjectComponent} from './law-project/law-project.component';
-import {CitizenVoicesService} from './citizen-voices/citizen-voices.service';
-import {CitizenVoicesComponent} from './citizen-voices/citizen-voices.component';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {CKEditorModule} from 'ckeditor4-angular';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {ConfirmDialogModule} from '../confirm-dialog/confirm-dialog.module';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {DetailsPetitionsComponent} from './details-petitions/details-petitions.component';
+import {DetailsInterpellationComponent} from './details-interpellation/details-interpellation.component';
+import {DetailsDenunciationComponent} from './details-denunciation/details-denunciation.component';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -55,13 +56,6 @@ const maskConfig: Partial<IConfig> = {
 };
 
 const routes: Routes = [
-    {
-        path: 'citizen-voices',
-        component: CitizenVoicesComponent,
-        resolve: {
-            data: CitizenVoicesService
-        }
-    },
     {
         path: 'denunciations',
         component: DenunciationsComponent,
@@ -158,7 +152,9 @@ const routes: Routes = [
         LawProjectsComponent,
         PetitionComponent,
         LawProjectComponent,
-        CitizenVoicesComponent
+        DetailsPetitionsComponent,
+        DetailsInterpellationComponent,
+        DetailsDenunciationComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -196,7 +192,11 @@ const routes: Routes = [
         MatAutocompleteModule
     ],
     providers: [],
-    entryComponents: []
+    entryComponents: [
+        DetailsPetitionsComponent,
+        DetailsInterpellationComponent,
+        DetailsDenunciationComponent
+    ]
 })
 export class ParticipationModule {
 }

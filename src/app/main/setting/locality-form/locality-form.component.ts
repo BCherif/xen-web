@@ -1,25 +1,26 @@
 import {Component, Inject, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {ToastrService} from "ngx-toastr";
-import {Cutting} from "../../../data/models/cutting.model";
-import {CuttingsService} from "../cuttings/cuttings.service";
-import {Locality} from "../../../data/models/locality.model";
-import {LocalitiesService} from "../localities/localities.service";
-import {Subject} from "rxjs";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {Cutting} from '../../../data/models/cutting.model';
+import {CuttingsService} from '../cuttings/cuttings.service';
+import {Locality} from '../../../data/models/locality.model';
+import {LocalitiesService} from '../localities/localities.service';
+import {Subject} from 'rxjs';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
-    selector     : 'setting-locality-form-dialog',
-    templateUrl  : './locality-form.component.html',
-    styleUrls    : ['./locality-form.component.scss'],
+    selector: 'setting-locality-form-dialog',
+    templateUrl: './locality-form.component.html',
+    styleUrls: ['./locality-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
+export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy {
     action: string;
     locality: Locality;
     levels: Locality[];
+    lowerLevels: Locality[];
     localitySelected: Locality;
     cuttings: Cutting[];
     cutting: Cutting;
@@ -47,21 +48,17 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
         private _localitiesService: LocalitiesService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService
-    )
-    {
+    ) {
         // Set the defaults
         this.action = _data.action;
 
-        if ( this.action === 'edit' )
-        {
+        if (this.action === 'edit') {
             this.dialogTitle = 'Modifier Une Localité';
             this.locality = _data.locality;
             this.getCuttingById(this.locality?.cutting?.id);
             this.getLeveSupById(this.locality?.levelSup?.id);
             this.updateOrderForm();
-        }
-        else
-        {
+        } else {
             this.dialogTitle = 'Ajouter Une Localité';
             this.locality = new Locality({});
             this.createOrderForm();
@@ -86,29 +83,36 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-    getLevelSup(){
+    getLevelSup() {
         this._localitiesService.getAll().subscribe(value => {
             this.levels = value['response'];
-        }, error => console.log(error))
+        }, error => console.log(error));
     }
 
     getLeveSupById(id: number) {
         this._localitiesService.getById(id).subscribe(value => {
             this.localitySelected = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
+    }
+
+    getAllByCuttingId(id: number) {
+        this._localitiesService.findByCuttingId(id).subscribe(value => {
+            this.lowerLevels = value['response'];
+            console.log(this.lowerLevels);
+        }, error => console.log(error));
     }
 
 
-    getAllCutting(){
+    getAllCutting() {
         this._cuttingsService.getAll().subscribe(value => {
             this.cuttings = value['response'];
-        }, error => console.log(error))
+        }, error => console.log(error));
     }
 
     getCuttingById(id: number) {
         this._cuttingsService.getById(id).subscribe(value => {
             this.cutting = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     /**
@@ -116,7 +120,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
      *
      * @returns {FormGroup}
      */
-    createOrderForm(){
+    createOrderForm() {
         this.localityForm = this._formBuilder.group({
             id: new FormControl(''),
             name: new FormControl('', Validators.required),
@@ -130,7 +134,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy{
      *
      * @returns {FormGroup}
      */
-    updateOrderForm(){
+    updateOrderForm() {
         this.localityForm = this._formBuilder.group({
             id: new FormControl(this.locality.id),
             name: new FormControl(this.locality.name, Validators.required),

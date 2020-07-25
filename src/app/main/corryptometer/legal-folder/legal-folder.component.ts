@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {CATEGORY, DEGREE, JUDGMENT, STATE_FOLDER, SUB_CATEGORY} from '../../../data/enums/enums';
@@ -51,7 +51,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     degrees: any[];
     domains: Domain[];
     domain: Domain;
-    localities: Locality[];
+    localities: Locality[] = [];
     locality: Locality;
     jurisdictions: Jurisdiction[];
     jurisdiction: Jurisdiction;
@@ -59,6 +59,8 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
 
     // Private
     private _unsubscribeAll: Subject<any>;
+
+    filteredOptions: Observable<Locality[]>;
 
     /**
      * Constructor
@@ -108,8 +110,16 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.statefolders = Object.keys(this.statefolder);
         this.degrees = Object.keys(this.degree);
         this.createLegalFolderForm();
-        this.getLocalities();
         this.getDomains();
+        this.getLocalities();
+
+        this.filteredOptions = this.legalFolderForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.localities.slice())
+            );
+
         // Subscribe to update interpellation on changes
         this._legalFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -195,6 +205,19 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
         }, error => console.log(error));
+    }
+
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filter(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
     }
 
     getDomains() {

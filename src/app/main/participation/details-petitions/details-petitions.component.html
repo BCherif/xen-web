@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{petition?.article?.title}}</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="leadership_event_icon">
+        <span><i class="fa fa-calendar"></i>{{petition?.article?.createDate | date: 'dd/MM/yyyy'}}</span>
+        <span><i class="fa fa-map-marker"></i>{{petition?.article?.level?.name}}</span>
+        <span><a href="#" class="tagcloud">{{petition?.article?.domain?.name}}</a></span>
+    </div>
+    <br>
+    <h3><strong>Contenu :</strong></h3>
+    <p [innerHTML]="petition?.article?.content"></p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Fermer</button>
+</mat-dialog-actions>

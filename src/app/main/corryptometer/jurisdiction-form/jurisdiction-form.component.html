@@ -41,14 +41,14 @@
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Localité</mat-label>
-                    <mat-select formControlName="level"
-                                (selectionChange)="findByLocalitySelected($event.value)"
-                                required>
-                        <mat-option *ngFor="let locality of localities"
-                                    [value]="locality.id">{{locality.name}}
+                    <mat-label>Localié</mat-label>
+                    <input type="text" matInput formControlName="level" [matAutocomplete]="auto">
+                    <mat-autocomplete (optionSelected)="getLevel($event.option.value)" #auto="matAutocomplete"
+                                      [displayWith]="displayFn">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option.name}}
                         </mat-option>
-                    </mat-select>
+                    </mat-autocomplete>
                 </mat-form-field>
             </div>
 

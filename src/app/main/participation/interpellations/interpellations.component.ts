@@ -11,10 +11,10 @@ import {takeUntil} from 'rxjs/internal/operators';
 import {InterpellationsService} from './interpellations.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {CALL_AS, ORGAN_CALL} from '../../../data/enums/enums';
-import {Denunciation} from '../../../data/models/denunciation.model';
 import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
 import {Interpellation} from '../../../data/models/interpellation.model';
 import {ToastrService} from 'ngx-toastr';
+import {DetailsInterpellationComponent} from '../details-interpellation/details-interpellation.component';
 
 @Component({
     selector: 'participation-interpellations',
@@ -28,7 +28,7 @@ export class InterpellationsComponent implements OnInit {
     callAs = CALL_AS;
     organCall = ORGAN_CALL;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['interpelDate', 'callAs', 'elected', 'organ', 'locality', 'domain', 'buttons'];
+    displayedColumns = ['interpelDate', 'callAs', 'locality', 'domain', 'buttons'];
 
     confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
 
@@ -101,6 +101,16 @@ export class InterpellationsComponent implements OnInit {
                 }, error => console.log(error));
             }
         });
+    }
+
+    showDetail(interpellation) {
+        const dialogRef = this._matDialog.open(DetailsInterpellationComponent, {
+            width: '700px',
+            data: {
+                interpellation: interpellation
+            }
+        });
+
     }
 
 }

@@ -80,7 +80,6 @@ $typography: mat-typography-config(
 // Import app and page component themes here to enable theming for them
 @import "src/app/layout/components/chat-panel/chat-panel.theme";
 @import "src/app/layout/components/toolbar/toolbar.theme";
-@import "src/app/main/setting/categories/categories.theme";
 @import "src/app/main/setting/cuttings/cuttings.theme";
 @import "src/app/main/setting/axes/axes.theme";
 @import "src/app/main/corryptometer/appeals/appeals.theme";
@@ -91,14 +90,9 @@ $typography: mat-typography-config(
 @import "src/app/main/setting/localities/localities.theme";
 @import "src/app/main/trueometer/organs/organs.theme";
 @import "src/app/main/trueometer/electeds/electeds.theme";
-@import "src/app/main/trueometer/verifications/verifications.theme";
-@import "src/app/main/trueometer/requests/requests.theme";
 @import "src/app/main/trueometer/projects/projects.theme";
 @import "src/app/main/participation/interpellations/interpellations.theme";
-@import "src/app/main/participation/citizen-voices/citizen-voices.theme";
 @import "src/app/main/governometer/articles/articles.theme";
-@import "src/app/main/norme/law-categories/law-categories.theme";
-@import "src/app/main/norme/laws/laws.theme";
 @import "src/app/main/auth/login/login.theme";
 @import "src/app/main/admin/users/users.theme";
 @import "src/app/main/admin/roles/roles.theme";
@@ -111,7 +105,6 @@ $typography: mat-typography-config(
 @import "src/app/main/corryptometer/legal-folders/legal-folders.theme";
 @import "src/app/main/corryptometer/jurisdictions/jurisdictions.theme";
 @import "src/app/main/participation/law-projects/law-projects.theme";
-@import "src/app/main/norme/law-articles/law-articles.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -119,7 +112,6 @@ $typography: mat-typography-config(
     // Layout components
     @include chat-panel-theme($theme);
     @include toolbar-theme($theme);
-    @include setting-categories-theme($theme);
     @include setting-cuttings-theme($theme);
     @include setting-axes-theme($theme);
     @include setting-programs-theme($theme);
@@ -127,15 +119,11 @@ $typography: mat-typography-config(
     @include setting-localities-theme($theme);
     @include trueometer-organs-theme($theme);
     @include trueometer-electeds-theme($theme);
-    @include trueometer-verifications-theme($theme);
-    @include trueometer-requests-theme($theme);
     @include trueometer-projects-theme($theme);
     @include participation-interpellations-theme($theme);
     @include governometer-articles-theme($theme);
     @include admin-users-theme($theme);
     @include admin-roles-theme($theme);
-    @include norme-law-categories-theme($theme);
-    @include norme-laws-theme($theme);
     @include login-theme($theme);
     @include corryptometer-legal-folders-theme($theme);
     @include corryptometer-appeals-theme($theme);
@@ -143,14 +131,12 @@ $typography: mat-typography-config(
     @include corryptometer-traces-folder-theme($theme);
     @include corryptometer-jurisdictions-theme($theme);
     @include participation-law-projects-theme($theme);
-    @include participation-citizen-voices-theme($theme);
     @include participation-denunciations-theme($theme);
     @include publications-petitions-theme($theme);
     @include publications-forms-theme($theme);
     @include publications-quiz-categories-theme($theme);
     @include publications-quizzes-theme($theme);
     @include publications-responses-theme($theme);
-    @include norme-law-articles-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

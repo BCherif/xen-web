@@ -53,13 +53,19 @@
                     <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Titre</mat-label>
-                                <textarea name="title" formControlName="title"
-                                          matInput type="text"
-                                          required
-                                          max-rows="5">
-                                </textarea>
+                                <input name="title" formControlName="title" matInput required>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Domaine</mat-label>
+                                <mat-select formControlName="domain"
+                                            (selectionChange)="findDomainSelected($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let domain of domains"
+                                                [value]="domain.id">{{domain.name}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
 
@@ -75,6 +81,17 @@
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" class="px-8" floatLabel="always" fxFlex="33">
+                                <mat-label>Localié</mat-label>
+                                <input type="text" matInput formControlName="level" [matAutocomplete]="auto">
+                                <mat-autocomplete (optionSelected)="getLevel($event.option.value)"
+                                                  #auto="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="px-8" floatLabel="always" fxFlex="33">
                                 <mat-label>Qui est interpeller</mat-label>
                                 <mat-select formControlName="organCall"
                                             (selectionChange)="getOrganChoice($event.value)" required>
@@ -83,60 +100,54 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
+                        </div>
 
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field *ngIf="organCallSelected ==='ELECTED' && organCallSelected !='ORGAN'"
-                                            appearance="outline" class="px-8" floatLabel="always" fxFlex="33">
-                                <mat-label>Elus concerné</mat-label>
-                                <mat-select formControlName="elected"
-                                            (selectionChange)="findByElectedSelected($event.value)">
-                                    <mat-option *ngFor="let elected of electeds" [value]="elected.id">
-                                        {{elected.firstname}} {{elected.lastname}}
-                                    </mat-option>
+                                            appearance="outline"
+                                            floatLabel="always" class="w-100-p">
+                                <mat-label>Membre</mat-label>
+                                <mat-select formControlName="electeds" multiple required>
+                                    <mat-select-trigger>
+                                        {{interpellationForm.get('electeds').value ? interpellationForm.get('electeds').value[0].name : ''}}
+                                        <span *ngIf="interpellationForm.get('electeds').value?.length > 1">
+        (+{{interpellationForm.get('electeds').value.length - 1}} {{interpellationForm.get('electeds').value?.length === 2 ? 'autres' : 'autres'}}
+                                            )
+      </span>
+                                    </mat-select-trigger>
+                                    <mat-option *ngFor="let elected of electeds"
+                                                [value]="elected">{{elected?.firstname}} {{elected?.lastname}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
 
+                        </div>
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field *ngIf="organCallSelected ==='ORGAN' && organCallSelected !='ELECTED'"
-                                            appearance="outline" class="px-8" floatLabel="always" fxFlex="33">
-                                <mat-label>Organ concerné</mat-label>
-                                <mat-select formControlName="organ"
-                                            (selectionChange)="findOrganSelected($event.value)">
-                                    <mat-option *ngFor="let organ of organs" [value]="organ.id">
-                                        {{organ.name}}
-                                    </mat-option>
+                                            appearance="outline"
+                                            floatLabel="always" class="w-100-p">
+                                <mat-label>Institution</mat-label>
+                                <mat-select formControlName="organs" multiple required>
+                                    <mat-select-trigger>
+                                        {{interpellationForm.get('organs').value ? interpellationForm.get('organs').value[0].name : ''}}
+                                        <span *ngIf="interpellationForm.get('organs').value?.length > 1">
+        (+{{interpellationForm.get('organs').value.length - 1}} {{interpellationForm.get('organs').value?.length === 2 ? 'autres' : 'autres'}}
+                                            )
+      </span>
+                                    </mat-select-trigger>
+                                    <mat-option *ngFor="let organ of organs"
+                                                [value]="organ">{{organ?.name}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field *ngIf="asCallSelected === 'NOT_ANONYMOUS'" appearance="outline"
+                            <mat-form-field appearance="outline"
                                             floatLabel="always" class="w-100-p">
                                 <mat-label>Auteur de l'interpellation</mat-label>
                                 <input name="author" formControlName="author" matInput required>
                             </mat-form-field>
                         </div>
 
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Localité</mat-label>
-                                <mat-select formControlName="locality"
-                                            (selectionChange)="findByLocalitySelected($event.value)"
-                                            required>
-                                    <mat-option *ngFor="let locality of localities"
-                                                [value]="locality.id">{{locality.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Domaine</mat-label>
-                                <mat-select formControlName="domain"
-                                            (selectionChange)="findDomainSelected($event.value)"
-                                            required>
-                                    <mat-option *ngFor="let domain of domains"
-                                                [value]="domain.id">{{domain.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
                         <div>
                             <ckeditor formControlName="interContent" required></ckeditor>
                         </div>

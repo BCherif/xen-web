@@ -61,6 +61,8 @@ export class PetitionComponent implements OnInit, OnDestroy {
     @ViewChild('decisionInput') decisionInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
+    filteredOptions: Observable<Locality[]>;
+
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -113,8 +115,15 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.getDomains();
         this.getDecisions();
         this.filteredDecisionMakers = this.petitionForm.get('decisionMakers').valueChanges.pipe(
-            startWith(null),
+            startWith(''),
             map((value: any | null) => value ? this._filter(value) : this.allDecisionMakers.slice()));
+
+        this.filteredOptions = this.petitionForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filterLevel(name) : this.localities.slice())
+            );
         // Subscribe to update interpellation on changes
         this._petitionService.onPetitionChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -129,7 +138,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this.petitionForm.get('decisionMakers').setValue(petition?.decisionMakers);
                     this.petitionForm.get('article').setValue(petition?.article?.id);
                     this.petitionForm.get('domain').setValue(petition?.article?.domain?.id);
-                    this.petitionForm.get('locality').setValue(petition?.article?.level?.id);
+                    this.petitionForm.get('level').setValue(petition?.article?.level?.id);
                     this.petition = new Petition(petition);
                     this.pageType = 'edit';
                 } else {
@@ -163,7 +172,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
             title: new FormControl('', Validators.required),
             petitionContent: new FormControl('', Validators.required),
             decisionMakers: new FormControl(''),
-            locality: new FormControl('', Validators.required),
+            level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             objective: new FormControl('', Validators.required),
             article: new FormControl('')
@@ -216,6 +225,15 @@ export class PetitionComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filterLevel(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
     getDomains() {
         this._domainsService.getAll().subscribe(value => {
             this.domains = value['response'];
@@ -232,6 +250,11 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this._domainsService.getById(id).subscribe(value => {
             this.domain = value['response'];
         }, error => console.log(error));
+    }
+
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
     }
 
     findByLocalitySelected(value) {

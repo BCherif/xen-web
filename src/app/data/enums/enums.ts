@@ -67,8 +67,8 @@ export enum CALL_AS {
 }
 
 export enum ORGAN_CALL {
-    ELECTED = 'Elus',
-    ORGAN = 'Organ'
+    ELECTED = 'Membre',
+    ORGAN = 'Institution'
 }
 
 export enum DEGREE {

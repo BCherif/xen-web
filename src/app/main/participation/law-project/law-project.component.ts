@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {CATEGORY, INITIATOR, STATE_LAW_PROJECT, SUB_CATEGORY} from '../../../data/enums/enums';
@@ -18,10 +18,8 @@ import {XensaUtils} from '../../../utils/xensa-utils';
 import {User} from '../../../data/models/user.model';
 import {LawProject} from '../../../data/models/law.project.model';
 import {LawProjectSaveEntity} from '../../../data/wrapper/law.project.save.entity.model';
-import {Elected} from '../../../data/models/elected.model';
 import {LawProjectService} from './law-project.service';
 import {ElectedsService} from '../../trueometer/electeds/electeds.service';
-import {MatDatepicker} from '@angular/material/datepicker';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
@@ -45,7 +43,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
     stateProjects: any[];
     domains: Domain[];
     domain: Domain;
-    localities: Locality[];
+    localities: Locality[] = [];
     locality: Locality;
     initiators: any;
     initiator = INITIATOR;
@@ -56,6 +54,8 @@ export class LawProjectComponent implements OnInit, OnDestroy {
 
     // Private
     private _unsubscribeAll: Subject<any>;
+
+    filteredOptions: Observable<Locality[]>;
 
     /**
      * Constructor
@@ -106,6 +106,13 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.createLawProjectForm();
         this.getLocalities();
         this.getDomains();
+
+        this.filteredOptions = this.lawProjectForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.localities.slice())
+            );
         // Subscribe to update interpellation on changes
         this._lawProjectService.onLawProjectChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -122,7 +129,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                     this.lawProjectForm.get('article').setValue(lawProject.article.id);
                     this.lawProjectForm.get('domain').setValue(lawProject?.article?.domain?.id);
                     this.lawProjectForm.get('initiator').setValue(lawProject.initiator);
-                    this.lawProjectForm.get('locality').setValue(lawProject?.article?.level?.id);
+                    this.lawProjectForm.get('level').setValue(lawProject?.article?.level?.id);
                     this.lawProject = new LawProject(lawProject);
                     this.pageType = 'edit';
                 } else {
@@ -158,7 +165,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
             year: new FormControl(new Date(), Validators.required),
             stateLawProject: new FormControl('', Validators.required),
             initiator: new FormControl('', Validators.required),
-            locality: new FormControl('', Validators.required),
+            level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             article: new FormControl('')
         });
@@ -168,6 +175,19 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
         }, error => console.log(error));
+    }
+
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filter(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
     }
 
     getDomains() {

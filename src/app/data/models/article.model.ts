@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {CATEGORY, SUB_CATEGORY} from '../enums/enums';
 import {Locality} from './locality.model';
 import {Domain} from './domain.model';
+import {User} from './user.model';
 
 @Injectable()
 export class Article implements Deserializable {
@@ -16,6 +17,7 @@ export class Article implements Deserializable {
     level: Locality;
     domain: Domain;
     ischeck: boolean;
+    user: User;
     createDate: Date = new Date();
     updateDate: Date;
 
@@ -31,6 +33,7 @@ export class Article implements Deserializable {
         this.subCategory = article.subCategory;
         this.level = article.level;
         this.domain = article.domain;
+        this.user = article.user;
     }
 
     deserialize(input: any): this {

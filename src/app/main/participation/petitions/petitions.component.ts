@@ -13,6 +13,7 @@ import {PetitionsService} from './petitions.service';
 import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
 import {Petition} from '../../../data/models/petition.model';
 import {ToastrService} from 'ngx-toastr';
+import {DetailsPetitionsComponent} from '../details-petitions/details-petitions.component';
 
 @Component({
     selector: 'participation-petitions',
@@ -97,6 +98,16 @@ export class PetitionsComponent implements OnInit {
                 }, error => console.log(error));
             }
         });
+    }
+
+    showDetailPetition(petition) {
+        const dialogRef = this._matDialog.open(DetailsPetitionsComponent, {
+            width: '700px',
+            data: {
+                petition: petition
+            }
+        });
+
     }
 
 }

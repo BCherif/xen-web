@@ -46,6 +46,7 @@ import {ProvidesComponent} from './provides/provides.component';
 import {ProvidesService} from './provides/provides.service';
 import {TracesFolderComponent} from './traces-folder/traces-folder.component';
 import {TracesFolderService} from './traces-folder/traces-folder.service';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 const maskConfig: Partial<IConfig> = {
@@ -161,7 +162,8 @@ const routes: Routes = [
         MatDatepickerModule,
         SpinnerModule,
         CKEditorModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        MatAutocompleteModule
     ],
     providers: [],
     entryComponents: [

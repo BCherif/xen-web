@@ -62,20 +62,6 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- <ng-container matColumnDef="content">
-                     <mat-header-cell *matHeaderCellDef mat-sort-header>Contenu</mat-header-cell>
-                     <mat-cell *matCellDef="let article">
-                         <p class="text-truncate" [innerHTML]="article.content"></p>
-                     </mat-cell>
-                 </ng-container>-->
-
-               <!-- <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Categorie</mat-header-cell>
-                    <mat-cell *matCellDef="let article">
-                        <p class="text-truncate">{{category[article?.category]}}</p>
-                    </mat-cell>
-                </ng-container>-->
-
                 <ng-container matColumnDef="subCategory">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Sous-categorie</mat-header-cell>
                     <mat-cell *matCellDef="let article">
@@ -103,6 +89,14 @@
                     <mat-cell *matCellDef="let article">
                         <a [routerLink]="'/main/governometer/articles/'+article.id+'/'+article.title">
                             <mat-icon>edit</mat-icon>
+                        </a>&nbsp;&nbsp;
+                        <a (click)="showDetail(article)">
+                            <mat-icon>visibility</mat-icon>
+                        </a>&nbsp;&nbsp;
+                        <a *ngIf="!article.ischeck"
+                           [routerLink]="" matTooltip="Valider"
+                           (click)="validation(article)">
+                            <mat-icon>check</mat-icon>
                         </a>
                     </mat-cell>
                 </ng-container>

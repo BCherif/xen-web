@@ -41,13 +41,14 @@
                 </mat-form-field>
             </div>
 
-            <div fxLayout="row" *ngIf="cutting?.name.toLocaleLowerCase() != 'Région'.toLocaleLowerCase()" class="textarea-wrapper" fxLayoutAlign="start start">
+            <div fxLayout="row" *ngIf="cutting?.name.toLocaleLowerCase() != 'Région'.toLocaleLowerCase()"
+                 class="textarea-wrapper" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Localité superieure</mat-label>
                     <mat-select formControlName="levelSup"
                                 (selectionChange)="findLevelSupSelected($event.value)">
                         <mat-option *ngFor="let levelSup of levels"
-                                    [value]="levelSup.id">{{levelSup?.name}} - {{levelSup?.cutting.name}}
+                                    [value]="levelSup.id">{{levelSup?.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

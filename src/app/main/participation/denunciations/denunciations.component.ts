@@ -14,6 +14,8 @@ import {Petition} from '../../../data/models/petition.model';
 import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
 import {Denunciation} from '../../../data/models/denunciation.model';
 import {ToastrService} from 'ngx-toastr';
+import {DetailsInterpellationComponent} from '../details-interpellation/details-interpellation.component';
+import {DetailsDenunciationComponent} from '../details-denunciation/details-denunciation.component';
 
 @Component({
     selector     : 'participation-denunciations',
@@ -101,6 +103,16 @@ export class DenunciationsComponent implements OnInit
                 }, error => console.log(error));
             }
         });
+    }
+
+    showDetail(denunciation) {
+        const dialogRef = this._matDialog.open(DetailsDenunciationComponent, {
+            width: '700px',
+            data: {
+                denunciation: denunciation
+            }
+        });
+
     }
 
 }

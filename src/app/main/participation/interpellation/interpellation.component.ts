@@ -2,13 +2,12 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {InterpellationService} from './interpellation.service';
 import {ElectedsService} from '../../trueometer/electeds/electeds.service';
-import {CategoriesService} from '../../setting/categories/categories.service';
 import {Elected} from '../../../data/models/elected.model';
 import {CALL_AS, CATEGORY, ORGAN_CALL, SUB_CATEGORY} from '../../../data/enums/enums';
 import {ToastrService} from 'ngx-toastr';
@@ -55,11 +54,13 @@ export class InterpellationComponent implements OnInit, OnDestroy {
     subCategories: any[];
     domains: Domain[];
     domain: Domain;
-    localities: Locality[];
+    localities: Locality[] = [];
     locality: Locality;
 
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
+
+    filteredOptions: Observable<Locality[]>;
 
 
     // Private
@@ -70,7 +71,6 @@ export class InterpellationComponent implements OnInit, OnDestroy {
      *
      * @param {InterpellationService} _interpellationService
      * @param _electedsService
-     * @param _categoriesService
      * @param _organsService
      * @param {FormBuilder} _formBuilder
      * @param {Location} _location
@@ -85,7 +85,6 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         private _interpellationService: InterpellationService,
         private _electedsService: ElectedsService,
         private _organsService: OrgansService,
-        private _categoriesService: CategoriesService,
         private _formBuilder: FormBuilder,
         private _location: Location,
         private _matSnackBar: MatSnackBar,
@@ -116,23 +115,28 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         this.categories = Object.keys(this.category);
         this.subCategories = Object.keys(this.subCategory);
         this.createInterpellationForm();
-        this.getElecteds();
         this.getOrgans();
         this.getLocalities();
         this.getDomains();
+
+        this.filteredOptions = this.interpellationForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.localities.slice())
+            );
         // Subscribe to update interpellation on changes
         this._interpellationService.onInterpellationChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(interpellation => {
 
                 if (interpellation) {
-                    if (interpellation.elected) {
-                        this.getElectedById(interpellation.elected.id);
-                        this.interpellationForm.get('elected').setValue(interpellation.elected.id);
-                    }
-                    if (interpellation.organ) {
-                        this.getOrganById(interpellation.organ.id);
-                        this.interpellationForm.get('organ').setValue(interpellation.organ.id);
+                    this.organCallSelected = interpellation.organCall;
+                    if (interpellation.organCall === 'ELECTED') {
+                        this.getElecteds(interpellation?.article?.level?.id);
+                        this.interpellationForm.get('electeds').setValue(interpellation.electeds);
+                    } else {
+                        this.interpellationForm.get('organs').setValue(interpellation.organs);
                     }
                     this.getDomainById(interpellation?.article?.domain?.id);
                     this.getLocalityById(interpellation?.article?.level?.id);
@@ -144,7 +148,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                     this.interpellationForm.get('author').setValue(interpellation.author);
                     this.interpellationForm.get('article').setValue(interpellation?.article.id);
                     this.interpellationForm.get('domain').setValue(interpellation?.article?.domain?.id);
-                    this.interpellationForm.get('locality').setValue(interpellation?.article?.level?.id);
+                    this.interpellationForm.get('level').setValue(interpellation?.article?.level?.id);
                     this.interpellation = new Interpellation(interpellation);
                     this.pageType = 'edit';
                 } else {
@@ -180,17 +184,18 @@ export class InterpellationComponent implements OnInit, OnDestroy {
             interContent: new FormControl('', Validators.required),
             organCall: new FormControl('', Validators.required),
             callAs: new FormControl('', Validators.required),
-            elected: new FormControl(''),
-            organ: new FormControl(''),
-            locality: new FormControl('', Validators.required),
+            electeds: new FormControl(''),
+            organs: new FormControl(''),
+            level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             article: new FormControl('')
         });
     }
 
-    getElecteds() {
-        this._electedsService.getAll().subscribe(value => {
+    getElecteds(id: number) {
+        this._electedsService.findAllByLevelId(id).subscribe(value => {
             this.electeds = value['response'];
+            console.log(this.electeds);
         }, error => console.log(error));
     }
 
@@ -200,30 +205,44 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
-    getElectedById(id: number) {
-        this._electedsService.getById(id).subscribe(value => {
-            this.elected = value['response'];
-        }, error => console.log(error));
-    }
+    /*  getElectedById(id: number) {
+          this._electedsService.getById(id).subscribe(value => {
+              this.elected = value['response'];
+          }, error => console.log(error));
+      }
 
-    getOrganById(id: number) {
-        this._organsService.getById(id).subscribe(value => {
-            this.organ = value['response'];
-        }, error => console.log(error));
-    }
+      getOrganById(id: number) {
+          this._organsService.getById(id).subscribe(value => {
+              this.organ = value['response'];
+          }, error => console.log(error));
+      }
 
-    findByElectedSelected(value) {
-        this.getElectedById(value);
-    }
+      findByElectedSelected(value) {
+          this.getElectedById(value);
+      }
 
-    findOrganSelected(value) {
-        this.getOrganById(value);
-    }
+      findOrganSelected(value) {
+          this.getOrganById(value);
+      }*/
 
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
         }, error => console.log(error));
+    }
+
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filter(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
+        this.getElecteds(value.id);
     }
 
     getDomains() {
@@ -246,6 +265,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
 
     findByLocalitySelected(value) {
         this.getLocalityById(value);
+        this.getElecteds(value);
     }
 
     findDomainSelected(value) {
@@ -261,10 +281,15 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         this.interpellation.id = this.interpellationForm.get('id').value;
         this.interpellation.callAs = this.interpellationForm.get('callAs').value;
         this.interpellation.author = this.interpellationForm.get('author').value;
+        if (this.organCallSelected === 'ELECTED') {
+            this.interpellation.electeds = this.interpellationForm.get('electeds').value;
+            this.interpellation.organs = [];
+        } else {
+            this.interpellation.organs = this.interpellationForm.get('organs').value;
+            this.interpellation.electeds = [];
+        }
         this.interpellation.organCall = this.interpellationForm.get('organCall').value;
-        this.interpellation.elected = this.elected;
-        this.interpellation.organ = this.organ;
-        this.interpellation.user = this.currentUser;
+        this.article.user = this.currentUser;
         this.article.title = this.interpellationForm.get('title').value;
         this.article.id = this.interpellationForm.get('article').value;
         this.article.content = this.interpellationForm.get('interContent').value;
@@ -299,13 +324,6 @@ export class InterpellationComponent implements OnInit, OnDestroy {
 
     getOrganChoice(value) {
         this.organCallSelected = value;
-        if (this.organCallSelected === 'ELECTED') {
-            this.interpellationForm.get('elected').setValue(this.elected?.id);
-            this.interpellationForm.get('organ').setValue(null);
-        } else {
-            this.interpellationForm.get('elected').setValue(null);
-            this.interpellationForm.get('organ').setValue(this.organ?.id);
-        }
     }
 
     getasCallChoice(value) {

@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 
 
 import {fuseAnimations} from '@fuse/animations';
@@ -17,6 +17,8 @@ import {Domain} from '../../../data/models/domain.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {DomainsService} from '../../setting/domains/domains.service';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {XensaUtils} from '../../../utils/xensa-utils';
+import {User} from '../../../data/models/user.model';
 
 @Component({
     selector: 'governometer-article',
@@ -29,7 +31,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
     article: Article;
     domains: Domain[];
     domain: Domain;
-    localities: Locality[];
+    localities: Locality[] = [];
     locality: Locality;
     pageType: string;
     fileSelected: File;
@@ -40,6 +42,11 @@ export class ArticleComponent implements OnInit, OnDestroy {
     categories: any[];
     subCategory = GOUV_SUB_CAT;
     subCategories: any[];
+
+    xensaUtils = new XensaUtils();
+    currentUser: User = this.xensaUtils.getAppUser();
+
+    filteredOptions: Observable<Locality[]>;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -88,6 +95,12 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.createArticleForm();
         this.getLocalities();
         this.getDomains();
+        this.filteredOptions = this.articleForm.get('level').valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.localities.slice())
+            );
         // Subscribe to update interpellation on changes
         this._articleService.onArticleChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -147,6 +160,19 @@ export class ArticleComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
+    displayFn(locality: Locality): string {
+        return locality && locality.name ? locality.name : '';
+    }
+
+    private _filter(name: string): Locality[] {
+        const filterValue = name.toLowerCase();
+        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    getLevel(value) {
+        this.getLocalityById(value.id);
+    }
+
     getDomains() {
         this._domainsService.getAll().subscribe(value => {
             this.domains = value['response'];
@@ -163,10 +189,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this._domainsService.getById(id).subscribe(value => {
             this.domain = value['response'];
         }, error => console.log(error));
-    }
-
-    findByLocalitySelected(value) {
-        this.getLocalityById(value);
     }
 
     findDomainSelected(value) {
@@ -192,6 +214,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.article.category = this.categories[1];
         this.article.domain = this.domain;
         this.article.ischeck = true;
+        this.article.user = this.currentUser;
         if (!this.article.id) {
             this._articleService.create(this.article).subscribe(data => {
                 if (data['status'] === 'OK') {

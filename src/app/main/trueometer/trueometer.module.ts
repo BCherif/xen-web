@@ -27,20 +27,7 @@ import {SettingOrganFormDialogComponent} from "./organ-form/organ-form.component
 import {ElectedsComponent} from "./electeds/electeds.component";
 import {ElectedsService} from "./electeds/electeds.service";
 import {SettingElectedFormDialogComponent} from "./elected-form/elected-form.component";
-import {VerificationsService} from "./verifications/verifications.service";
-import {VerificationsComponent} from "./verifications/verifications.component";
-import {VerificationComponent} from "./verification/verification.component";
-import {VerificationService} from "./verification/verification.service";
-import {RequestsComponent} from "./requests/requests.component";
-import {RequestsService} from "./requests/requests.service";
-import {RequestComponent} from './request/request.component';
-import {RequestService} from './request/request.service';
 import {MatMenuModule} from '@angular/material/menu';
-import {RequestAnswerComponent} from './request-answer/request-answer.component';
-import {RequestAnswerService} from './request-answer/request-answer.service';
-import {VerificationDetailsComponent} from './verification-details/verification-details.component';
-import {RequestDetailsComponent} from './request-details/request-details.component';
-import {RequestDetailsService} from './request-details/request-details.service';
 import {ProjectsService} from './projects/projects.service';
 import {ProjectsComponent} from './projects/projects.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
@@ -55,66 +42,10 @@ const maskConfig: Partial<IConfig> = {
 
 const routes: Routes = [
     {
-        path     : 'verifications',
-        component: VerificationsComponent,
-        resolve  : {
-            data: VerificationsService
-        }
-    },
-    {
-        path     : 'verifications/:id',
-        component: VerificationComponent,
-        resolve  : {
-            data: VerificationService
-        }
-    },
-    {
-        path     : 'verifications/:id/:label',
-        component: VerificationComponent,
-        resolve  : {
-            data: VerificationService
-        }
-    },
-    {
-        path     : 'requests',
-        component: RequestsComponent,
-        resolve  : {
-            data: RequestsService
-        }
-    },
-    {
-        path     : 'requests/:id',
-        component: RequestComponent,
-        resolve  : {
-            data: RequestService
-        }
-    },
-    {
-        path     : 'requests/:id/:label',
-        component: RequestComponent,
-        resolve  : {
-            data: RequestService
-        }
-    },
-    {
         path     : 'organs',
         component: OrgansComponent,
         resolve  : {
             data: OrgansService
-        }
-    },
-    {
-        path     : 'request-answer/:id',
-        component: RequestAnswerComponent,
-        resolve  : {
-            data: RequestAnswerService
-        }
-    },
-    {
-        path     : 'request-details/:id',
-        component: RequestDetailsComponent,
-        resolve  : {
-            data: RequestDetailsService
         }
     },
     {
@@ -151,15 +82,8 @@ const routes: Routes = [
     declarations: [
         OrgansComponent,
         ElectedsComponent,
-        VerificationsComponent,
-        VerificationComponent,
-        RequestsComponent,
-        RequestComponent,
         ProjectComponent,
-        RequestDetailsComponent,
-        VerificationDetailsComponent,
         SettingOrganFormDialogComponent,
-        RequestAnswerComponent,
         SettingElectedFormDialogComponent,
         ProjectsComponent
     ],

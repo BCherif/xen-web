@@ -71,13 +71,6 @@ export const navigation: FuseNavigation[] = [
                 type: 'collapsable',
                 icon: 'person_add',
                 children: [
-                    /*{
-                        id: 'citizen-voices',
-                        title: 'Voix citoyen',
-                        type: 'item',
-                        icon: 'people',
-                        url: '/main/participation/citizen-voices'
-                    },*/
                     {
                         id: 'law-projects',
                         title: 'Projet de Lois',
@@ -180,37 +173,6 @@ export const navigation: FuseNavigation[] = [
                     }
                 ]
             },
-            /*
-                        {
-                            id       : 'norme',
-                            title    : 'Normes',
-                            type     : 'collapsable',
-                            icon: 'gavel',
-                            children : [
-                                {
-                                    id   : 'article',
-                                    title: 'Article de lois',
-                                    type : 'item',
-                                    icon: 'gavel',
-                                    url  : '/main/norme/law-articles'
-                                },
-                                {
-                                    id   : 'lois',
-                                    title: 'Lois',
-                                    type : 'item',
-                                    icon: 'gavel',
-                                    url  : '/main/norme/laws'
-                                },
-                                {
-                                    id   : 'category',
-                                    title: 'Catégories de lois',
-                                    type : 'item',
-                                    icon: 'gavel',
-                                    url  : '/main/norme/law-categories'
-                                }
-                            ]
-                        },
-            */
             {
                 id: 'setting',
                 title: 'Configurations',
