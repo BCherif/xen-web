@@ -1,17 +1,15 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {environment} from "../../../../environments/environment";
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
 import {Form} from '../../../data/models/form.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
-import {FormCatQuizSaveEntity} from '../../../data/wrapper/form.cat.quiz.save.entity.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class FormsService implements Resolve<any>
-{
+export class FormsService implements Resolve<any> {
     forms: Form[];
     onFormsChanged: BehaviorSubject<any>;
     readonly httpOptions: any;
@@ -24,8 +22,7 @@ export class FormsService implements Resolve<any>
      */
     constructor(
         private _httpClient: HttpClient
-    )
-    {
+    ) {
         this.httpOptions = new XensaUtils().httpHeaders();
         this.serviceURL = environment.serviceUrl + '/forms';
         // Set the defaults
@@ -39,8 +36,7 @@ export class FormsService implements Resolve<any>
      * @param {RouterStateSnapshot} state
      * @returns {Observable<any> | Promise<any> | any}
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         return new Promise((resolve, reject) => {
 
             Promise.all([
@@ -61,7 +57,7 @@ export class FormsService implements Resolve<any>
      */
     getForms(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL,this.httpOptions)
+            this._httpClient.get(this.serviceURL, this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.forms = res['response'];
@@ -73,15 +69,11 @@ export class FormsService implements Resolve<any>
     }
 
     create(form: Form) {
-        return this._httpClient.post(this.serviceURL, form,this.httpOptions);
-    }
-
-    affectQuiz(formCatQuizSaveEntity: FormCatQuizSaveEntity) {
-        return this._httpClient.post(this.serviceURL+'/add-quizzes',formCatQuizSaveEntity,this.httpOptions);
+        return this._httpClient.post(this.serviceURL, form, this.httpOptions);
     }
 
     getById(id: number) {
-        return this._httpClient.get(this.serviceURL + '/' + id,this.httpOptions);
+        return this._httpClient.get(this.serviceURL + '/' + id, this.httpOptions);
     }
 
 }

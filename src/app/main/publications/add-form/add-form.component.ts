@@ -1,29 +1,28 @@
 import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {ToastrService} from "ngx-toastr";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Form} from '../../../data/models/form.model';
 import {FormsService} from '../forms/forms.service';
 import {CATEGORY_FORM} from '../../../data/enums/enums';
-import {QuizCategoriesService} from '../quiz-categories/quiz-categories.service';
-import {QuizCategory} from '../../../data/models/quiz.category.model';
+import {Domain} from '../../../data/models/domain.model';
+import {DomainsService} from '../../setting/domains/domains.service';
 
 @Component({
-    selector     : 'publications-add-form-dialog',
-    templateUrl  : './add-form.component.html',
-    styleUrls    : ['./add-form.component.scss'],
+    selector: 'publications-add-form-dialog',
+    templateUrl: './add-form.component.html',
+    styleUrls: ['./add-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class PublicationsAddFormDialogComponent implements OnInit
-{
+export class PublicationsAddFormDialogComponent implements OnInit {
     action: string;
     form: Form;
     addForm: FormGroup;
     categoryForm = CATEGORY_FORM;
-    categoriesQuiz : QuizCategory[];
-    categories : any[];
+    domains: Domain[];
+    categories: any[];
     dialogTitle: string;
 
     /**
@@ -33,7 +32,7 @@ export class PublicationsAddFormDialogComponent implements OnInit
      * @param _data
      * @param {FormBuilder} _formBuilder
      * @param _formsService
-     * @param _quizCategoriesService
+     * @param _domainsService
      * @param _toastr
      * @param _spinnerService
      */
@@ -42,21 +41,17 @@ export class PublicationsAddFormDialogComponent implements OnInit
         @Inject(MAT_DIALOG_DATA) private _data: any,
         private _formBuilder: FormBuilder,
         private _formsService: FormsService,
-        private _quizCategoriesService: QuizCategoriesService,
+        private _domainsService: DomainsService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService
-    )
-    {
+    ) {
         // Set the defaults
         this.action = _data.action;
 
-        if ( this.action === 'edit' )
-        {
+        if (this.action === 'edit') {
             this.dialogTitle = 'Modifier un formulaire';
             this.form = _data.form;
-        }
-        else
-        {
+        } else {
             this.dialogTitle = 'Ajouter un formulaire';
             this.form = new Form({});
         }
@@ -66,7 +61,7 @@ export class PublicationsAddFormDialogComponent implements OnInit
 
     ngOnInit() {
         this.categories = Object.keys(this.categoryForm);
-        this.getAllQuizCategorie();
+        this.getDomains();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -78,20 +73,19 @@ export class PublicationsAddFormDialogComponent implements OnInit
      *
      * @returns {FormGroup}
      */
-    createForm()
-    {
+    createForm() {
         return this._formBuilder.group({
-            id      : new FormControl(this.form.id),
-            name    : new FormControl(this.form.name, Validators.required),
-            categoryForm:new FormControl(this.form.categoryForm, Validators.required),
-            quizCategories:new FormControl(this.form.quizCategories, Validators.required)
+            id: new FormControl(this.form.id),
+            name: new FormControl(this.form.name, Validators.required),
+            categoryForm: new FormControl(this.form.categoryForm, Validators.required),
+            domains: new FormControl(this.form.domains, Validators.required)
         });
     }
 
-    getAllQuizCategorie(){
-        this._quizCategoriesService.getAll().subscribe(value => {
-            this.categoriesQuiz = value['response'];
-        },error => console.error(error));
+    getDomains() {
+        this._domainsService.getAll().subscribe(value => {
+            this.domains = value['response'];
+        }, error => console.log(error));
     }
 
     saveOrUpdate() {

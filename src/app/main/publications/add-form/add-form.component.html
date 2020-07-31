@@ -41,18 +41,18 @@
             </div>
             <div>
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Catégorie</mat-label>
-                    <mat-select formControlName="quizCategories" multiple required>
+                    <mat-label>Domaine</mat-label>
+                    <mat-select formControlName="domains" multiple required>
                         <mat-select-trigger>
-                            {{addForm.get('quizCategories').value ? addForm.get('quizCategories').value[0].name : ''}}
-                            <span *ngIf="addForm.get('quizCategories').value?.length > 1"
+                            {{addForm.get('domains').value ? addForm.get('domains').value[0].name : ''}}
+                            <span *ngIf="addForm.get('domains').value?.length > 1"
                                   class="example-additional-selection">
-        (+{{addForm.get('quizCategories').value.length - 1}} {{addForm.get('quizCategories').value?.length === 2 ? 'autres' : 'autres'}}
+        (+{{addForm.get('domains').value.length - 1}} {{addForm.get('domains').value?.length === 2 ? 'autres' : 'autres'}}
                                 )
       </span>
                         </mat-select-trigger>
-                        <mat-option *ngFor="let quizCat of categoriesQuiz"
-                                    [value]="quizCat">{{quizCat?.name}}</mat-option>
+                        <mat-option *ngFor="let domain of domains"
+                                    [value]="domain">{{domain?.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

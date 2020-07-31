@@ -53,11 +53,11 @@ export enum STATE_FOLDER {
 }
 
 export enum TYPE_QUIZ_ANSWER {
-    TEXT = 'Texte',
-    NUMBER = 'Nombre',
-    CHECK = 'Multiple choix',
-    SELECT = 'Selectionner',
-    DATE = 'Date'
+    text = 'Texte',
+    number = 'Nombre',
+    checkbox = 'Multiple choix',
+    select = 'Selectionner',
+    date = 'Date'
 }
 
 

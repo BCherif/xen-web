@@ -98,7 +98,6 @@ $typography: mat-typography-config(
 @import "src/app/main/admin/roles/roles.theme";
 @import "src/app/main/publications/forms/forms.theme";
 @import "src/app/main/publications/quizzes/quizzes.theme";
-@import "src/app/main/publications/quiz-categories/quiz-categories.theme";
 @import "src/app/main/publications/responses/responses.theme";
 @import "src/app/main/participation/denunciations/denunciations.theme";
 @import "src/app/main/participation/petitions/petitions.theme";
@@ -134,7 +133,6 @@ $typography: mat-typography-config(
     @include participation-denunciations-theme($theme);
     @include publications-petitions-theme($theme);
     @include publications-forms-theme($theme);
-    @include publications-quiz-categories-theme($theme);
     @include publications-quizzes-theme($theme);
     @include publications-responses-theme($theme);
 }

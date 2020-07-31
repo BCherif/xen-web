@@ -179,15 +179,15 @@ export class ArticleComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
-    getLocalityById(id: number) {
-        this._localitiesService.getById(id).subscribe(value => {
-            this.locality = value['response'];
-        }, error => console.log(error));
-    }
-
     getDomainById(id: number) {
         this._domainsService.getById(id).subscribe(value => {
             this.domain = value['response'];
+        }, error => console.log(error));
+    }
+
+    getLocalityById(id: number) {
+        this._localitiesService.getById(id).subscribe(value => {
+            this.locality = value['response'];
         }, error => console.log(error));
     }
 

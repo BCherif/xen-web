@@ -28,18 +28,13 @@ import {QuizzesComponent} from './quizzes/quizzes.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {ResponsesService} from './responses/responses.service';
 import {ResponsesComponent} from './responses/responses.component';
-import {ResponseService} from './response/response.service';
-import {ResponseComponent} from './response/response.component';
 import {SpinnerModule} from '../../shared/modules/spinner.module';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {PublicationsAddFormDialogComponent} from './add-form/add-form.component';
 import {PublicationsAddQuizDialogComponent} from './add-quiz/add-quiz.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {QuizCategoriesService} from './quiz-categories/quiz-categories.service';
-import {QuizCategoriesComponent} from './quiz-categories/quiz-categories.component';
-import {PublicationsAddCategoryDialogComponent} from './add-category/add-category.component';
-import {PublicationsAffectQuizDialogComponent} from './affect-quiz/affect-quiz.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 const routes: Routes = [
@@ -48,13 +43,6 @@ const routes: Routes = [
         component: QuizzesComponent,
         resolve: {
             data: QuizzesService
-        }
-    },
-    {
-        path: 'quiz-categories',
-        component: QuizCategoriesComponent,
-        resolve: {
-            data: QuizCategoriesService
         }
     },
     {
@@ -70,20 +58,6 @@ const routes: Routes = [
         resolve: {
             data: FormsService
         }
-    },
-    {
-        path: 'responses/:id',
-        component: ResponseComponent,
-        resolve: {
-            data: ResponseService
-        }
-    },
-    {
-        path: 'responses/:id/:label',
-        component: ResponseComponent,
-        resolve: {
-            data: ResponseService
-        }
     }
 ];
 
@@ -92,12 +66,8 @@ const routes: Routes = [
         QuizzesComponent,
         FormsComponent,
         ResponsesComponent,
-        ResponseComponent,
-        QuizCategoriesComponent,
         PublicationsAddFormDialogComponent,
-        PublicationsAddQuizDialogComponent,
-        PublicationsAddCategoryDialogComponent,
-        PublicationsAffectQuizDialogComponent
+        PublicationsAddQuizDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -129,14 +99,13 @@ const routes: Routes = [
         SpinnerModule,
         NgxSpinnerModule,
         MatCheckboxModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatAutocompleteModule
     ],
     providers: [],
     entryComponents: [
         PublicationsAddFormDialogComponent,
-        PublicationsAddQuizDialogComponent,
-        PublicationsAddCategoryDialogComponent,
-        PublicationsAffectQuizDialogComponent
+        PublicationsAddQuizDialogComponent
     ]
 })
 export class PublicationsModule {

@@ -22,11 +22,27 @@
         <form [formGroup]="quizForm">
 
             <div fxLayout="row" fxLayoutAlign="start center">
-                <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
+                <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Libellé</mat-label>
                     <input type="text" formControlName="name" matInput required>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="pr-4" fxFlex="50">
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Domaine</mat-label>
+                    <mat-select formControlName="domain"
+                                (selectionChange)="findDomainSelected($event.value)"
+                                required>
+                        <mat-option *ngFor="let domain of domains"
+                                    [value]="domain.id">{{domain.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Type</mat-label>
                     <mat-select formControlName="typeQuiz" (selectionChange)="onTypeChange($event.value)"
                                 required>
@@ -37,49 +53,75 @@
                 </mat-form-field>
             </div>
 
-            <div *ngIf="typeSelected ==='CHECK' || typeSelected ==='SELECT'" class="responsiveTbl">
-                <table formArrayName="answers">
-                    <tr>
-                        <th colspan="1">Ajouter une réponse:</th>
-                        <th width="150px">
-                            <button (click)="addAnswer()" class="submit-button" color="#fff" mat-stroked-button>
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </th>
-                    </tr>
-                    <tr *ngFor="let answer of answers().controls; let i=index" [formGroupName]="i">
-                        <td>
-                            <!--<mat-form-field *ngIf="typeSelected === 'DATE'" appearance="outline" fxFlex>
-                                <mat-label>Date</mat-label>
-                                <input [matDatepicker]="date"
-                                       formControlName="dateField" matInput
-                                       name="date">
-                                <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
-                                <mat-datepicker #date></mat-datepicker>
-                            </mat-form-field>-->
-                            <mat-form-field appearance="outline" fxFlex>
-                                <mat-label>Libéllé :</mat-label>
-                                <input name="name" formControlName="name" matInput required>
-                            </mat-form-field>
-                            <!--<mat-form-field *ngIf="typeSelected ==='NUMBER'" appearance="outline" fxFlex>
-                                <mat-label>Nombre :</mat-label>
-                                <input name="name" formControlName="numberFiled" matInput required>
-                            </mat-form-field>-->
-                        </td>
-                        <!-- <td>
-                             <div class="example-section">
-                                 <mat-checkbox class="example-margin" formControlName="isCorrect">Est correcte
-                                 </mat-checkbox>
-                             </div>
-                         </td>-->
-                        <td>
-                            <button (click)="removeAnswer(i)" class="submit-button" color="#C00000" mat-stroked-button>
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+            <div *ngIf="typeSelected ==='checkbox' || typeSelected ==='select'" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-chip-list #chipList>
+                        <mat-chip *ngFor="let response of responses;let indx=index;"
+                                  [selectable]="selectable"
+                                  [removable]="removable" (removed)="remove(response,indx)">
+                            {{response.name}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Ajouter une réponse" #responseInput
+                               formControlName="responses" required
+                               [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                               [matChipInputAddOnBlur]="addOnBlur"
+                               (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let responseFilter of filteredResponses | async"
+                                    [value]="responseFilter">
+                            {{responseFilter.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
             </div>
+
+            <!--  <div *ngIf="typeSelected ==='CHECK' || typeSelected ==='SELECT'" class="responsiveTbl">
+
+                  <table formArrayName="answers">
+                      <tr>
+                          <th colspan="1">Ajouter une réponse:</th>
+                          <th width="150px">
+                              <button (click)="addAnswer()" class="submit-button" color="#fff" mat-stroked-button>
+                                  <mat-icon>add</mat-icon>
+                              </button>
+                          </th>
+                      </tr>
+                      <tr *ngFor="let answer of answers().controls; let i=index" [formGroupName]="i">
+                          <td>
+                              &lt;!&ndash;<mat-form-field *ngIf="typeSelected === 'DATE'" appearance="outline" fxFlex>
+                                  <mat-label>Date</mat-label>
+                                  <input [matDatepicker]="date"
+                                         formControlName="dateField" matInput
+                                         name="date">
+                                  <mat-datepicker-toggle [for]="date" matSuffix></mat-datepicker-toggle>
+                                  <mat-datepicker #date></mat-datepicker>
+                              </mat-form-field>&ndash;&gt;
+                              <mat-form-field appearance="outline" fxFlex>
+                                  <mat-label>Libéllé :</mat-label>
+                                  <input name="name" formControlName="name" matInput required>
+                              </mat-form-field>
+                              &lt;!&ndash;<mat-form-field *ngIf="typeSelected ==='NUMBER'" appearance="outline" fxFlex>
+                                  <mat-label>Nombre :</mat-label>
+                                  <input name="name" formControlName="numberFiled" matInput required>
+                              </mat-form-field>&ndash;&gt;
+                          </td>
+                          &lt;!&ndash; <td>
+                               <div class="example-section">
+                                   <mat-checkbox class="example-margin" formControlName="isCorrect">Est correcte
+                                   </mat-checkbox>
+                               </div>
+                           </td>&ndash;&gt;
+                          <td>
+                              <button (click)="removeAnswer(i)" class="submit-button" color="#C00000" mat-stroked-button>
+                                  <mat-icon>delete</mat-icon>
+                              </button>
+                          </td>
+                      </tr>
+                  </table>
+              </div>-->
 
         </form>
 
@@ -90,9 +132,8 @@
         <button mat-button
                 (click)="saveQuiz()"
                 class="save-button"
-                [disabled]="quizForm.invalid"
                 matTooltip="Ajouter">
-            Ajouter
+            Enregistrer
         </button>
 
         <button (click)="matDialogRef.close()"

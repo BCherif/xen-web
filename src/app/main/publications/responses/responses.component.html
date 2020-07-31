@@ -59,26 +59,28 @@
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Type réponse</mat-header-cell>
                     <mat-cell *matCellDef="let response">
                         <p *ngIf="response?.name" class="text-truncate">{{response?.name}}</p>
-                        <p *ngIf="response?.numberFiled" class="text-truncate">{{response?.numberFiled}}</p>
-                        <p *ngIf="response?.dateField" class="text-truncate">{{response?.dateField | date: 'dd/MM/yyyy'}}</p>
+                        <!--<p *ngIf="response?.numberFiled" class="text-truncate">{{response?.numberFiled}}</p>
+                        <p *ngIf="response?.dateField" class="text-truncate">
+                            {{response?.dateField | date: 'dd/MM/yyyy'}}
+                        </p>-->
                     </mat-cell>
                 </ng-container>
 
 
-                <ng-container matColumnDef="quiz">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Question</mat-header-cell>
-                    <mat-cell *matCellDef="let response">
-                        <p class="text-truncate">{{response?.quiz?.name}}</p>
-                    </mat-cell>
-                </ng-container>
+                <!-- <ng-container matColumnDef="quiz">
+                     <mat-header-cell *matHeaderCellDef mat-sort-header>Question</mat-header-cell>
+                     <mat-cell *matCellDef="let response">
+                         <p class="text-truncate">{{response?.quiz?.name}}</p>
+                     </mat-cell>
+                 </ng-container>
 
-                <ng-container matColumnDef="isCorrect">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Est correcte</mat-header-cell>
-                    <mat-cell *matCellDef="let response">
-                        <mat-icon *ngIf="response.isCorrect" class="active-icon green-600 s-16">check</mat-icon>
-                        <mat-icon *ngIf="!response.isCorrect" class="active-icon red-500 s-16">close</mat-icon>
-                    </mat-cell>
-                </ng-container>
+                 <ng-container matColumnDef="isCorrect">
+                     <mat-header-cell *matHeaderCellDef mat-sort-header>Est correcte</mat-header-cell>
+                     <mat-cell *matCellDef="let response">
+                         <mat-icon *ngIf="response.isCorrect" class="active-icon green-600 s-16">check</mat-icon>
+                         <mat-icon *ngIf="!response.isCorrect" class="active-icon red-500 s-16">close</mat-icon>
+                     </mat-cell>
+                 </ng-container>-->
 
                 <!-- Buttons Column -->
                 <!-- <ng-container matColumnDef="buttons">
