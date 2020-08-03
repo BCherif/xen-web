@@ -16,6 +16,7 @@ import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/a
 import {ResponsesService} from '../responses/responses.service';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {map, startWith} from 'rxjs/operators';
+import {Form} from '../../../data/models/form.model';
 
 @Component({
     selector: 'publications-quiz-form-dialog',
@@ -27,6 +28,7 @@ import {map, startWith} from 'rxjs/operators';
 export class PublicationsAddQuizDialogComponent implements OnInit {
     action: string;
     quiz: Quiz;
+    form: Form;
     quizForm: FormGroup;
     types: any[];
     type = TYPE_QUIZ_ANSWER;
@@ -37,8 +39,8 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
     domain: Domain;
 
     responses: any = [];
-    allResponses: Response[] = [];
-    filteredResponses: Observable<Response[]>;
+    allResponses: any[] = [];
+    filteredResponses: Observable<any[]>;
     visible = true;
     selectable = true;
     removable = true;
@@ -74,6 +76,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
     ) {
         // Set the defaults
         this.action = _data.action;
+        this.form = _data.form;
 
         if (this.action === 'new') {
             this.dialogTitle = 'Ajouter une question';
@@ -87,12 +90,9 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this.getResponses();
         this.getDomains();
 
-        this.filteredResponses = this.quizForm.get('responses').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.allResponses.slice())
-            );
+        this.filteredResponses = this.quizForm.get('responses').valueChanges.pipe(
+            startWith(''),
+            map((value: any | null) => value ? this._filter(value) : this.allResponses.slice()));
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -150,9 +150,8 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this.quizForm.get('responses').setValue(null);
     }
 
-    private _filter(name: string): Response[] {
-        const filterValue = name.toLowerCase();
-        return this.allResponses.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    private _filter(name: any): any[] {
+        return this.allResponses.filter(option => option.name.includes(name));
     }
 
     getDomains() {
@@ -195,6 +194,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this.quiz = new Quiz();
         this.quiz = this.quizForm.getRawValue();
         this.quiz.domain = this.domain;
+        this.quiz.form = this.form;
         this.quiz.responses = this.responses;
         this._quizzesService.create(this.quiz).subscribe(data => {
             if (data['status'] === 'OK') {

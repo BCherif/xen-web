@@ -35,12 +35,12 @@
             </div>
             <!-- / SEARCH -->
 
-            <button mat-raised-button
-                    (click)="newQuiz()"
-                    class="add-product-button fuse-white mt-24 mt-md-0">
-                <mat-icon>add</mat-icon>
-                <span>Nouvelle question</span>
-            </button>
+            <!-- <button mat-raised-button
+                     (click)="newQuiz()"
+                     class="add-product-button fuse-white mt-24 mt-md-0">
+                 <mat-icon>add</mat-icon>
+                 <span>Nouvelle question</span>
+             </button>-->
 
         </div>
         <!-- / HEADER -->
@@ -62,12 +62,12 @@
                     </mat-cell>
                 </ng-container>
 
-               <!-- <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
-                    <mat-cell *matCellDef="let quiz">
-                        <p class="text-truncate">{{quiz.description}}</p>
-                    </mat-cell>
-                </ng-container>-->
+                <!-- <ng-container matColumnDef="description">
+                     <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                     <mat-cell *matCellDef="let quiz">
+                         <p class="text-truncate">{{quiz.description}}</p>
+                     </mat-cell>
+                 </ng-container>-->
 
                 <ng-container matColumnDef="type">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
@@ -77,24 +77,24 @@
                 </ng-container>
 
                 <!-- Buttons Column -->
-               <!-- <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let quiz">
-                        <div fxFlex="row" fxLayoutAlign="end center">
-                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
-                                    (click)="$event.stopPropagation();">
-                                <mat-icon class="secondary-text">more_vert</mat-icon>
-                            </button>
+                <!-- <ng-container matColumnDef="buttons">
+                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                     <mat-cell *matCellDef="let quiz">
+                         <div fxFlex="row" fxLayoutAlign="end center">
+                             <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                     (click)="$event.stopPropagation();">
+                                 <mat-icon class="secondary-text">more_vert</mat-icon>
+                             </button>
 
-                            <mat-menu #moreMenu="matMenu">
-                                <button  mat-menu-item>
-                                    <mat-icon>add</mat-icon>
-                                    <span>Assigner Réponse</span>
-                                </button>
-                            </mat-menu>
-                        </div>
-                    </mat-cell>
-                </ng-container>-->
+                             <mat-menu #moreMenu="matMenu">
+                                 <button  mat-menu-item>
+                                     <mat-icon>add</mat-icon>
+                                     <span>Assigner Réponse</span>
+                                 </button>
+                             </mat-menu>
+                         </div>
+                     </mat-cell>
+                 </ng-container>-->
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 

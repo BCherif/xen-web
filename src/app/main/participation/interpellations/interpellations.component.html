@@ -120,9 +120,9 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let interpellation">
-                        <a [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
+                       <!-- <a [routerLink]="'/main/participation/interpellations/'+interpellation.id+'/'+interpellation.author">
                             <mat-icon>edit</mat-icon>
-                        </a>&nbsp;&nbsp;
+                        </a>&nbsp;&nbsp;-->
                         <a (click)="showDetail(interpellation)">
                             <mat-icon>visibility</mat-icon>
                         </a>&nbsp;&nbsp;

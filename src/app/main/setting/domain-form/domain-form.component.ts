@@ -1,8 +1,8 @@
 import {Component, Inject, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {ToastrService} from "ngx-toastr";
-import {Subject} from "rxjs";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {Subject} from 'rxjs';
 import {Domain} from '../../../data/models/domain.model';
 import {Axis} from '../../../data/models/axis.model';
 import {DomainsService} from '../domains/domains.service';
@@ -10,13 +10,13 @@ import {AxesService} from '../axes/axes.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
-    selector     : 'setting-domain-form-dialog',
-    templateUrl  : './domain-form.component.html',
-    styleUrls    : ['./domain-form.component.scss'],
+    selector: 'setting-domain-form-dialog',
+    templateUrl: './domain-form.component.html',
+    styleUrls: ['./domain-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
+export class SettingDomainFormDialogComponent implements OnInit, OnDestroy {
     action: string;
     domain: Domain;
     axes: Axis[];
@@ -45,20 +45,16 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
         private _axesService: AxesService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService
-    )
-    {
+    ) {
         // Set the defaults
         this.action = _data.action;
 
-        if ( this.action === 'edit' )
-        {
+        if (this.action === 'edit') {
             this.dialogTitle = 'Modifier un domaine';
             this.domain = _data.domain;
             this.getAxeById(this.domain.axis.id);
             this.updateDomainForm();
-        }
-        else
-        {
+        } else {
             this.dialogTitle = 'Ajouter un domaine';
             this.domain = new Domain({});
             this.createDomainForm();
@@ -83,16 +79,16 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-    getAllAxes(){
+    getAllAxes() {
         this._axesService.getAll().subscribe(value => {
             this.axes = value['response'];
-        }, error => console.log(error))
+        }, error => console.log(error));
     }
 
     getAxeById(id: number) {
         this._axesService.getById(id).subscribe(value => {
             this.axis = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     /**
@@ -100,7 +96,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
      *
      * @returns {FormGroup}
      */
-    createDomainForm(){
+    createDomainForm() {
         this.domainForm = this._formBuilder.group({
             id: new FormControl(''),
             name: new FormControl('', Validators.required),
@@ -113,7 +109,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
      *
      * @returns {FormGroup}
      */
-    updateDomainForm(){
+    updateDomainForm() {
         this.domainForm = this._formBuilder.group({
             id: new FormControl(this.domain.id),
             name: new FormControl(this.domain.name, Validators.required),
@@ -140,6 +136,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
                 } else {
                     this._toastr.error(data['message']);
                     this.matDialogRef.close();
+                    this._spinnerService.hide();
                 }
             });
         } else {
@@ -152,6 +149,7 @@ export class SettingDomainFormDialogComponent implements OnInit, OnDestroy{
                 } else {
                     this._toastr.error(data['message']);
                     this.matDialogRef.close();
+                    this._spinnerService.hide();
                 }
             });
         }

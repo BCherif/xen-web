@@ -34,7 +34,7 @@
                     <mat-select formControlName="domain"
                                 (selectionChange)="findDomainSelected($event.value)"
                                 required>
-                        <mat-option *ngFor="let domain of domains"
+                        <mat-option *ngFor="let domain of form.domains"
                                     [value]="domain.id">{{domain.name}}
                         </mat-option>
                     </mat-select>

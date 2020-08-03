@@ -12,6 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {FormsService} from './forms.service';
 import {PublicationsAddFormDialogComponent} from '../add-form/add-form.component';
 import {CATEGORY_FORM} from '../../../data/enums/enums';
+import {PublicationsAddQuizDialogComponent} from '../add-quiz/add-quiz.component';
 
 @Component({
     selector: 'publications-forms',
@@ -92,6 +93,15 @@ export class FormsComponent implements OnInit {
         });
     }
 
+    affectQuiz(form) {
+        this.dialogRef = this._matDialog.open(PublicationsAddQuizDialogComponent, {
+            panelClass: 'add-quiz-dialog',
+            data: {
+                action: 'new',
+                form: form
+            }
+        });
+    }
 }
 
 export class FilesDataSource extends DataSource<any> {
