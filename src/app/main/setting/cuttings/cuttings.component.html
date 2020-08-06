@@ -65,10 +65,10 @@
                 </ng-container>
 
                 <!-- Description Column -->
-                <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                <ng-container matColumnDef="cuttingSup">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Découpage superieure</mat-header-cell>
                     <mat-cell *matCellDef="let cutting">
-                        <p class="text-truncate">{{cutting.description}}</p>
+                        <p class="text-truncate">{{cutting?.cuttingSup ? cutting?.cuttingSup?.name : "N'en a pas"}}</p>
                     </mat-cell>
                 </ng-container>
 

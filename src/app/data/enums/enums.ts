@@ -11,7 +11,7 @@ export enum CS_JUDGMENT {
 }
 
 export enum INITIATOR {
-    PRESIDENT = 'Président de la republique',
+    PRESIDENT = 'Gouvernement',
     ASSEMBLY = 'Assemblée nationale'
 }
 

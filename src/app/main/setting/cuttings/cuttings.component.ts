@@ -23,7 +23,7 @@ export class CuttingsComponent implements OnInit
 {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'description'];
+    displayedColumns = ['name', 'cuttingSup'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

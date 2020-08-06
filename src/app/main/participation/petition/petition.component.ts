@@ -23,6 +23,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {DecisionMarkerService} from '../../../services/decision.marker.service';
 import {MatChipInputEvent} from '@angular/material/chips';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'participation-petition',
@@ -61,7 +62,17 @@ export class PetitionComponent implements OnInit, OnDestroy {
     @ViewChild('decisionInput') decisionInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-    filteredOptions: Observable<Locality[]>;
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -118,18 +129,12 @@ export class PetitionComponent implements OnInit, OnDestroy {
             startWith(''),
             map((value: any | null) => value ? this._filter(value) : this.allDecisionMakers.slice()));
 
-        this.filteredOptions = this.petitionForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filterLevel(name) : this.localities.slice())
-            );
-        // Subscribe to update interpellation on changes
         this._petitionService.onPetitionChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(petition => {
 
                 if (petition) {
+                    console.log(petition?.decisionMakers);
                     this.getLocalityById(petition?.article?.level?.id);
                     this.getDomainById(petition?.article?.domain?.id);
                     this.petitionForm.get('id').setValue(petition.id);
@@ -138,7 +143,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this.petitionForm.get('decisionMakers').setValue(petition?.decisionMakers);
                     this.petitionForm.get('article').setValue(petition?.article?.id);
                     this.petitionForm.get('domain').setValue(petition?.article?.domain?.id);
-                    this.petitionForm.get('level').setValue(petition?.article?.level?.id);
+                    // this.petitionForm.get('level').setValue(petition?.article?.level?.id);
                     this.petition = new Petition(petition);
                     this.pageType = 'edit';
                 } else {
@@ -172,9 +177,10 @@ export class PetitionComponent implements OnInit, OnDestroy {
             title: new FormControl('', Validators.required),
             petitionContent: new FormControl('', Validators.required),
             decisionMakers: new FormControl(''),
-            level: new FormControl('', Validators.required),
+            // level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             objective: new FormControl('', Validators.required),
+            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
             article: new FormControl('')
         });
     }
@@ -196,12 +202,10 @@ export class PetitionComponent implements OnInit, OnDestroy {
                 name: value.trim()
             });
         }
-
         // Reset the input value
         if (input) {
             input.value = '';
         }
-
         this.petitionForm.get('decisionMakers').setValue(null);
     }
 
@@ -222,16 +226,8 @@ export class PetitionComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filterLevel(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getDomains() {
@@ -265,6 +261,47 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.getDomainById(value);
     }
 
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
+    }
+
     save() {
         this._spinnerService.show();
         this.article = new Article();
@@ -273,6 +310,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.article.id = this.petitionForm.get('article').value;
         this.article.title = this.petitionForm.get('title').value;
         this.article.content = this.petitionForm.get('petitionContent').value;
+        this.article.description = this.petitionForm.get('description').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[6];
         this.petition.decisionMakers = this.decisions;

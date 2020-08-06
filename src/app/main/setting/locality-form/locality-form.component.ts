@@ -98,7 +98,6 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy {
     getAllByCuttingId(id: number) {
         this._localitiesService.findByCuttingId(id).subscribe(value => {
             this.lowerLevels = value['response'];
-            console.log(this.lowerLevels);
         }, error => console.log(error));
     }
 
@@ -166,6 +165,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy {
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 }
             });
@@ -178,6 +178,7 @@ export class SettingLocalityFormDialogComponent implements OnInit, OnDestroy {
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 }
             });

@@ -1,24 +1,25 @@
 import {Component, Inject, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {ToastrService} from "ngx-toastr";
-import {Locality} from "../../../data/models/locality.model";
-import {Subject} from "rxjs";
-import {Organ} from "../../../data/models/organ.model";
-import {OrgansService} from "../organs/organs.service";
-import {ElectedsService} from "../electeds/electeds.service";
-import {Elected} from "../../../data/models/elected.model";
-import {LocalitiesService} from "../../setting/localities/localities.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {Locality} from '../../../data/models/locality.model';
+import {Subject} from 'rxjs';
+import {Organ} from '../../../data/models/organ.model';
+import {OrgansService} from '../organs/organs.service';
+import {ElectedsService} from '../electeds/electeds.service';
+import {Elected} from '../../../data/models/elected.model';
+import {LocalitiesService} from '../../setting/localities/localities.service';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
-    selector     : 'trueometer-elected-form-dialog',
-    templateUrl  : './elected-form.component.html',
-    styleUrls    : ['./elected-form.component.scss'],
+    selector: 'trueometer-elected-form-dialog',
+    templateUrl: './elected-form.component.html',
+    styleUrls: ['./elected-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
+export class SettingElectedFormDialogComponent implements OnInit, OnDestroy {
     action: string;
     elected: Elected;
     locality: Locality;
@@ -27,6 +28,19 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
     organs: Organ[];
     electedForm: FormGroup;
     dialogTitle: string;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
+
 
     private _unsubscribeAll: Subject<any>;
 
@@ -51,21 +65,17 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
         private _organsService: OrgansService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService
-    )
-    {
+    ) {
         // Set the defaults
         this.action = _data.action;
 
-        if ( this.action === 'edit' )
-        {
+        if (this.action === 'edit') {
             this.dialogTitle = 'Modifier un membre';
             this.elected = _data.elected;
             this.getLocalityById(this.elected?.level?.id);
             this.getOrganById(this.elected?.organ?.id);
             this.updateElectedForm();
-        }
-        else
-        {
+        } else {
             this.dialogTitle = 'Ajouter un membre';
             this.elected = new Elected({});
             this.createElectedForm();
@@ -91,28 +101,29 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-    getAllLocalities(){
+    getAllLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
-        }, error => console.log(error))
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
+        }, error => console.log(error));
     }
 
     getAllOrgans() {
         this._organsService.getAll().subscribe(value => {
             this.organs = value['response'];
-        }, error => console.log(error))
+        }, error => console.log(error));
     }
 
     getLocalityById(id: number) {
         this._localitiesService.getById(id).subscribe(value => {
             this.locality = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     getOrganById(id: number) {
         this._organsService.getById(id).subscribe(value => {
             this.organ = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     /**
@@ -120,14 +131,13 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
      *
      * @returns {FormGroup}
      */
-    createElectedForm(){
+    createElectedForm() {
         this.electedForm = this._formBuilder.group({
             id: new FormControl(''),
-            lastname: new FormControl('', Validators.required),
-            firstname: new FormControl('', Validators.required),
+            fullName: new FormControl('', Validators.required),
             job: new FormControl('', Validators.required),
             sexe: new FormControl('', Validators.required),
-            locality: new FormControl('', Validators.required),
+            // locality: new FormControl('', Validators.required),
             organ: new FormControl('', Validators.required)
         });
     }
@@ -137,14 +147,14 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
      *
      * @returns {FormGroup}
      */
-    updateElectedForm(){
+    updateElectedForm() {
         this.electedForm = this._formBuilder.group({
             id: new FormControl(this.elected.id),
             lastname: new FormControl(this.elected.lastname, Validators.required),
             firstname: new FormControl(this.elected.firstname, Validators.required),
             job: new FormControl(this.elected.job, Validators.required),
             sexe: new FormControl(this.elected.sexe, Validators.required),
-            locality: new FormControl(this.elected?.level?.id, Validators.required),
+            // locality: new FormControl(this.elected?.level?.id, Validators.required),
             organ: new FormControl(this.elected?.organ?.id, Validators.required)
         });
     }
@@ -155,6 +165,47 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy{
 
     findOrganSelected(value) {
         this.getOrganById(value);
+    }
+
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
     }
 
     saveOrUpdate() {

@@ -96,16 +96,19 @@ export class LoginComponent implements OnInit {
                 this.router.navigateByUrl('/main/governometer/articles').then(r => {
                     if (r) {
                         this._spinnerService.hide();
-                    }else {
-                        console.log("La navigation a échoué!");
+                    } else {
+                        this._spinnerService.hide();
+                        console.log('La navigation a échoué!');
                     }
                 });
             } else {
+                this._spinnerService.hide();
                 this.toastr.error(ret['message']);
                 // console.log(ret['message']);
             }
 
         }, e => {
+            this._spinnerService.hide();
             this.toastr.error(environment.errorMessage);
             // console.log(e);
         });

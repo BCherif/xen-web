@@ -20,6 +20,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {ProvideOnFolderService} from './provide-on-folder.service';
 import {LegalFolderService} from '../legal-folder/legal-folder.service';
 import {Provide} from '../../../data/models/provide.model';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'corryptometer-provide-on-folder',
@@ -50,6 +51,18 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
     jurisdictions: Jurisdiction[];
     jurisdiction: Jurisdiction;
     minDate: Date;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -105,12 +118,12 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
         this.getLocalities();
         this.getJurisdictions();
         this.getDomains();
-        this.filteredOptions = this.provideForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.localities.slice())
-            );
+        /* this.filteredOptions = this.provideForm.get('level').valueChanges
+             .pipe(
+                 startWith(''),
+                 map(value => typeof value === 'string' ? value : value.name),
+                 map(name => name ? this._filter(name) : this.localities.slice())
+             );*/
         // Subscribe to update interpellation on changes
         this._provideOnFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -133,7 +146,7 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
                     this.provideForm.get('dateOfJudment').setValue('');
                     this.provideForm.get('jurisdiction').setValue('');
                     this.provideForm.get('judgment').setValue('');
-                    this.provideForm.get('level').setValue(legalFolder?.article?.level?.id);
+                    // this.provideForm.get('level').setValue(legalFolder?.article?.level?.id);
                     this.provideForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                 }
             });
@@ -169,7 +182,7 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
             amountAtStake: new FormControl('', Validators.required),
             motivation: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            level: new FormControl('', Validators.required),
+            // level: new FormControl('', Validators.required),
             dateProvide: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required)
@@ -185,6 +198,7 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -254,6 +268,47 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
         } else {
             this.provideForm.get('judgment').setValue('');
         }
+    }
+
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
     }
 
     save() {

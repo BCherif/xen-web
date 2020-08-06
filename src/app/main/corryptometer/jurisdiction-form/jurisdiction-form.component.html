@@ -41,14 +41,51 @@
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Localié</mat-label>
-                    <input type="text" matInput formControlName="level" [matAutocomplete]="auto">
-                    <mat-autocomplete (optionSelected)="getLevel($event.option.value)" #auto="matAutocomplete"
-                                      [displayWith]="displayFn">
-                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                            {{option.name}}
+                    <mat-label>Régions</mat-label>
+                    <mat-select (selectionChange)="onRegionChange($event.value)">
+                        <mat-option *ngFor="let region of regions" [value]="region?.id">
+                            {{region?.name}}
                         </mat-option>
-                    </mat-autocomplete>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="regionId" fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Cercles</mat-label>
+                    <mat-select (selectionChange)="onCircleChange($event.value)">
+                        <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
+                            <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
+                                {{circle?.name}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="circleId" fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Commune</mat-label>
+                    <mat-select (selectionChange)="onTownChange($event.value)">
+                        <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
+                            <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
+                                {{tow?.name}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="towId" fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>VFQ</mat-label>
+                    <mat-select (selectionChange)="onVFQChange($event.value)">
+                        <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
+                            <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
+                                {{vfq?.name}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
                 </mat-form-field>
             </div>
 

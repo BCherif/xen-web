@@ -1,5 +1,5 @@
 import {Component, Inject, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ToastrService} from 'ngx-toastr';
 import {Cutting} from '../../../data/models/cutting.model';
@@ -16,6 +16,8 @@ import {NgxSpinnerService} from 'ngx-spinner';
 export class SettingCuttingFormDialogComponent {
     action: string;
     cutting: Cutting;
+    cuttingSelected: Cutting;
+    cuttings: Cutting[];
     cuttingForm: FormGroup;
     dialogTitle: string;
 
@@ -39,21 +41,41 @@ export class SettingCuttingFormDialogComponent {
     ) {
         // Set the defaults
         this.action = _data.action;
+        this.getAllCutting();
 
         if (this.action === 'edit') {
-            this.dialogTitle = 'Modifier Un Découpage';
+            this.dialogTitle = 'Modifier un découpage';
             this.cutting = _data.cutting;
+            this.getCuttingById(this.cutting?.cuttingSup?.id);
+            this.cuttingForm = this.updateCuttingForm();
         } else {
-            this.dialogTitle = 'Ajouter Un Découpage';
+            this.dialogTitle = 'Ajouter un découpage';
             this.cutting = new Cutting({});
+            this.cuttingForm = this.createCuttingForm();
         }
 
-        this.cuttingForm = this.createCuttingForm();
+
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
+
+    getAllCutting() {
+        this._cuttingsService.getAllCutting().subscribe(value => {
+            this.cuttings = value['response'];
+        }, error => console.log(error));
+    }
+
+    getCuttingById(id: number) {
+        this._cuttingsService.getById(id).subscribe(value => {
+            this.cuttingSelected = value['response'];
+        }, error => console.log(error));
+    }
+
+    findCuttingSelected(value) {
+        this.getCuttingById(value);
+    }
 
     /**
      * Create cutting form
@@ -63,8 +85,23 @@ export class SettingCuttingFormDialogComponent {
     createCuttingForm(): FormGroup {
         return this._formBuilder.group({
             id: [this.cutting.id],
-            name: [this.cutting.name],
-            description: [this.cutting.description]
+            name: [this.cutting.name, Validators.required],
+            description: [this.cutting.description],
+            cuttingSup: [this.cutting.cuttingSup]
+        });
+    }
+
+    /**
+     * Create cutting form
+     *
+     * @returns {FormGroup}
+     */
+    updateCuttingForm(): FormGroup {
+        return this._formBuilder.group({
+            id: [this.cutting.id],
+            name: [this.cutting.name, Validators.required],
+            description: [this.cutting.description],
+            cuttingSup: [this.cutting?.cuttingSup?.id]
         });
     }
 
@@ -72,6 +109,7 @@ export class SettingCuttingFormDialogComponent {
         this._spinnerService.show();
         this.cutting = new Cutting();
         this.cutting = this.cuttingForm.getRawValue();
+        this.cutting.cuttingSup = this.cuttingSelected;
         if (!this.cutting.id) {
             this._cuttingsService.create(this.cutting).subscribe(data => {
                 if (data['status'] === 'OK') {
@@ -81,6 +119,7 @@ export class SettingCuttingFormDialogComponent {
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 }
             });
@@ -93,6 +132,7 @@ export class SettingCuttingFormDialogComponent {
                     this.matDialogRef.close();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                     this.matDialogRef.close();
                 }
             }, error => {

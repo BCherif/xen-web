@@ -20,6 +20,7 @@ import {DenunciationService} from './denunciation.service';
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {User} from '../../../data/models/user.model';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'participation-denunciation',
@@ -42,6 +43,18 @@ export class DenunciationComponent implements OnInit, OnDestroy {
     domain: Domain;
     localities: Locality[] = [];
     locality: Locality;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
@@ -97,12 +110,12 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         this.getLocalities();
         this.getDomains();
 
-        this.filteredOptions = this.denunciationForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.localities.slice())
-            );
+        /* this.filteredOptions = this.denunciationForm.get('level').valueChanges
+             .pipe(
+                 startWith(''),
+                 map(value => typeof value === 'string' ? value : value.name),
+                 map(name => name ? this._filter(name) : this.localities.slice())
+             );*/
         // Subscribe to update interpellation on changes
         this._denunciationService.onDenunciationChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -117,7 +130,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                     this.denunciationForm.get('entity').setValue(denunciation.entity);
                     this.denunciationForm.get('article').setValue(denunciation?.article.id);
                     this.denunciationForm.get('domain').setValue(denunciation?.article?.domain?.id);
-                    this.denunciationForm.get('level').setValue(denunciation?.article?.level?.id);
+                    // this.denunciationForm.get('level').setValue(denunciation?.article?.level?.id);
                     this.denunciation = new Denunciation(denunciation);
                     this.pageType = 'edit';
                 } else {
@@ -150,8 +163,9 @@ export class DenunciationComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             title: new FormControl('', Validators.required),
             denunContent: new FormControl('', Validators.required),
+            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
             entity: new FormControl('', Validators.required),
-            level: new FormControl('', Validators.required),
+            // level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             article: new FormControl(''),
         });
@@ -160,6 +174,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -202,6 +217,47 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         this.getDomainById(value);
     }
 
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
+    }
+
     save() {
         this._spinnerService.show();
         this.article = new Article();
@@ -210,6 +266,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         this.article.id = this.denunciationForm.get('article').value;
         this.article.title = this.denunciationForm.get('title').value;
         this.article.content = this.denunciationForm.get('denunContent').value;
+        this.article.description = this.denunciationForm.get('description').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[5];
         this.article.level = this.locality;

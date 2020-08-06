@@ -19,6 +19,7 @@ import {DomainsService} from '../../setting/domains/domains.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {User} from '../../../data/models/user.model';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'governometer-article',
@@ -42,6 +43,18 @@ export class ArticleComponent implements OnInit, OnDestroy {
     categories: any[];
     subCategory = GOUV_SUB_CAT;
     subCategories: any[];
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
@@ -95,12 +108,12 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.createArticleForm();
         this.getLocalities();
         this.getDomains();
-        this.filteredOptions = this.articleForm.get('level').valueChanges
+        /*this.filteredOptions = this.articleForm.get('level').valueChanges
             .pipe(
                 startWith(''),
                 map(value => typeof value === 'string' ? value : value.name),
                 map(name => name ? this._filter(name) : this.localities.slice())
-            );
+            );*/
         // Subscribe to update interpellation on changes
         this._articleService.onArticleChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -114,7 +127,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
                     this.articleForm.get('content').setValue(article.content);
                     this.articleForm.get('subCategory').setValue(article.subCategory);
                     this.articleForm.get('domain').setValue(article?.domain?.id);
-                    this.articleForm.get('level').setValue(article?.level?.id);
+                    this.articleForm.get('description').setValue(article?.description);
+                    /*
+                                        this.articleForm.get('level').setValue(article?.level?.id);
+                    */
                     this.article = new Article(article);
                     this.pageType = 'edit';
                 } else {
@@ -146,10 +162,11 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.articleForm = this._formBuilder.group({
             id: new FormControl(''),
             title: new FormControl('', [Validators.required, Validators.maxLength(400), Validators.minLength(3)]),
+            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
             content: new FormControl('', [Validators.required, Validators.maxLength(999999), Validators.minLength(10)]),
-            level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
-            /*  fileName: new FormControl(''),*/
+            /*  fileName: new FormControl(''),
+            *  level: new FormControl('', Validators.required),*/
             subCategory: new FormControl('', Validators.required)
         });
     }
@@ -157,6 +174,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -241,6 +259,47 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
         }
 
+    }
+
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
     }
 
 }

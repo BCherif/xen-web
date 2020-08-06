@@ -21,6 +21,7 @@ import {LawProjectSaveEntity} from '../../../data/wrapper/law.project.save.entit
 import {LawProjectService} from './law-project.service';
 import {ElectedsService} from '../../trueometer/electeds/electeds.service';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'participation-law-project',
@@ -47,6 +48,19 @@ export class LawProjectComponent implements OnInit, OnDestroy {
     locality: Locality;
     initiators: any;
     initiator = INITIATOR;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
+
 
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
@@ -107,12 +121,12 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.getLocalities();
         this.getDomains();
 
-        this.filteredOptions = this.lawProjectForm.get('level').valueChanges
+        /*this.filteredOptions = this.lawProjectForm.get('level').valueChanges
             .pipe(
                 startWith(''),
                 map(value => typeof value === 'string' ? value : value.name),
                 map(name => name ? this._filter(name) : this.localities.slice())
-            );
+            );*/
         // Subscribe to update interpellation on changes
         this._lawProjectService.onLawProjectChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -129,7 +143,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                     this.lawProjectForm.get('article').setValue(lawProject.article.id);
                     this.lawProjectForm.get('domain').setValue(lawProject?.article?.domain?.id);
                     this.lawProjectForm.get('initiator').setValue(lawProject.initiator);
-                    this.lawProjectForm.get('level').setValue(lawProject?.article?.level?.id);
+                    // this.lawProjectForm.get('level').setValue(lawProject?.article?.level?.id);
                     this.lawProject = new LawProject(lawProject);
                     this.pageType = 'edit';
                 } else {
@@ -165,8 +179,9 @@ export class LawProjectComponent implements OnInit, OnDestroy {
             year: new FormControl(new Date(), Validators.required),
             stateLawProject: new FormControl('', Validators.required),
             initiator: new FormControl('', Validators.required),
-            level: new FormControl('', Validators.required),
+            // level: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
+            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
             article: new FormControl('')
         });
     }
@@ -174,6 +189,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -217,6 +233,47 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.getDomainById(value);
     }
 
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
+    }
+
     save() {
         this._spinnerService.show();
         this.article = new Article();
@@ -225,6 +282,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.article.id = this.lawProjectForm.get('article').value;
         this.article.title = this.lawProjectForm.get('title').value;
         this.article.content = this.lawProjectForm.get('projectContent').value;
+        this.article.description = this.lawProjectForm.get('description').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[4];
         this.article.level = this.locality;

@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { Location } from '@angular/common';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Location} from '@angular/common';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import {ToastrService} from "ngx-toastr";
-import {Router} from "@angular/router";
+import {fuseAnimations} from '@fuse/animations';
+import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 import {Project} from '../../../data/models/project.model';
 import {Domain} from '../../../data/models/domain.model';
 import {Locality} from '../../../data/models/locality.model';
@@ -18,16 +18,16 @@ import {LocalitiesService} from '../../setting/localities/localities.service';
 import {ProgramsService} from '../../setting/programs/programs.service';
 import {STATE_PROJECT} from '../../../data/enums/enums';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
-    selector     : 'trueometer-project',
-    templateUrl  : './project.component.html',
-    styleUrls    : ['./project.component.scss'],
+    selector: 'trueometer-project',
+    templateUrl: './project.component.html',
+    styleUrls: ['./project.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations
 })
-export class ProjectComponent implements OnInit, OnDestroy
-{
+export class ProjectComponent implements OnInit, OnDestroy {
     project: Project;
     domain: Domain;
     domains: Domain[];
@@ -39,6 +39,18 @@ export class ProjectComponent implements OnInit, OnDestroy
     stateProject = STATE_PROJECT;
     pageType: string;
     projectForm: FormGroup;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -68,8 +80,7 @@ export class ProjectComponent implements OnInit, OnDestroy
         private _toastr: ToastrService,
         private _router: Router,
         private _spinnerService: NgxSpinnerService
-    )
-    {
+    ) {
         // Set the default
         this.project = new Project();
 
@@ -94,20 +105,17 @@ export class ProjectComponent implements OnInit, OnDestroy
         this._projectService.onProjectChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(project => {
-                if ( project )
-                {
+                if (project) {
                     this.projectForm.get('id').setValue(project.id);
                     this.projectForm.get('name').setValue(project.name);
                     this.projectForm.get('budget').setValue(project.budget);
                     this.projectForm.get('state').setValue(project.state);
                     this.projectForm.get('domain').setValue(project.domain.id);
-                    this.projectForm.get('locality').setValue(project.locality.id);
+                    // this.projectForm.get('locality').setValue(project.locality.id);
                     this.projectForm.get('program').setValue(project.program.id);
                     this.project = new Project(project);
                     this.pageType = 'edit';
-                }
-                else
-                {
+                } else {
                     this.pageType = 'new';
                     this.project = new Project();
                 }
@@ -117,8 +125,7 @@ export class ProjectComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
@@ -133,52 +140,53 @@ export class ProjectComponent implements OnInit, OnDestroy
      *
      * @returns {FormGroup}
      */
-    createProjectForm(){
+    createProjectForm() {
         this.projectForm = this._formBuilder.group({
             id: new FormControl(''),
             name: new FormControl('', Validators.required),
             budget: new FormControl('', Validators.required),
             state: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
-            locality: new FormControl('', Validators.required),
+            // locality: new FormControl('', Validators.required),
             program: new FormControl('', Validators.required)
         });
     }
 
-    getDomains(){
+    getDomains() {
         this._domainsService.getAll().subscribe(value => {
-            this.domains= value['response'];
-        }, error => console.log(error))
+            this.domains = value['response'];
+        }, error => console.log(error));
     }
 
     getLocalities() {
         this._domainsService.getAll().subscribe(value => {
             this.localities = value['response'];
-        }, error => console.log(error))
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
+        }, error => console.log(error));
     }
 
     getPrograms() {
         this._programsService.getAll().subscribe(value => {
             this.programs = value['response'];
-        }, error => console.log(error))
+        }, error => console.log(error));
     }
 
     getDomainById(id: number) {
         this._domainsService.getById(id).subscribe(value => {
             this.domain = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     getLocalityById(id: number) {
         this._localitiesService.getById(id).subscribe(value => {
             this.locality = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     getProgramById(id: number) {
         this._programsService.getById(id).subscribe(value => {
             this.program = value['response'];
-        },error => console.log(error))
+        }, error => console.log(error));
     }
 
     findByDomainSelected(value) {
@@ -191,6 +199,47 @@ export class ProjectComponent implements OnInit, OnDestroy
 
     findProgramSelected(value) {
         this.getProgramById(value);
+    }
+
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
     }
 
     saveOrUpdate() {
@@ -208,6 +257,7 @@ export class ProjectComponent implements OnInit, OnDestroy
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         } else {
@@ -218,6 +268,7 @@ export class ProjectComponent implements OnInit, OnDestroy
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         }

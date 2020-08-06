@@ -1,29 +1,28 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {DataSource} from '@angular/cdk/collections';
+import {BehaviorSubject, fromEvent, merge, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import { FuseUtils } from '@fuse/utils';
-import { takeUntil } from 'rxjs/internal/operators';
-import {ElectedsService} from "./electeds.service";
-import {MatDialog} from "@angular/material/dialog";
-import {SettingElectedFormDialogComponent} from "../elected-form/elected-form.component";
+import {fuseAnimations} from '@fuse/animations';
+import {FuseUtils} from '@fuse/utils';
+import {takeUntil} from 'rxjs/internal/operators';
+import {ElectedsService} from './electeds.service';
+import {MatDialog} from '@angular/material/dialog';
+import {SettingElectedFormDialogComponent} from '../elected-form/elected-form.component';
 
 @Component({
-    selector     : 'trueometer-electeds',
-    templateUrl  : './electeds.component.html',
-    styleUrls    : ['./electeds.component.scss'],
-    animations   : fuseAnimations,
+    selector: 'trueometer-electeds',
+    templateUrl: './electeds.component.html',
+    styleUrls: ['./electeds.component.scss'],
+    animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class ElectedsComponent implements OnInit
-{
+export class ElectedsComponent implements OnInit {
     dialogRef: any;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['firstname','lastname','sexe','job','locality','organ','buttons'];
+    displayedColumns = ['fullName', 'sexe', 'job', 'locality', 'organ', 'buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -40,8 +39,7 @@ export class ElectedsComponent implements OnInit
     constructor(
         private _electedsService: ElectedsService,
         private _matDialog: MatDialog
-    )
-    {
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -54,7 +52,7 @@ export class ElectedsComponent implements OnInit
      * On init
      */
     ngOnInit(): void {
-        document.title = 'XENSA | Electeurs';
+        document.title = 'XENSA | Membres';
         this.dataSource = new FilesDataSource(this._electedsService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
@@ -64,8 +62,7 @@ export class ElectedsComponent implements OnInit
                 distinctUntilChanged()
             )
             .subscribe(() => {
-                if ( !this.dataSource )
-                {
+                if (!this.dataSource) {
                     return;
                 }
 
@@ -76,7 +73,7 @@ export class ElectedsComponent implements OnInit
     newElected(): void {
         this.dialogRef = this._matDialog.open(SettingElectedFormDialogComponent, {
             panelClass: 'elected-form-dialog',
-            data      : {
+            data: {
                 action: 'new'
             }
         });
@@ -86,7 +83,7 @@ export class ElectedsComponent implements OnInit
     editElected(elected) {
         this.dialogRef = this._matDialog.open(SettingElectedFormDialogComponent, {
             panelClass: 'elected-form-dialog',
-            data      : {
+            data: {
                 action: 'edit',
                 elected: elected
             }
@@ -94,8 +91,7 @@ export class ElectedsComponent implements OnInit
     }
 }
 
-export class FilesDataSource extends DataSource<any>
-{
+export class FilesDataSource extends DataSource<any> {
     private _filterChange = new BehaviorSubject('');
     private _filteredDataChange = new BehaviorSubject('');
 
@@ -110,8 +106,7 @@ export class FilesDataSource extends DataSource<any>
         private _electedsService: ElectedsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
-    )
-    {
+    ) {
         super();
 
         this.filteredData = this._electedsService.electeds;
@@ -122,8 +117,7 @@ export class FilesDataSource extends DataSource<any>
      *
      * @returns {Observable<any[]>}
      */
-    connect(): Observable<any[]>
-    {
+    connect(): Observable<any[]> {
         const displayDataChanges = [
             this._electedsService.onElectedsChanged,
             this._matPaginator.page,
@@ -154,24 +148,20 @@ export class FilesDataSource extends DataSource<any>
     // -----------------------------------------------------------------------------------------------------
 
     // Filtered data
-    get filteredData(): any
-    {
+    get filteredData(): any {
         return this._filteredDataChange.value;
     }
 
-    set filteredData(value: any)
-    {
+    set filteredData(value: any) {
         this._filteredDataChange.next(value);
     }
 
     // Filter
-    get filter(): string
-    {
+    get filter(): string {
         return this._filterChange.value;
     }
 
-    set filter(filter: string)
-    {
+    set filter(filter: string) {
         this._filterChange.next(filter);
     }
 
@@ -185,10 +175,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any}
      */
-    filterData(data): any
-    {
-        if ( !this.filter )
-        {
+    filterData(data): any {
+        if (!this.filter) {
             return data;
         }
         return FuseUtils.filterArrayByString(data, this.filter);
@@ -200,10 +188,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any[]}
      */
-    sortData(data): any[]
-    {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
+    sortData(data): any[] {
+        if (!this._matSort.active || this._matSort.direction === '') {
             return data;
         }
 
@@ -211,13 +197,9 @@ export class FilesDataSource extends DataSource<any>
             let propertyA: number | string = '';
             let propertyB: number | string = '';
 
-            switch ( this._matSort.active )
-            {
-                case 'lastname':
-                    [propertyA, propertyB] = [a.lastname, b.lastname];
-                    break;
-                case 'firstname':
-                    [propertyA, propertyB] = [a.firstname, b.firstname];
+            switch (this._matSort.active) {
+                case 'fullName':
+                    [propertyA, propertyB] = [a.fullName, b.fullName];
                     break;
                 case 'job':
                     [propertyA, propertyB] = [a.job, b.job];
@@ -243,7 +225,6 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Disconnect
      */
-    disconnect(): void
-    {
+    disconnect(): void {
     }
 }

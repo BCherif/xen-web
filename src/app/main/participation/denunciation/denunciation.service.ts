@@ -6,7 +6,6 @@ import {environment} from "../../../../environments/environment";
 import {XensaUtils} from '../../../utils/xensa-utils';
 import {Denunciation} from '../../../data/models/denunciation.model';
 import {DenunciationSaveEntity} from '../../../data/wrapper/denunciation.save.entity.model';
-import {Article} from '../../../data/models/article.model';
 
 @Injectable({
     providedIn: 'root'

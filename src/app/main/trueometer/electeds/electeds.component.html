@@ -57,17 +57,10 @@
                        fusePerfectScrollbar>
 
                 <!-- Name Column -->
-                <ng-container matColumnDef="firstname">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Prénom</mat-header-cell>
-                    <mat-cell *matCellDef="let elected">
-                        <p class="text-truncate">{{elected?.firstname}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="lastname">
+                <ng-container matColumnDef="fullName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
                     <mat-cell *matCellDef="let elected">
-                        <p class="text-truncate">{{elected?.lastname}}</p>
+                        <p class="text-truncate">{{elected?.fullName}}</p>
                     </mat-cell>
                 </ng-container>
 

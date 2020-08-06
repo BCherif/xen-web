@@ -20,6 +20,7 @@ import {DomainsService} from '../../setting/domains/domains.service';
 import {JurisdictionsService} from '../jurisdictions/jurisdictions.service';
 import {Jurisdiction} from '../../../data/models/jurisdiction.model';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'corryptometer-denunciation',
@@ -56,6 +57,18 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     jurisdictions: Jurisdiction[];
     jurisdiction: Jurisdiction;
     minDate: Date;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -113,12 +126,12 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.getDomains();
         this.getLocalities();
 
-        this.filteredOptions = this.legalFolderForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.localities.slice())
-            );
+        /* this.filteredOptions = this.legalFolderForm.get('level').valueChanges
+             .pipe(
+                 startWith(''),
+                 map(value => typeof value === 'string' ? value : value.name),
+                 map(name => name ? this._filter(name) : this.localities.slice())
+             );*/
 
         // Subscribe to update interpellation on changes
         this._legalFolderService.onLegalFolderChanged
@@ -144,7 +157,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                     this.legalFolderForm.get('judgment').setValue(legalFolder.judgment);
                     this.legalFolderForm.get('article').setValue(legalFolder?.article?.id);
                     this.legalFolderForm.get('domain').setValue(legalFolder?.article?.domain?.id);
-                    this.legalFolderForm.get('locality').setValue(legalFolder?.article?.level?.id);
+                    // this.legalFolderForm.get('locality').setValue(legalFolder?.article?.level?.id);
                     this.legalFolderForm.get('jurisdiction').setValue(legalFolder?.jurisdiction?.id);
                     this.legalFolder = new LegalFolder(legalFolder);
                     this.pageType = 'edit';
@@ -187,7 +200,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             motivation: new FormControl('', Validators.required),
             content: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            locality: new FormControl('', Validators.required),
+            // locality: new FormControl('', Validators.required),
             dateOfCharge: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
@@ -204,6 +217,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -256,6 +270,47 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.getDomainById(value);
     }
 
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
+    }
+
     save() {
         this._spinnerService.show();
         this.article = new Article();
@@ -293,6 +348,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                             this._spinnerService.hide();
                         } else {
                             console.log('La navigation a échoué!');
+                            this._spinnerService.hide();
                         }
                     });
                 } else {
@@ -310,6 +366,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                             this._spinnerService.hide();
                         } else {
                             console.log('La navigation a échoué!');
+                            this._spinnerService.hide();
                         }
                     });
                 } else {

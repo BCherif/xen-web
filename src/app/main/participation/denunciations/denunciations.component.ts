@@ -10,11 +10,8 @@ import { FuseUtils } from '@fuse/utils';
 import { takeUntil } from 'rxjs/internal/operators';
 import {DenunciationsService} from './denunciations.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {Petition} from '../../../data/models/petition.model';
 import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
-import {Denunciation} from '../../../data/models/denunciation.model';
 import {ToastrService} from 'ngx-toastr';
-import {DetailsInterpellationComponent} from '../details-interpellation/details-interpellation.component';
 import {DetailsDenunciationComponent} from '../details-denunciation/details-denunciation.component';
 
 @Component({
@@ -82,28 +79,7 @@ export class DenunciationsComponent implements OnInit
             });
     }
 
-    validation(denunciation: Denunciation) {
-        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
-            disableClose: false
-        });
 
-        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de valider la denonciation N° ' + denunciation.id + '?';
-
-        this.confirmDialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this._denunciationService.publish(denunciation).subscribe(data => {
-                    if (data['status'] === 'OK') {
-                        this._toastr.success(data['message']);
-                        const denunciationIndex = this._denunciationService.denunciations.indexOf(denunciation);
-                        this._denunciationService.denunciations.splice(denunciationIndex, 1, data['response']);
-                        this._denunciationService.onDenunciationsChanged.next(this._denunciationService.denunciations);
-                    } else {
-                        this._toastr.error(data['message']);
-                    }
-                }, error => console.log(error));
-            }
-        });
-    }
 
     showDetail(denunciation) {
         const dialogRef = this._matDialog.open(DetailsDenunciationComponent, {

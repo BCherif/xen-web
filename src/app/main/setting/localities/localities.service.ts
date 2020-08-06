@@ -63,8 +63,6 @@ export class LocalitiesService implements Resolve<any> {
                         this.localities = res['response'];
                         this.onLocalitiesChanged.next(this.localities);
                         resolve(res['response']);
-                    } else {
-                        // console.log('error : ' + res['status']);
                     }
                 }, reject);
         });
@@ -80,6 +78,11 @@ export class LocalitiesService implements Resolve<any> {
 
     findByCuttingId(id: number) {
         return this._httpClient.get(this.serviceURL + '/' + id + '/cutting', this.httpOptions);
+    }
+
+
+    findAllByLevelSupId(id: number) {
+        return this._httpClient.get(this.serviceURL + '/' + id + '/all-levels');
     }
 
     create(locality: Locality) {

@@ -8,10 +8,8 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {fuseAnimations} from '@fuse/animations';
 import {FuseUtils} from '@fuse/utils';
 import {takeUntil} from 'rxjs/internal/operators';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {PetitionsService} from './petitions.service';
-import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
-import {Petition} from '../../../data/models/petition.model';
 import {ToastrService} from 'ngx-toastr';
 import {DetailsPetitionsComponent} from '../details-petitions/details-petitions.component';
 
@@ -26,9 +24,6 @@ export class PetitionsComponent implements OnInit {
     dialogRef: any;
     dataSource: FilesDataSource | null;
     displayedColumns = ['title', 'locality', 'domain', 'buttons'];
-
-    confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
-
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -77,28 +72,6 @@ export class PetitionsComponent implements OnInit {
             });
     }
 
-    validation(petition: Petition) {
-        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
-            disableClose: false
-        });
-
-        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de valider la petition ' + petition.id + '?';
-
-        this.confirmDialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this._petitionsService.publish(petition).subscribe(data => {
-                    if (data['status'] === 'OK') {
-                        this._toastr.success(data['message']);
-                        const petitionIndex = this._petitionsService.petitions.indexOf(petition);
-                        this._petitionsService.petitions.splice(petitionIndex, 1, data['response']);
-                        this._petitionsService.onPetitionsChanged.next(this._petitionsService.petitions);
-                    } else {
-                        this._toastr.error(data['message']);
-                    }
-                }, error => console.log(error));
-            }
-        });
-    }
 
     showDetailPetition(petition) {
         const dialogRef = this._matDialog.open(DetailsPetitionsComponent, {

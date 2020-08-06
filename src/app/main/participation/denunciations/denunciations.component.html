@@ -90,11 +90,6 @@
                         <a (click)="showDetail(denunciation)">
                             <mat-icon>visibility</mat-icon>
                         </a>&nbsp;&nbsp;
-                        <a *ngIf="!denunciation.ischeck"
-                           [routerLink]="" matTooltip="Valider"
-                           (click)="validation(denunciation)">
-                            <mat-icon>check</mat-icon>
-                        </a>
                     </mat-cell>
                 </ng-container>
 

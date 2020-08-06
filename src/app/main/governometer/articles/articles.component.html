@@ -87,17 +87,12 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let article">
-                        <!--<a [routerLink]="'/main/governometer/articles/'+article.id+'/'+article.title">
+                        <a [routerLink]="'/main/governometer/articles/'+article.id+'/'+article.title">
                             <mat-icon>edit</mat-icon>
-                        </a>&nbsp;&nbsp;-->
+                        </a>&nbsp;&nbsp;
                         <a (click)="showDetail(article)">
                             <mat-icon>visibility</mat-icon>
                         </a>&nbsp;&nbsp;
-                        <a *ngIf="!article.ischeck"
-                           [routerLink]="" matTooltip="Valider"
-                           (click)="validation(article)">
-                            <mat-icon>check</mat-icon>
-                        </a>
                     </mat-cell>
                 </ng-container>
 

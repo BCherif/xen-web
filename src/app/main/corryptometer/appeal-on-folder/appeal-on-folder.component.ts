@@ -20,6 +20,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {AppealOnFolderService} from './appeal-on-folder.service';
 import {Appeal} from '../../../data/models/appeal.model';
 import {LegalFolderService} from '../legal-folder/legal-folder.service';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
     selector: 'corryptometer-appeal-on-folder',
@@ -50,6 +51,18 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
     jurisdictions: Jurisdiction[];
     jurisdiction: Jurisdiction;
     minDate: Date;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     filteredOptions: Observable<Locality[]>;
 
@@ -106,12 +119,12 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
         this.getJurisdictions();
         this.getDomains();
 
-        this.filteredOptions = this.appealForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.localities.slice())
-            );
+        // this.filteredOptions = this.appealForm.get('level').valueChanges
+        //     .pipe(
+        //         startWith(''),
+        //         map(value => typeof value === 'string' ? value : value.name),
+        //         map(name => name ? this._filter(name) : this.localities.slice())
+        //     );
         // Subscribe to update interpellation on changes
         this._appealOnFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -134,7 +147,9 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
                     this.appealForm.get('dateAppeal').setValue('');
                     this.appealForm.get('dateOfJudment').setValue('');
                     this.appealForm.get('judgment').setValue('');
-                    this.appealForm.get('level').setValue(legalFolder?.article?.level?.id);
+                    /*
+                                        this.appealForm.get('level').setValue(legalFolder?.article?.level?.id);
+                    */
                     this.appealForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                     this.appealForm.get('jurisdiction').setValue(legalFolder?.jurisdiction?.id);
                 }
@@ -172,7 +187,7 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
             motivation: new FormControl('', Validators.required),
             content: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            level: new FormControl('', Validators.required),
+            // level: new FormControl('', Validators.required),
             dateAppeal: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required)
@@ -188,6 +203,7 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -254,9 +270,50 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
         this.dateTabActive = true;
         if (value === 'IN_PROGRESS') {
             this.appealForm.get('judgment').setValue(this.judments[0]);
-        }else {
+        } else {
             this.appealForm.get('judgment').setValue('');
         }
+    }
+
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
     }
 
     save() {

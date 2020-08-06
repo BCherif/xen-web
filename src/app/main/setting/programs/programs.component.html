@@ -71,7 +71,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="organ">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Organ</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Institution</mat-header-cell>
                     <mat-cell *matCellDef="let program">
                         <p class="text-truncate">{{program?.organ ? program.organ?.name : 'Ne concerna pas un organ'}}</p>
                     </mat-cell>
@@ -79,10 +79,10 @@
 
                 <!-- cutting Column -->
                 <ng-container matColumnDef="elected">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Elus</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Membre</mat-header-cell>
                     <mat-cell *matCellDef="let program">
                         <p *ngIf="program.elected" class="text-truncate">
-                            {{program?.elected?.firstname}} {{program?.elected?.lastname}}
+                            {{program?.elected?.fullName}}
                         </p>
                         <p *ngIf="!program.elected" class="text-truncate">Ne concerna pas un élus</p>
                     </mat-cell>
@@ -92,7 +92,7 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let program">
-                        <a  [routerLink]="'/main/setting/programs/'+program.id+'/'+program.title">
+                        <a [routerLink]="'/main/setting/programs/'+program.id+'/'+program.title">
                             <mat-icon>edit</mat-icon>
                         </a>
                     </mat-cell>

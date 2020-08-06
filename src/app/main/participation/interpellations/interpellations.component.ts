@@ -9,10 +9,8 @@ import {fuseAnimations} from '@fuse/animations';
 import {FuseUtils} from '@fuse/utils';
 import {takeUntil} from 'rxjs/internal/operators';
 import {InterpellationsService} from './interpellations.service';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {CALL_AS, ORGAN_CALL} from '../../../data/enums/enums';
-import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
-import {Interpellation} from '../../../data/models/interpellation.model';
 import {ToastrService} from 'ngx-toastr';
 import {DetailsInterpellationComponent} from '../details-interpellation/details-interpellation.component';
 
@@ -29,9 +27,6 @@ export class InterpellationsComponent implements OnInit {
     organCall = ORGAN_CALL;
     dataSource: FilesDataSource | null;
     displayedColumns = ['interpelDate', 'callAs', 'locality', 'domain', 'buttons'];
-
-    confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
-
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -78,29 +73,6 @@ export class InterpellationsComponent implements OnInit {
 
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
-    }
-
-    validation(interpellation: Interpellation) {
-        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
-            disableClose: false
-        });
-
-        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de valider l\'interpellation N°' + interpellation.id + '?';
-
-        this.confirmDialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this._interpellationsService.publish(interpellation).subscribe(data => {
-                    if (data['status'] === 'OK') {
-                        this._toastr.success(data['message']);
-                        const interpellationIndex = this._interpellationsService.interpellations.indexOf(interpellation);
-                        this._interpellationsService.interpellations.splice(interpellationIndex, 1, data['response']);
-                        this._interpellationsService.onInterpellationsChanged.next(this._interpellationsService.interpellations);
-                    } else {
-                        this._toastr.error(data['message']);
-                    }
-                }, error => console.log(error));
-            }
-        });
     }
 
     showDetail(interpellation) {

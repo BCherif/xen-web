@@ -1,7 +1,7 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import {Component, Inject, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {ToastrService} from "ngx-toastr";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
 import {Jurisdiction} from '../../../data/models/jurisdiction.model';
 import {JurisdictionsService} from '../jurisdictions/jurisdictions.service';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -10,16 +10,16 @@ import {Locality} from '../../../data/models/locality.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
-    selector     : 'corryptometer-jurisdiction-form-dialog',
-    templateUrl  : './jurisdiction-form.component.html',
-    styleUrls    : ['./jurisdiction-form.component.scss'],
+    selector: 'corryptometer-jurisdiction-form-dialog',
+    templateUrl: './jurisdiction-form.component.html',
+    styleUrls: ['./jurisdiction-form.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class CorryptometerJurisdictionFormDialogComponent
-{
+export class CorryptometerJurisdictionFormDialogComponent {
     action: string;
     jurisdiction: Jurisdiction;
     degree = DEGREE;
@@ -28,6 +28,18 @@ export class CorryptometerJurisdictionFormDialogComponent
     locality: Locality;
     jurisdictionForm: FormGroup;
     dialogTitle: string;
+
+    regions: Locality[];
+    circles: SearchLevelEntity[] = [];
+    towns: SearchLevelEntity[] = [];
+    vfqs: SearchLevelEntity[] = [];
+
+    levelSelected: Locality;
+
+    regionId: number;
+    circleId: number;
+    towId: number;
+    vfqId: number;
 
     filteredOptions: Observable<Locality[]>;
 
@@ -50,32 +62,28 @@ export class CorryptometerJurisdictionFormDialogComponent
         private _toastr: ToastrService,
         private _localitiesService: LocalitiesService,
         private _spinnerService: NgxSpinnerService
-    )
-    {
+    ) {
         // Set the defaults
         this.action = _data.action;
 
-        if ( this.action === 'edit' )
-        {
+        if (this.action === 'edit') {
             this.dialogTitle = 'Modifier une juridiction';
             this.jurisdiction = _data.jurisdiction;
             this.getLocalityById(this.jurisdiction.level.id);
             this.updateJurisdictionForm();
-        }
-        else
-        {
+        } else {
             this.dialogTitle = 'Ajouter une juridiction';
             this.jurisdiction = new Jurisdiction({});
             this.createJurisdictionForm();
         }
         this.degrees = Object.keys(this.degree);
         this.getLocalities();
-        this.filteredOptions = this.jurisdictionForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.localities.slice())
-            );
+        /* this.filteredOptions = this.jurisdictionForm.get('level').valueChanges
+             .pipe(
+                 startWith(''),
+                 map(value => typeof value === 'string' ? value : value.name),
+                 map(name => name ? this._filter(name) : this.localities.slice())
+             );*/
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -86,12 +94,12 @@ export class CorryptometerJurisdictionFormDialogComponent
      * Create jurisdiction form
      *
      */
-    createJurisdictionForm(){
+    createJurisdictionForm() {
         this.jurisdictionForm = this._formBuilder.group({
-            id      : [this.jurisdiction.id],
-            name    : [this.jurisdiction.name, Validators.required],
-            level   : ['', Validators.required],
-            degree  : [this.jurisdiction.degree, Validators.required],
+            id: [this.jurisdiction.id],
+            name: [this.jurisdiction.name, Validators.required],
+            /*level: ['', Validators.required],*/
+            degree: [this.jurisdiction.degree, Validators.required],
             description: [this.jurisdiction.description]
         });
     }
@@ -101,12 +109,12 @@ export class CorryptometerJurisdictionFormDialogComponent
      * update jurisdiction form
      *
      */
-    updateJurisdictionForm(){
+    updateJurisdictionForm() {
         this.jurisdictionForm = this._formBuilder.group({
-            id      : [this.jurisdiction.id],
-            name    : [this.jurisdiction.name, Validators.required],
-            level   : [this.jurisdiction.level.id, Validators.required],
-            degree  : [this.jurisdiction.degree, Validators.required],
+            id: [this.jurisdiction.id],
+            name: [this.jurisdiction.name, Validators.required],
+            /*level: [this.jurisdiction.level.id, Validators.required],*/
+            degree: [this.jurisdiction.degree, Validators.required],
             description: [this.jurisdiction.description]
         });
     }
@@ -114,6 +122,7 @@ export class CorryptometerJurisdictionFormDialogComponent
     getLocalities() {
         this._localitiesService.getAll().subscribe(value => {
             this.localities = value['response'];
+            this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
     }
 
@@ -139,6 +148,49 @@ export class CorryptometerJurisdictionFormDialogComponent
     findByLocalitySelected(value) {
         this.getLocalityById(value);
     }
+
+
+    getCircles(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.circles = data['response'];
+        }, error => console.log(error));
+    }
+
+    getTows(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.towns = data['response'];
+        }, error => console.log(error));
+    }
+
+    getVfqs(id: number) {
+        this._localitiesService.findAllByLevelSupId(id).subscribe(data => {
+            this.vfqs = data['response'];
+        }, error => console.log(error));
+    }
+
+    onRegionChange(value) {
+        this.regionId = value;
+        this.getLocalityById(value);
+        this.getCircles(value);
+
+    }
+
+    onCircleChange(event) {
+        this.circleId = event;
+        this.getLocalityById(event);
+        this.getTows(event);
+    }
+
+    onTownChange(event) {
+        this.towId = event;
+        this.getLocalityById(event);
+        this.getVfqs(event);
+    }
+
+    onVFQChange(event) {
+        this.getLocalityById(event);
+    }
+
 
     saveOrUpdate() {
         this._spinnerService.show();

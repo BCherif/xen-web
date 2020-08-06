@@ -6,6 +6,7 @@ import {Organ} from "./organ.model";
 @Injectable()
 export class Elected implements Deserializable{
     id: number;
+    fullName: string;
     lastname: string;
     firstname: string;
     job: string;
@@ -18,8 +19,9 @@ export class Elected implements Deserializable{
         this.id = elected.id;
         this.lastname = elected.lastname;
         this.firstname = elected.firstname;
-        this.job = elected.levelOfEducation;
-        this.sexe = elected.profession;
+        this.fullName = elected.fullName;
+        this.job = elected.job;
+        this.sexe = elected.sexe;
         this.level = elected.level;
         this.organ = elected.organ;
     }

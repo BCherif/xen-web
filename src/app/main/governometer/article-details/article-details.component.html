@@ -12,5 +12,16 @@
     <p [innerHTML]="article?.content"></p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Fermer</button>
+    <button *ngIf="!article.ischeck"
+            mat-raised-button class="save-button"
+            matTooltip="Valider"
+            color="primary"
+            (click)="validation(article)">
+        <mat-icon>check</mat-icon>&nbsp;
+        <span>Valider</span>
+    </button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
+        <mat-icon>close</mat-icon>&nbsp;
+        Fermer
+    </button>
 </mat-dialog-actions>
