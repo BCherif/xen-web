@@ -7,9 +7,6 @@ import {Quiz} from '../../../data/models/quiz.model';
 import {QuizzesService} from '../quizzes/quizzes.service';
 import {TYPE_QUIZ_ANSWER} from '../../../data/enums/enums';
 import {Router} from '@angular/router';
-import {Response} from '../../../data/models/response.model';
-import {Domain} from '../../../data/models/domain.model';
-import {DomainsService} from '../../setting/domains/domains.service';
 import {Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -17,6 +14,9 @@ import {ResponsesService} from '../responses/responses.service';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {map, startWith} from 'rxjs/operators';
 import {Form} from '../../../data/models/form.model';
+import {Category} from '../../../data/models/category.model';
+import {CategoriesService} from '../categories/categories.service';
+import {FormsService} from '../forms/forms.service';
 
 @Component({
     selector: 'publications-quiz-form-dialog',
@@ -28,15 +28,15 @@ import {Form} from '../../../data/models/form.model';
 export class PublicationsAddQuizDialogComponent implements OnInit {
     action: string;
     quiz: Quiz;
-    form: Form;
+    category: Category;
     quizForm: FormGroup;
     types: any[];
     type = TYPE_QUIZ_ANSWER;
     typeSelected: any;
     dialogTitle: string;
 
-    domains: Domain[];
-    domain: Domain;
+    forms: Form[];
+    form: Form;
 
     responses: any = [];
     allResponses: any[] = [];
@@ -59,7 +59,8 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
      * @param _quizzesService
      * @param _toastr
      * @param _spinnerService
-     * @param _domainsService
+     * @param _formsService
+     * @param _categoriesService
      * @param _responsesService
      * @param _router
      */
@@ -70,13 +71,14 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         private _quizzesService: QuizzesService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService,
-        private _domainsService: DomainsService,
+        private _formsService: FormsService,
+        private _categoriesService: CategoriesService,
         private _responsesService: ResponsesService,
         private _router: Router
     ) {
         // Set the defaults
         this.action = _data.action;
-        this.form = _data.form;
+        this.category = _data.category;
 
         if (this.action === 'new') {
             this.dialogTitle = 'Ajouter une question';
@@ -88,7 +90,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
     ngOnInit() {
         this.types = Object.keys(this.type);
         this.getResponses();
-        this.getDomains();
+        this.getForms();
 
         this.filteredResponses = this.quizForm.get('responses').valueChanges.pipe(
             startWith(''),
@@ -108,7 +110,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this.quizForm = this._formBuilder.group({
             name: [this.quiz.name, Validators.required],
             typeQuiz: [this.quiz.typeQuiz, Validators.required],
-            domain: [this.quiz.domain, Validators.required],
+            form: [this.quiz.form, Validators.required],
             responses: [this.quiz.responses]
             /*  answers: this._formBuilder.array([]),*/
         });
@@ -154,20 +156,20 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         return this.allResponses.filter(option => option.name.includes(name));
     }
 
-    getDomains() {
-        this._domainsService.getAll().subscribe(value => {
-            this.domains = value['response'];
+    getForms() {
+        this._formsService.getAll().subscribe(value => {
+            this.forms = value['response'];
         }, error => console.log(error));
     }
 
-    getDomainById(id: number) {
-        this._domainsService.getById(id).subscribe(value => {
-            this.domain = value['response'];
+    getFormById(id: number) {
+        this._formsService.getById(id).subscribe(value => {
+            this.form = value['response'];
         }, error => console.log(error));
     }
 
-    findDomainSelected(value) {
-        this.getDomainById(value);
+    findFormSelected(value) {
+        this.getFormById(value);
     }
 
     /*
@@ -193,7 +195,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this._spinnerService.show();
         this.quiz = new Quiz();
         this.quiz = this.quizForm.getRawValue();
-        this.quiz.domain = this.domain;
+        this.quiz.category = this.category;
         this.quiz.form = this.form;
         this.quiz.responses = this.responses;
         this._quizzesService.create(this.quiz).subscribe(data => {

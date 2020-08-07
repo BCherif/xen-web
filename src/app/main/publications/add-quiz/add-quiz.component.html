@@ -30,12 +30,12 @@
 
             <div fxLayout="row" fxLayoutAlign="start center">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Domaine</mat-label>
-                    <mat-select formControlName="domain"
-                                (selectionChange)="findDomainSelected($event.value)"
+                    <mat-label>Formulaire</mat-label>
+                    <mat-select formControlName="form"
+                                (selectionChange)="findFormSelected($event.value)"
                                 required>
-                        <mat-option *ngFor="let domain of form.domains"
-                                    [value]="domain.id">{{domain.name}}
+                        <mat-option *ngFor="let form of forms"
+                                    [value]="form.id">{{form.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -63,7 +63,7 @@
                             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                         </mat-chip>
                         <input placeholder="Ajouter une réponse" #responseInput
-                               formControlName="responses" required
+                               formControlName="responses"
                                [matAutocomplete]="auto" [matChipInputFor]="chipList"
                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                [matChipInputAddOnBlur]="addOnBlur"
@@ -132,7 +132,8 @@
         <button mat-button
                 (click)="saveQuiz()"
                 class="save-button"
-                matTooltip="Ajouter">
+                [disabled]="quizForm.invalid"
+                matTooltip="Enregistrer">
             Enregistrer
         </button>
 

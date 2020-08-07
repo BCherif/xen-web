@@ -76,6 +76,13 @@
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="form">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Formulaire</mat-header-cell>
+                    <mat-cell *matCellDef="let quiz">
+                        <p class="text-truncate">{{quiz?.form?.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- Buttons Column -->
                 <!-- <ng-container matColumnDef="buttons">
                      <mat-header-cell *matHeaderCellDef></mat-header-cell>

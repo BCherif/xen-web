@@ -99,6 +99,7 @@ $typography: mat-typography-config(
 @import "src/app/main/publications/forms/forms.theme";
 @import "src/app/main/publications/quizzes/quizzes.theme";
 @import "src/app/main/publications/responses/responses.theme";
+@import "src/app/main/publications/categories/categories.theme";
 @import "src/app/main/participation/denunciations/denunciations.theme";
 @import "src/app/main/participation/petitions/petitions.theme";
 @import "src/app/main/corryptometer/legal-folders/legal-folders.theme";
@@ -135,6 +136,7 @@ $typography: mat-typography-config(
     @include publications-forms-theme($theme);
     @include publications-quizzes-theme($theme);
     @include publications-responses-theme($theme);
+    @include publications-categories-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

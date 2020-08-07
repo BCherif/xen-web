@@ -6,8 +6,8 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {Form} from '../../../data/models/form.model';
 import {FormsService} from '../forms/forms.service';
 import {CATEGORY_FORM} from '../../../data/enums/enums';
-import {Domain} from '../../../data/models/domain.model';
 import {DomainsService} from '../../setting/domains/domains.service';
+import {CategoryService} from '../../../services/category.service';
 
 @Component({
     selector: 'publications-add-form-dialog',
@@ -21,9 +21,10 @@ export class PublicationsAddFormDialogComponent implements OnInit {
     form: Form;
     addForm: FormGroup;
     categoryForm = CATEGORY_FORM;
-    domains: Domain[];
-    categories: any[];
     dialogTitle: string;
+    type: any;
+
+    categories: any[];
 
     /**
      * Constructor
@@ -33,6 +34,7 @@ export class PublicationsAddFormDialogComponent implements OnInit {
      * @param {FormBuilder} _formBuilder
      * @param _formsService
      * @param _domainsService
+     * @param _categoryService
      * @param _toastr
      * @param _spinnerService
      */
@@ -42,6 +44,7 @@ export class PublicationsAddFormDialogComponent implements OnInit {
         private _formBuilder: FormBuilder,
         private _formsService: FormsService,
         private _domainsService: DomainsService,
+        private _categoryService: CategoryService,
         private _toastr: ToastrService,
         private _spinnerService: NgxSpinnerService
     ) {
@@ -61,7 +64,6 @@ export class PublicationsAddFormDialogComponent implements OnInit {
 
     ngOnInit() {
         this.categories = Object.keys(this.categoryForm);
-        this.getDomains();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -77,34 +79,29 @@ export class PublicationsAddFormDialogComponent implements OnInit {
         return this._formBuilder.group({
             id: new FormControl(this.form.id),
             name: new FormControl(this.form.name, Validators.required),
-            categoryForm: new FormControl(this.form.categoryForm, Validators.required),
-            domains: new FormControl(this.form.domains, Validators.required)
+            categoryForm: new FormControl(this.form.categoryForm, Validators.required)
         });
-    }
-
-    getDomains() {
-        this._domainsService.getAll().subscribe(value => {
-            this.domains = value['response'];
-        }, error => console.log(error));
     }
 
     saveOrUpdate() {
         this._spinnerService.show();
         this.form = new Form();
         this.form = this.addForm.getRawValue();
-        if (!this.form.id) {
-            this._formsService.create(this.form).subscribe(data => {
-                if (data['status'] === 'OK') {
-                    this._formsService.getForms();
-                    this._toastr.success(data['message']);
-                    this._spinnerService.hide();
-                    this.matDialogRef.close();
-                } else {
-                    this._toastr.error(data['message']);
-                    this._spinnerService.hide();
-                    this.matDialogRef.close();
-                }
-            });
-        }
+        this._formsService.create(this.form).subscribe(data => {
+            if (data['status'] === 'OK') {
+                this._formsService.getForms();
+                this._toastr.success(data['message']);
+                this._spinnerService.hide();
+                this.matDialogRef.close();
+            } else {
+                this._toastr.error(data['message']);
+                this._spinnerService.hide();
+                this.matDialogRef.close();
+            }
+        });
+    }
+
+    onChangeType(value) {
+        this.type = value;
     }
 }

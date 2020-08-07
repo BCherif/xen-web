@@ -35,6 +35,9 @@ import {PublicationsAddQuizDialogComponent} from './add-quiz/add-quiz.component'
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {CategoriesService} from './categories/categories.service';
+import {CategoriesComponent} from './categories/categories.component';
+import {CategoryFormComponent} from './category-form/category-form.component';
 
 
 const routes: Routes = [
@@ -58,6 +61,13 @@ const routes: Routes = [
         resolve: {
             data: FormsService
         }
+    },
+    {
+        path: 'categories',
+        component: CategoriesComponent,
+        resolve: {
+            data: CategoriesService
+        }
     }
 ];
 
@@ -67,7 +77,9 @@ const routes: Routes = [
         FormsComponent,
         ResponsesComponent,
         PublicationsAddFormDialogComponent,
-        PublicationsAddQuizDialogComponent
+        PublicationsAddQuizDialogComponent,
+        CategoriesComponent,
+        CategoryFormComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -105,7 +117,8 @@ const routes: Routes = [
     providers: [],
     entryComponents: [
         PublicationsAddFormDialogComponent,
-        PublicationsAddQuizDialogComponent
+        PublicationsAddQuizDialogComponent,
+        CategoryFormComponent
     ]
 })
 export class PublicationsModule {

@@ -25,7 +25,7 @@ export class QuizzesComponent implements OnInit
     dialogRef: any;
     typeQuiz = TYPE_QUIZ_ANSWER;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name','type'];
+    displayedColumns = ['name','type','form'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;

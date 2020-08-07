@@ -1,18 +1,18 @@
 import {Deserializable} from '../wrapper/deserializable.wrapper';
 import {Injectable} from '@angular/core';
-import {CATEGORY_FORM} from '../enums/enums';
+import {Domain} from './domain.model';
 
 @Injectable()
-export class Form implements Deserializable {
+export class Category implements Deserializable {
     id: number;
     name: string;
-    categoryForm: CATEGORY_FORM;
+    domain: Domain;
 
-    constructor(form?) {
-        form = form || {};
-        this.id = form.id;
-        this.name = form.name;
-        this.categoryForm = form.categoryForm;
+    constructor(category?) {
+        category = category || {};
+        this.id = category.id;
+        this.name = category.name;
+        this.domain = category.domain;
     }
 
     deserialize(input: any): this {

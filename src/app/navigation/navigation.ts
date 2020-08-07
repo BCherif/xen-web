@@ -151,6 +151,13 @@ export const navigation: FuseNavigation[] = [
                         url: '/main/publications/forms'
                     },
                     {
+                        id: 'categories',
+                        title: 'Catégories',
+                        type: 'item',
+                        icon: 'edit',
+                        url: '/main/publications/categories'
+                    },
+                    {
                         id: 'quizzes',
                         title: 'Questions',
                         type: 'item',

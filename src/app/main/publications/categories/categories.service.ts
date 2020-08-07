@@ -3,15 +3,15 @@ import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/rou
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../../../../environments/environment';
-import {Form} from '../../../data/models/form.model';
 import {XensaUtils} from '../../../utils/xensa-utils';
+import {Category} from '../../../data/models/category.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class FormsService implements Resolve<any> {
-    forms: Form[];
-    onFormsChanged: BehaviorSubject<any>;
+export class CategoriesService implements Resolve<any> {
+    categories: Category[];
+    onCategoriesChanged: BehaviorSubject<any>;
     readonly httpOptions: any;
     readonly serviceURL: string;
 
@@ -24,9 +24,9 @@ export class FormsService implements Resolve<any> {
         private _httpClient: HttpClient
     ) {
         this.httpOptions = new XensaUtils().httpHeaders();
-        this.serviceURL = environment.serviceUrl + '/forms';
+        this.serviceURL = environment.serviceUrl + '/categories';
         // Set the defaults
-        this.onFormsChanged = new BehaviorSubject({});
+        this.onCategoriesChanged = new BehaviorSubject({});
     }
 
     /**
@@ -40,7 +40,7 @@ export class FormsService implements Resolve<any> {
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getForms()
+                this.getCategories()
             ]).then(
                 () => {
                     resolve();
@@ -51,25 +51,21 @@ export class FormsService implements Resolve<any> {
     }
 
     /**
-     * Get forms
+     * Get categories
      *
      * @returns {Promise<any>}
      */
-    getForms(): Promise<any> {
+    getCategories(): Promise<any> {
         return new Promise((resolve, reject) => {
             this._httpClient.get(this.serviceURL, this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
-                        this.forms = res['response'];
-                        this.onFormsChanged.next(this.forms);
+                        this.categories = res['response'];
+                        this.onCategoriesChanged.next(this.categories);
                         resolve(res['response']);
                     }
                 }, reject);
         });
-    }
-
-    create(form: Form) {
-        return this._httpClient.post(this.serviceURL, form, this.httpOptions);
     }
 
     getAll() {
@@ -80,4 +76,11 @@ export class FormsService implements Resolve<any> {
         return this._httpClient.get(this.serviceURL + '/' + id, this.httpOptions);
     }
 
+    create(category: Category) {
+        return this._httpClient.post(this.serviceURL, category, this.httpOptions);
+    }
+
+    update(category: Category) {
+        return this._httpClient.put(this.serviceURL, category, this.httpOptions);
+    }
 }

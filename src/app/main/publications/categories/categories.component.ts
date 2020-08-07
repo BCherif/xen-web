@@ -9,22 +9,21 @@ import {fuseAnimations} from '@fuse/animations';
 import {FuseUtils} from '@fuse/utils';
 import {takeUntil} from 'rxjs/internal/operators';
 import {MatDialog} from '@angular/material/dialog';
-import {FormsService} from './forms.service';
-import {PublicationsAddFormDialogComponent} from '../add-form/add-form.component';
-import {CATEGORY_FORM} from '../../../data/enums/enums';
+import {CategoriesService} from './categories.service';
+import {CategoryFormComponent} from '../category-form/category-form.component';
+import {PublicationsAddQuizDialogComponent} from '../add-quiz/add-quiz.component';
 
 @Component({
-    selector: 'publications-forms',
-    templateUrl: './forms.component.html',
-    styleUrls: ['./forms.component.scss'],
+    selector: 'publications-categories',
+    templateUrl: './categories.component.html',
+    styleUrls: ['./categories.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class FormsComponent implements OnInit {
+export class CategoriesComponent implements OnInit {
     dialogRef: any;
-    categoryForm = CATEGORY_FORM;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name', 'categoryForm'];
+    displayedColumns = ['name', 'domain', 'actions'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -39,7 +38,7 @@ export class FormsComponent implements OnInit {
     private _unsubscribeAll: Subject<any>;
 
     constructor(
-        private _formsService: FormsService,
+        private _categoriesService: CategoriesService,
         private _matDialog: MatDialog
     ) {
         // Set the private defaults
@@ -54,8 +53,8 @@ export class FormsComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
-        document.title = 'XENSA | Formulaires';
-        this.dataSource = new FilesDataSource(this._formsService, this.paginator, this.sort);
+        document.title = 'XENSA | Catégories';
+        this.dataSource = new FilesDataSource(this._categoriesService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
             .pipe(
@@ -72,9 +71,12 @@ export class FormsComponent implements OnInit {
             });
     }
 
-    addForm(): void {
-        this.dialogRef = this._matDialog.open(PublicationsAddFormDialogComponent, {
-            panelClass: 'add-form-dialog',
+    /**
+     * New category
+     */
+    newCategory(): void {
+        this.dialogRef = this._matDialog.open(CategoryFormComponent, {
+            panelClass: 'category-form-dialog',
             data: {
                 action: 'new'
             }
@@ -82,17 +84,25 @@ export class FormsComponent implements OnInit {
     }
 
 
-    editForm(form) {
-        this.dialogRef = this._matDialog.open(PublicationsAddFormDialogComponent, {
-            panelClass: 'add-form-dialog',
+    editCategory(category) {
+        this.dialogRef = this._matDialog.open(CategoryFormComponent, {
+            panelClass: 'category-form-dialog',
             data: {
                 action: 'edit',
-                form: form
+                category: category
             }
         });
     }
 
-
+    affectQuiz(category) {
+        this.dialogRef = this._matDialog.open(PublicationsAddQuizDialogComponent, {
+            panelClass: 'add-quiz-dialog',
+            data: {
+                action: 'new',
+                category: category
+            }
+        });
+    }
 }
 
 export class FilesDataSource extends DataSource<any> {
@@ -102,18 +112,18 @@ export class FilesDataSource extends DataSource<any> {
     /**
      * Constructor
      *
-     * @param _formsService
+     * @param _categoriesService
      * @param {MatPaginator} _matPaginator
      * @param {MatSort} _matSort
      */
     constructor(
-        private _formsService: FormsService,
+        private _categoriesService: CategoriesService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
     ) {
         super();
 
-        this.filteredData = this._formsService.forms;
+        this.filteredData = this._categoriesService.categories;
     }
 
     /**
@@ -123,7 +133,7 @@ export class FilesDataSource extends DataSource<any> {
      */
     connect(): Observable<any[]> {
         const displayDataChanges = [
-            this._formsService.onFormsChanged,
+            this._categoriesService.onCategoriesChanged,
             this._matPaginator.page,
             this._filterChange,
             this._matSort.sortChange
@@ -132,7 +142,7 @@ export class FilesDataSource extends DataSource<any> {
         return merge(...displayDataChanges)
             .pipe(
                 map(() => {
-                        let data = this._formsService.forms.slice();
+                        let data = this._categoriesService.categories.slice();
 
                         data = this.filterData(data);
 
@@ -204,9 +214,6 @@ export class FilesDataSource extends DataSource<any> {
             switch (this._matSort.active) {
                 case 'name':
                     [propertyA, propertyB] = [a.name, b.name];
-                    break;
-                case 'categoryForm':
-                    [propertyA, propertyB] = [a.categoryForm, b.categoryForm];
                     break;
             }
 

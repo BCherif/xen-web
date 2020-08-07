@@ -19,7 +19,7 @@
             <p style="font-size: 20px; color: white">S'il vous plaît, attendez ...</p>
         </ngx-spinner>
 
-        <form [formGroup]="addForm">
+        <form [formGroup]="categoryForm">
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
@@ -30,16 +30,17 @@
 
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Type</mat-label>
-                    <mat-select formControlName="categoryForm"
-                                (selectionChange)="onChangeType($event.value)"
+                    <mat-label>Domaine</mat-label>
+                    <mat-select formControlName="domain"
+                                (selectionChange)="findDomainSelected($event.value)"
                                 required>
-                        <mat-option *ngFor="let cat of categories"
-                                    [value]="cat">{{categoryForm[cat]}}
+                        <mat-option *ngFor="let domain of domains"
+                                    [value]="domain.id">{{domain.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
+
         </form>
 
     </div>
@@ -50,7 +51,7 @@
                 mat-button
                 class="save-button"
                 (click)="saveOrUpdate()"
-                [disabled]="addForm.invalid"
+                [disabled]="categoryForm.invalid"
                 matTooltip="Enregistrer">
             Enregistrer
         </button>
@@ -58,7 +59,8 @@
         <button *ngIf="action === 'edit'"
                 mat-button
                 class="save-button"
-                [disabled]="addForm.invalid || addForm.pristine"
+                (click)="saveOrUpdate()"
+                [disabled]="categoryForm.invalid || categoryForm.pristine"
                 matTooltip="Modifier">
             Modifier
         </button>
