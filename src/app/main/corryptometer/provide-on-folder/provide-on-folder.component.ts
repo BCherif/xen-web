@@ -118,12 +118,7 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
         this.getLocalities();
         this.getJurisdictions();
         this.getDomains();
-        /* this.filteredOptions = this.provideForm.get('level').valueChanges
-             .pipe(
-                 startWith(''),
-                 map(value => typeof value === 'string' ? value : value.name),
-                 map(name => name ? this._filter(name) : this.localities.slice())
-             );*/
+
         // Subscribe to update interpellation on changes
         this._provideOnFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -146,7 +141,10 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
                     this.provideForm.get('dateOfJudment').setValue('');
                     this.provideForm.get('jurisdiction').setValue('');
                     this.provideForm.get('judgment').setValue('');
-                    // this.provideForm.get('level').setValue(legalFolder?.article?.level?.id);
+                    this.provideForm.get('region').setValue(legalFolder?.article?.level?.id);
+                    this.provideForm.get('circle').setValue(legalFolder?.article?.level?.id);
+                    this.provideForm.get('town').setValue(legalFolder?.article?.level?.id);
+                    this.provideForm.get('vfq').setValue(legalFolder?.article?.level?.id);
                     this.provideForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                 }
             });
@@ -182,7 +180,10 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
             amountAtStake: new FormControl('', Validators.required),
             motivation: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            // level: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             dateProvide: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required)

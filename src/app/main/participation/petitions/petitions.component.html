@@ -87,10 +87,10 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let petition">
-                        <!--<a matTooltip="Modifier"
+                        <a matTooltip="Modifier"
                            [routerLink]="'/main/participation/petitions/'+petition.id+'/'+petition?.article?.title">
                             <mat-icon>edit</mat-icon>
-                        </a>&nbsp;&nbsp;-->
+                        </a>&nbsp;&nbsp;
                         <a (click)="showDetailPetition(petition)">
                             <mat-icon>visibility</mat-icon>
                         </a>&nbsp;&nbsp;

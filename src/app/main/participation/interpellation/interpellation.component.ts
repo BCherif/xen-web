@@ -165,8 +165,10 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                     if (interpellation.organCall === 'ELECTED') {
                         this.getElecteds(interpellation?.article?.level?.id);
                         this.interpellationForm.get('electeds').setValue(interpellation.electeds);
+                        this.members = interpellation.electeds;
                     } else {
                         this.interpellationForm.get('organs').setValue(interpellation.organs);
+                        this.organs = interpellation.organs;
                     }
                     this.getDomainById(interpellation?.article?.domain?.id);
                     this.getLocalityById(interpellation?.article?.level?.id);
@@ -178,7 +180,10 @@ export class InterpellationComponent implements OnInit, OnDestroy {
                     this.interpellationForm.get('author').setValue(interpellation.author);
                     this.interpellationForm.get('article').setValue(interpellation?.article.id);
                     this.interpellationForm.get('domain').setValue(interpellation?.article?.domain?.id);
-                    // this.interpellationForm.get('level').setValue(interpellation?.article?.level?.id);
+                    this.interpellationForm.get('region').setValue(interpellation?.article?.level?.id);
+                    this.interpellationForm.get('circle').setValue(interpellation?.article?.level?.id);
+                    this.interpellationForm.get('town').setValue(interpellation?.article?.level?.id);
+                    this.interpellationForm.get('vfq').setValue(interpellation?.article?.level?.id);
                     this.interpellation = new Interpellation(interpellation);
                     this.pageType = 'edit';
                 } else {
@@ -217,7 +222,10 @@ export class InterpellationComponent implements OnInit, OnDestroy {
             callAs: new FormControl('', Validators.required),
             electeds: new FormControl(''),
             organs: new FormControl(''),
-            // level: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             domain: new FormControl('', Validators.required),
             article: new FormControl('')
         });

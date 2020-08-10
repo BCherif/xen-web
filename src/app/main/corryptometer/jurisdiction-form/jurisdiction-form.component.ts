@@ -1,5 +1,5 @@
 import {Component, Inject, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ToastrService} from 'ngx-toastr';
 import {Jurisdiction} from '../../../data/models/jurisdiction.model';
@@ -8,8 +8,6 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {DEGREE} from '../../../data/enums/enums';
 import {Locality} from '../../../data/models/locality.model';
 import {LocalitiesService} from '../../setting/localities/localities.service';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
 import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
@@ -40,8 +38,6 @@ export class CorryptometerJurisdictionFormDialogComponent {
     circleId: number;
     towId: number;
     vfqId: number;
-
-    filteredOptions: Observable<Locality[]>;
 
     /**
      * Constructor
@@ -78,12 +74,6 @@ export class CorryptometerJurisdictionFormDialogComponent {
         }
         this.degrees = Object.keys(this.degree);
         this.getLocalities();
-        /* this.filteredOptions = this.jurisdictionForm.get('level').valueChanges
-             .pipe(
-                 startWith(''),
-                 map(value => typeof value === 'string' ? value : value.name),
-                 map(name => name ? this._filter(name) : this.localities.slice())
-             );*/
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -113,7 +103,10 @@ export class CorryptometerJurisdictionFormDialogComponent {
         this.jurisdictionForm = this._formBuilder.group({
             id: [this.jurisdiction.id],
             name: [this.jurisdiction.name, Validators.required],
-            /*level: [this.jurisdiction.level.id, Validators.required],*/
+            region: new FormControl(this.jurisdiction.level.id),
+            circle: new FormControl(this.jurisdiction.level.id),
+            town: new FormControl(this.jurisdiction.level.id),
+            vfq: new FormControl(this.jurisdiction.level.id),
             degree: [this.jurisdiction.degree, Validators.required],
             description: [this.jurisdiction.description]
         });
@@ -124,15 +117,6 @@ export class CorryptometerJurisdictionFormDialogComponent {
             this.localities = value['response'];
             this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filter(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getLevel(value) {

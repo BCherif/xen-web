@@ -111,7 +111,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
                     this.projectForm.get('budget').setValue(project.budget);
                     this.projectForm.get('state').setValue(project.state);
                     this.projectForm.get('domain').setValue(project.domain.id);
-                    // this.projectForm.get('locality').setValue(project.locality.id);
+                    this.projectForm.get('region').setValue(project.level.id);
+                    this.projectForm.get('circle').setValue(project.level.id);
+                    this.projectForm.get('town').setValue(project.level.id);
+                    this.projectForm.get('vfq').setValue(project.level.id);
                     this.projectForm.get('program').setValue(project.program.id);
                     this.project = new Project(project);
                     this.pageType = 'edit';
@@ -147,7 +150,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
             budget: new FormControl('', Validators.required),
             state: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
-            // locality: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             program: new FormControl('', Validators.required)
         });
     }
@@ -247,7 +253,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.project = new Project();
         this.project = this.projectForm.getRawValue();
         this.project.domain = this.domain;
-        this.project.locality = this.locality;
+        this.project.level = this.locality;
         this.project.program = this.program;
         if (!this.project.id) {
             this._projectService.create(this.project).subscribe(data => {

@@ -48,7 +48,8 @@
             <div fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Régions</mat-label>
-                    <mat-select (selectionChange)="onRegionChange($event.value)">
+                    <mat-select formControlName="region"
+                                (selectionChange)="onRegionChange($event.value)">
                         <mat-option *ngFor="let region of regions" [value]="region?.id">
                             {{region?.name}}
                         </mat-option>
@@ -59,7 +60,8 @@
             <div *ngIf="regionId" fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Cercles</mat-label>
-                    <mat-select (selectionChange)="onCircleChange($event.value)">
+                    <mat-select formControlName="circle"
+                                (selectionChange)="onCircleChange($event.value)">
                         <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
                             <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
                                 {{circle?.name}}
@@ -72,7 +74,8 @@
             <div *ngIf="circleId" fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Commune</mat-label>
-                    <mat-select (selectionChange)="onTownChange($event.value)">
+                    <mat-select formControlName="town"
+                                (selectionChange)="onTownChange($event.value)">
                         <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
                             <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
                                 {{tow?.name}}
@@ -85,7 +88,8 @@
             <div *ngIf="towId" fxLayout="row" fxLayoutAlign="start start">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>VFQ</mat-label>
-                    <mat-select (selectionChange)="onVFQChange($event.value)">
+                    <mat-select formControlName="vfq"
+                                (selectionChange)="onVFQChange($event.value)">
                         <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
                             <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
                                 {{vfq?.name}}

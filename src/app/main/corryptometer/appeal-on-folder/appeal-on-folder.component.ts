@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable, Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {DEGREE, JUDGMENT, STATE_FOLDER} from '../../../data/enums/enums';
@@ -64,8 +64,6 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
     towId: number;
     vfqId: number;
 
-    filteredOptions: Observable<Locality[]>;
-
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -119,12 +117,6 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
         this.getJurisdictions();
         this.getDomains();
 
-        // this.filteredOptions = this.appealForm.get('level').valueChanges
-        //     .pipe(
-        //         startWith(''),
-        //         map(value => typeof value === 'string' ? value : value.name),
-        //         map(name => name ? this._filter(name) : this.localities.slice())
-        //     );
         // Subscribe to update interpellation on changes
         this._appealOnFolderService.onLegalFolderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -147,9 +139,10 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
                     this.appealForm.get('dateAppeal').setValue('');
                     this.appealForm.get('dateOfJudment').setValue('');
                     this.appealForm.get('judgment').setValue('');
-                    /*
-                                        this.appealForm.get('level').setValue(legalFolder?.article?.level?.id);
-                    */
+                    this.appealForm.get('region').setValue(legalFolder?.article?.level?.id);
+                    this.appealForm.get('circle').setValue(legalFolder?.article?.level?.id);
+                    this.appealForm.get('town').setValue(legalFolder?.article?.level?.id);
+                    this.appealForm.get('vfq').setValue(legalFolder?.article?.level?.id);
                     this.appealForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                     this.appealForm.get('jurisdiction').setValue(legalFolder?.jurisdiction?.id);
                 }
@@ -187,7 +180,10 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
             motivation: new FormControl('', Validators.required),
             content: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            // level: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             dateAppeal: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required)
@@ -205,15 +201,6 @@ export class AppealOnFolderComponent implements OnInit, OnDestroy {
             this.localities = value['response'];
             this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filter(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getLevel(value) {

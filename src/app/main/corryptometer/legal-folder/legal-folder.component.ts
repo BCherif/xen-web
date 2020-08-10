@@ -126,12 +126,6 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
         this.getDomains();
         this.getLocalities();
 
-        /* this.filteredOptions = this.legalFolderForm.get('level').valueChanges
-             .pipe(
-                 startWith(''),
-                 map(value => typeof value === 'string' ? value : value.name),
-                 map(name => name ? this._filter(name) : this.localities.slice())
-             );*/
 
         // Subscribe to update interpellation on changes
         this._legalFolderService.onLegalFolderChanged
@@ -157,7 +151,10 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                     this.legalFolderForm.get('judgment').setValue(legalFolder.judgment);
                     this.legalFolderForm.get('article').setValue(legalFolder?.article?.id);
                     this.legalFolderForm.get('domain').setValue(legalFolder?.article?.domain?.id);
-                    // this.legalFolderForm.get('locality').setValue(legalFolder?.article?.level?.id);
+                    this.legalFolderForm.get('region').setValue(legalFolder?.article?.level?.id);
+                    this.legalFolderForm.get('circle').setValue(legalFolder?.article?.level?.id);
+                    this.legalFolderForm.get('town').setValue(legalFolder?.article?.level?.id);
+                    this.legalFolderForm.get('vfq').setValue(legalFolder?.article?.level?.id);
                     this.legalFolderForm.get('jurisdiction').setValue(legalFolder?.jurisdiction?.id);
                     this.legalFolder = new LegalFolder(legalFolder);
                     this.pageType = 'edit';
@@ -200,7 +197,10 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             motivation: new FormControl('', Validators.required),
             content: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
-            // locality: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             dateOfCharge: new FormControl('', Validators.required),
             dateOfJudment: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
@@ -219,15 +219,6 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             this.localities = value['response'];
             this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filter(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getLevel(value) {

@@ -29,7 +29,6 @@ export class ArticlesComponent implements OnInit {
     displayedColumns = ['title', 'subCategory', 'locality', 'domain', 'buttons'];
 
 
-
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
 
@@ -76,7 +75,6 @@ export class ArticlesComponent implements OnInit {
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
     }
-
 
 
     showDetail(article) {

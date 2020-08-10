@@ -84,9 +84,9 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <!--<a [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
+                        <a [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
                             <mat-icon>edit</mat-icon>
-                        </a>&nbsp;&nbsp;-->
+                        </a>&nbsp;&nbsp;
                         <a (click)="showDetail(denunciation)">
                             <mat-icon>visibility</mat-icon>
                         </a>&nbsp;&nbsp;

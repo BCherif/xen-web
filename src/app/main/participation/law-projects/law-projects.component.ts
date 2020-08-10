@@ -1,31 +1,30 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {DataSource} from '@angular/cdk/collections';
+import {BehaviorSubject, fromEvent, merge, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
-import { fuseAnimations } from '@fuse/animations';
-import { FuseUtils } from '@fuse/utils';
-import { takeUntil } from 'rxjs/internal/operators';
-import {MatDialog} from "@angular/material/dialog";
+import {fuseAnimations} from '@fuse/animations';
+import {FuseUtils} from '@fuse/utils';
+import {takeUntil} from 'rxjs/internal/operators';
+import {MatDialog} from '@angular/material/dialog';
 import {INITIATOR, STATE_LAW_PROJECT} from '../../../data/enums/enums';
 import {LawProjectsService} from './law-projects.service';
 
 @Component({
-    selector     : 'participation-law-projects',
-    templateUrl  : './law-projects.component.html',
-    styleUrls    : ['./law-projects.component.scss'],
-    animations   : fuseAnimations,
+    selector: 'participation-law-projects',
+    templateUrl: './law-projects.component.html',
+    styleUrls: ['./law-projects.component.scss'],
+    animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class LawProjectsComponent implements OnInit
-{
+export class LawProjectsComponent implements OnInit {
     dialogRef: any;
     dataSource: FilesDataSource | null;
     stateLawProject = STATE_LAW_PROJECT;
     initiator = INITIATOR;
-    displayedColumns = ['title','year','elected','stateLawProject','locality','domain','buttons'];
+    displayedColumns = ['title', 'year', 'elected', 'stateLawProject', 'locality', 'domain', 'buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -42,8 +41,7 @@ export class LawProjectsComponent implements OnInit
     constructor(
         private _lawProjectsService: LawProjectsService,
         private _matDialog: MatDialog
-    )
-    {
+    ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
@@ -66,8 +64,7 @@ export class LawProjectsComponent implements OnInit
                 distinctUntilChanged()
             )
             .subscribe(() => {
-                if ( !this.dataSource )
-                {
+                if (!this.dataSource) {
                     return;
                 }
 
@@ -77,8 +74,7 @@ export class LawProjectsComponent implements OnInit
 
 }
 
-export class FilesDataSource extends DataSource<any>
-{
+export class FilesDataSource extends DataSource<any> {
     private _filterChange = new BehaviorSubject('');
     private _filteredDataChange = new BehaviorSubject('');
 
@@ -93,8 +89,7 @@ export class FilesDataSource extends DataSource<any>
         private _lawProjectsService: LawProjectsService,
         private _matPaginator: MatPaginator,
         private _matSort: MatSort
-    )
-    {
+    ) {
         super();
 
         this.filteredData = this._lawProjectsService.lawProjects;
@@ -105,8 +100,7 @@ export class FilesDataSource extends DataSource<any>
      *
      * @returns {Observable<any[]>}
      */
-    connect(): Observable<any[]>
-    {
+    connect(): Observable<any[]> {
         const displayDataChanges = [
             this._lawProjectsService.onLawProjectsChanged,
             this._matPaginator.page,
@@ -137,24 +131,20 @@ export class FilesDataSource extends DataSource<any>
     // -----------------------------------------------------------------------------------------------------
 
     // Filtered data
-    get filteredData(): any
-    {
+    get filteredData(): any {
         return this._filteredDataChange.value;
     }
 
-    set filteredData(value: any)
-    {
+    set filteredData(value: any) {
         this._filteredDataChange.next(value);
     }
 
     // Filter
-    get filter(): string
-    {
+    get filter(): string {
         return this._filterChange.value;
     }
 
-    set filter(filter: string)
-    {
+    set filter(filter: string) {
         this._filterChange.next(filter);
     }
 
@@ -168,10 +158,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any}
      */
-    filterData(data): any
-    {
-        if ( !this.filter )
-        {
+    filterData(data): any {
+        if (!this.filter) {
             return data;
         }
         return FuseUtils.filterArrayByString(data, this.filter);
@@ -183,10 +171,8 @@ export class FilesDataSource extends DataSource<any>
      * @param data
      * @returns {any[]}
      */
-    sortData(data): any[]
-    {
-        if ( !this._matSort.active || this._matSort.direction === '' )
-        {
+    sortData(data): any[] {
+        if (!this._matSort.active || this._matSort.direction === '') {
             return data;
         }
 
@@ -194,8 +180,7 @@ export class FilesDataSource extends DataSource<any>
             let propertyA: number | string = '';
             let propertyB: number | string = '';
 
-            switch ( this._matSort.active )
-            {
+            switch (this._matSort.active) {
                 case 'title':
                     [propertyA, propertyB] = [a.title, b.title];
                     break;
@@ -217,7 +202,6 @@ export class FilesDataSource extends DataSource<any>
     /**
      * Disconnect
      */
-    disconnect(): void
-    {
+    disconnect(): void {
     }
 }

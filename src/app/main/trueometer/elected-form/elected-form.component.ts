@@ -137,7 +137,6 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy {
             fullName: new FormControl('', Validators.required),
             job: new FormControl('', Validators.required),
             sexe: new FormControl('', Validators.required),
-            // locality: new FormControl('', Validators.required),
             organ: new FormControl('', Validators.required)
         });
     }
@@ -150,11 +149,13 @@ export class SettingElectedFormDialogComponent implements OnInit, OnDestroy {
     updateElectedForm() {
         this.electedForm = this._formBuilder.group({
             id: new FormControl(this.elected.id),
-            lastname: new FormControl(this.elected.lastname, Validators.required),
-            firstname: new FormControl(this.elected.firstname, Validators.required),
+            fullName: new FormControl(this.elected.fullName, Validators.required),
             job: new FormControl(this.elected.job, Validators.required),
             sexe: new FormControl(this.elected.sexe, Validators.required),
-            // locality: new FormControl(this.elected?.level?.id, Validators.required),
+            region: new FormControl(this.elected.level.id),
+            circle: new FormControl(this.elected.level.id),
+            town: new FormControl(this.elected.level.id),
+            vfq: new FormControl(this.elected.level.id),
             organ: new FormControl(this.elected?.organ?.id, Validators.required)
         });
     }

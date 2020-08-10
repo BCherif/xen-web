@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable, Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {CATEGORY, SUB_CATEGORY} from '../../../data/enums/enums';
@@ -110,12 +110,6 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         this.getLocalities();
         this.getDomains();
 
-        /* this.filteredOptions = this.denunciationForm.get('level').valueChanges
-             .pipe(
-                 startWith(''),
-                 map(value => typeof value === 'string' ? value : value.name),
-                 map(name => name ? this._filter(name) : this.localities.slice())
-             );*/
         // Subscribe to update interpellation on changes
         this._denunciationService.onDenunciationChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -130,7 +124,10 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                     this.denunciationForm.get('entity').setValue(denunciation.entity);
                     this.denunciationForm.get('article').setValue(denunciation?.article.id);
                     this.denunciationForm.get('domain').setValue(denunciation?.article?.domain?.id);
-                    // this.denunciationForm.get('level').setValue(denunciation?.article?.level?.id);
+                    this.denunciationForm.get('region').setValue(denunciation?.article?.level?.id);
+                    this.denunciationForm.get('circle').setValue(denunciation?.article?.level?.id);
+                    this.denunciationForm.get('town').setValue(denunciation?.article?.level?.id);
+                    this.denunciationForm.get('vfq').setValue(denunciation?.article?.level?.id);
                     this.denunciation = new Denunciation(denunciation);
                     this.pageType = 'edit';
                 } else {
@@ -165,7 +162,10 @@ export class DenunciationComponent implements OnInit, OnDestroy {
             denunContent: new FormControl('', Validators.required),
             description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
             entity: new FormControl('', Validators.required),
-            // level: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             domain: new FormControl('', Validators.required),
             article: new FormControl(''),
         });
@@ -176,15 +176,6 @@ export class DenunciationComponent implements OnInit, OnDestroy {
             this.localities = value['response'];
             this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filter(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getLevel(value) {

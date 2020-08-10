@@ -65,16 +65,9 @@
 
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <!--<mat-label>Localié</mat-label>
-                                <input type="text" matInput formControlName="level" [matAutocomplete]="auto">
-                                <mat-autocomplete (optionSelected)="getLevel($event.option.value)"
-                                                  #auto="matAutocomplete" [displayWith]="displayFn">
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                        {{option.name}}
-                                    </mat-option>
-                                </mat-autocomplete>-->
                                 <mat-label>Régions</mat-label>
-                                <mat-select (selectionChange)="onRegionChange($event.value)">
+                                <mat-select formControlName="region"
+                                            (selectionChange)="onRegionChange($event.value)">
                                     <mat-option *ngFor="let region of regions" [value]="region.id">
                                         {{region.name}}
                                     </mat-option>
@@ -83,7 +76,8 @@
                             <mat-form-field *ngIf="regionId" appearance="outline" class="px-4" floatLabel="always"
                                             fxFlex="50">
                                 <mat-label>Cercles</mat-label>
-                                <mat-select (selectionChange)="onCircleChange($event.value)">
+                                <mat-select formControlName="circle"
+                                            (selectionChange)="onCircleChange($event.value)">
                                     <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
                                         <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
                                             {{circle?.name}}
@@ -96,7 +90,8 @@
                             <mat-form-field *ngIf="circleId" appearance="outline" class="px-4" floatLabel="always"
                                             fxFlex="50">
                                 <mat-label>Commune</mat-label>
-                                <mat-select (selectionChange)="onTownChange($event.value)">
+                                <mat-select formControlName="town"
+                                            (selectionChange)="onTownChange($event.value)">
                                     <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
                                         <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
                                             {{tow?.name}}
@@ -108,7 +103,8 @@
                             <mat-form-field *ngIf="vfqId" appearance="outline" class="px-4" floatLabel="always"
                                             fxFlex="50">
                                 <mat-label>VFQ</mat-label>
-                                <mat-select (selectionChange)="onVFQChange($event.value)">
+                                <mat-select formControlName="vfq"
+                                            (selectionChange)="onVFQChange($event.value)">
                                     <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
                                         <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
                                             {{vfq?.name}}

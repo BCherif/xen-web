@@ -134,16 +134,19 @@ export class PetitionComponent implements OnInit, OnDestroy {
             .subscribe(petition => {
 
                 if (petition) {
-                    console.log(petition?.decisionMakers);
                     this.getLocalityById(petition?.article?.level?.id);
                     this.getDomainById(petition?.article?.domain?.id);
+                    this.decisions = petition?.decisionMakers;
                     this.petitionForm.get('id').setValue(petition.id);
                     this.petitionForm.get('title').setValue(petition?.article?.title);
                     this.petitionForm.get('petitionContent').setValue(petition?.article?.content);
                     this.petitionForm.get('decisionMakers').setValue(petition?.decisionMakers);
                     this.petitionForm.get('article').setValue(petition?.article?.id);
                     this.petitionForm.get('domain').setValue(petition?.article?.domain?.id);
-                    // this.petitionForm.get('level').setValue(petition?.article?.level?.id);
+                    this.petitionForm.get('region').setValue(petition?.article?.level?.id);
+                    this.petitionForm.get('circle').setValue(petition?.article?.level?.id);
+                    this.petitionForm.get('town').setValue(petition?.article?.level?.id);
+                    this.petitionForm.get('vfq').setValue(petition?.article?.level?.id);
                     this.petition = new Petition(petition);
                     this.pageType = 'edit';
                 } else {
@@ -177,7 +180,10 @@ export class PetitionComponent implements OnInit, OnDestroy {
             title: new FormControl('', Validators.required),
             petitionContent: new FormControl('', Validators.required),
             decisionMakers: new FormControl(''),
-            // level: new FormControl('', Validators.required),
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             domain: new FormControl('', Validators.required),
             objective: new FormControl('', Validators.required),
             description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),

@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable, Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 
 import {fuseAnimations} from '@fuse/animations';
@@ -59,8 +59,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
     xensaUtils = new XensaUtils();
     currentUser: User = this.xensaUtils.getAppUser();
 
-    filteredOptions: Observable<Locality[]>;
-
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -108,12 +106,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
         this.createArticleForm();
         this.getLocalities();
         this.getDomains();
-        /*this.filteredOptions = this.articleForm.get('level').valueChanges
-            .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filter(name) : this.localities.slice())
-            );*/
+
         // Subscribe to update interpellation on changes
         this._articleService.onArticleChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -128,9 +121,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
                     this.articleForm.get('subCategory').setValue(article.subCategory);
                     this.articleForm.get('domain').setValue(article?.domain?.id);
                     this.articleForm.get('description').setValue(article?.description);
-                    /*
-                                        this.articleForm.get('level').setValue(article?.level?.id);
-                    */
+                    this.articleForm.get('region').setValue(article?.level?.id);
+                    this.articleForm.get('circle').setValue(article?.level?.id);
+                    this.articleForm.get('town').setValue(article?.level?.id);
+                    this.articleForm.get('vfq').setValue(article?.level?.id);
                     this.article = new Article(article);
                     this.pageType = 'edit';
                 } else {
@@ -167,6 +161,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
             domain: new FormControl('', Validators.required),
             /*  fileName: new FormControl(''),
             *  level: new FormControl('', Validators.required),*/
+            region: new FormControl(''),
+            circle: new FormControl(''),
+            town: new FormControl(''),
+            vfq: new FormControl(''),
             subCategory: new FormControl('', Validators.required)
         });
     }
@@ -176,15 +174,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
             this.localities = value['response'];
             this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filter(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getLevel(value) {
