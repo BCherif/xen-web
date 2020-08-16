@@ -49,4 +49,30 @@ export class DetailsInterpellationComponent {
             }
         });
     }
+
+    toPublish(interpellation: Interpellation) {
+        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            disableClose: false
+        });
+
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de démoderer cette interpellation';
+
+        this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                interpellation.ischeck = false;
+                interpellation.article.ischeck = false;
+                this._interpellationsService.toPublish(interpellation).subscribe(data => {
+                    if (data['status'] === 'OK') {
+                        this._toastr.success(data['message']);
+                        const interpellationIndex = this._interpellationsService.interpellations.indexOf(interpellation);
+                        this._interpellationsService.interpellations.splice(interpellationIndex, 1, data['response']);
+                        this._interpellationsService.onInterpellationsChanged.next(this._interpellationsService.interpellations);
+                        this.matDialogRef.close();
+                    } else {
+                        this._toastr.error(data['message']);
+                    }
+                }, error => console.log(error));
+            }
+        });
+    }
 }

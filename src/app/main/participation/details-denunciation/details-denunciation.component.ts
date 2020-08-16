@@ -50,4 +50,31 @@ export class DetailsDenunciationComponent {
             }
         });
     }
+
+    toPublish(denunciation: Denunciation) {
+        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            disableClose: false
+        });
+
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de démoderer la denonciation';
+
+        this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                denunciation.article.ischeck = false;
+                denunciation.ischeck = false;
+                this._denunciationService.toPublish(denunciation).subscribe(data => {
+                    if (data['status'] === 'OK') {
+                        this._toastr.success(data['message']);
+                        const denunciationIndex = this._denunciationService.denunciations.indexOf(denunciation);
+                        this._denunciationService.denunciations.splice(denunciationIndex, 1, data['response']);
+                        this._denunciationService.onDenunciationsChanged.next(this._denunciationService.denunciations);
+                        this.matDialogRef.close();
+                    } else {
+                        this._toastr.error(data['message']);
+                        this.matDialogRef.close();
+                    }
+                }, error => console.log(error));
+            }
+        });
+    }
 }

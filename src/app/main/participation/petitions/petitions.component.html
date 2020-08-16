@@ -88,6 +88,7 @@
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let petition">
                         <a matTooltip="Modifier"
+                           *ngIf="!petition.ischeck && !petition.frontend"
                            [routerLink]="'/main/participation/petitions/'+petition.id+'/'+petition?.article?.title">
                             <mat-icon>edit</mat-icon>
                         </a>&nbsp;&nbsp;

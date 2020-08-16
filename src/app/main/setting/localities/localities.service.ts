@@ -76,6 +76,10 @@ export class LocalitiesService implements Resolve<any> {
         return this._httpClient.get(this.serviceURL + '/' + id, this.httpOptions);
     }
 
+    findByName() {
+        return this._httpClient.get(this.serviceURL + '/by-name', this.httpOptions);
+    }
+
     findByCuttingId(id: number) {
         return this._httpClient.get(this.serviceURL + '/' + id + '/cutting', this.httpOptions);
     }

@@ -14,11 +14,19 @@
 <mat-dialog-actions align="end">
     <button *ngIf="!article.ischeck"
             mat-raised-button class="save-button"
-            matTooltip="Valider"
+            matTooltip="Moderer"
             color="primary"
             (click)="validation(article)">
         <mat-icon>check</mat-icon>&nbsp;
-        <span>Valider</span>
+        <span>Publier</span>
+    </button>
+    <button *ngIf="article.ischeck"
+            mat-raised-button class="save-button"
+            matTooltip="Démoderer"
+            (click)="toPublish(article)"
+            color="primary">
+        <mat-icon>close</mat-icon>&nbsp;
+        <span>Dépublier</span>
     </button>
     <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
         <mat-icon>close</mat-icon>&nbsp;

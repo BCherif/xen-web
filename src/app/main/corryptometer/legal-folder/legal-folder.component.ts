@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable, Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {CATEGORY, DEGREE, JUDGMENT, STATE_FOLDER, SUB_CATEGORY} from '../../../data/enums/enums';
@@ -136,19 +136,20 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
                     this.getJurisdictionById(legalFolder?.jurisdiction?.id);
                     this.getDomainById(legalFolder?.article?.domain?.id);
                     this.getLocalityById(legalFolder?.article?.level?.id);
-                    this.legalFolderForm.get('id').setValue(legalFolder.id);
-                    this.legalFolderForm.get('degree').setValue(legalFolder.degree);
+                    this.legalFolderForm.get('id').setValue(legalFolder?.id);
+                    this.legalFolderForm.get('degree').setValue(legalFolder?.degree);
                     this.getJurisdictions(legalFolder.degree);
-                    this.legalFolderForm.get('title').setValue(legalFolder.article.title);
-                    this.legalFolderForm.get('content').setValue(legalFolder.article.content);
-                    this.legalFolderForm.get('nameOfAccused').setValue(legalFolder.nameOfAccused);
-                    this.legalFolderForm.get('decisionOfJurisdiction').setValue(legalFolder.decisionOfJurisdiction);
-                    this.legalFolderForm.get('amountAtStake').setValue(legalFolder.amountAtStake);
-                    this.legalFolderForm.get('motivation').setValue(legalFolder.motivation);
-                    this.legalFolderForm.get('stateFolder').setValue(legalFolder.stateFolder);
-                    this.legalFolderForm.get('dateOfCharge').setValue(new Date(legalFolder.dateOfCharge));
-                    this.legalFolderForm.get('dateOfJudment').setValue(new Date(legalFolder.dateOfJudment));
-                    this.legalFolderForm.get('judgment').setValue(legalFolder.judgment);
+                    this.legalFolderForm.get('title').setValue(legalFolder?.article?.title);
+                    this.legalFolderForm.get('content').setValue(legalFolder?.article?.content);
+                    this.legalFolderForm.get('description').setValue(legalFolder?.article?.description);
+                    this.legalFolderForm.get('nameOfAccused').setValue(legalFolder?.nameOfAccused);
+                    this.legalFolderForm.get('decisionOfJurisdiction').setValue(legalFolder?.decisionOfJurisdiction);
+                    this.legalFolderForm.get('amountAtStake').setValue(legalFolder?.amountAtStake);
+                    this.legalFolderForm.get('motivation').setValue(legalFolder?.motivation);
+                    this.legalFolderForm.get('stateFolder').setValue(legalFolder?.stateFolder);
+                    this.legalFolderForm.get('dateOfCharge').setValue(new Date(legalFolder?.dateOfCharge));
+                    this.legalFolderForm.get('dateOfJudment').setValue(new Date(legalFolder?.dateOfJudment));
+                    this.legalFolderForm.get('judgment').setValue(legalFolder?.judgment);
                     this.legalFolderForm.get('article').setValue(legalFolder?.article?.id);
                     this.legalFolderForm.get('domain').setValue(legalFolder?.article?.domain?.id);
                     this.legalFolderForm.get('region').setValue(legalFolder?.article?.level?.id);
@@ -188,13 +189,13 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             degree: new FormControl('', Validators.required),
             title: new FormControl('', Validators.required),
-            description: new FormControl(''),
+            description: new FormControl('', Validators.required),
             nameOfAccused: new FormControl('', Validators.required),
             judgment: new FormControl('', Validators.required),
             jurisdiction: new FormControl('', Validators.required),
-            decisionOfJurisdiction: new FormControl('', Validators.required),
-            amountAtStake: new FormControl('', Validators.required),
-            motivation: new FormControl('', Validators.required),
+            decisionOfJurisdiction: new FormControl(''),
+            amountAtStake: new FormControl(''),
+            motivation: new FormControl(''),
             content: new FormControl('', Validators.required),
             stateFolder: new FormControl('', Validators.required),
             region: new FormControl(''),
@@ -202,7 +203,7 @@ export class LegalFolderComponent implements OnInit, OnDestroy {
             town: new FormControl(''),
             vfq: new FormControl(''),
             dateOfCharge: new FormControl('', Validators.required),
-            dateOfJudment: new FormControl('', Validators.required),
+            dateOfJudment: new FormControl(''),
             domain: new FormControl('', Validators.required),
             article: new FormControl('')
         });

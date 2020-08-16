@@ -1,10 +1,10 @@
-import {Deserializable} from "../wrapper/deserializable.wrapper";
-import {Injectable} from "@angular/core";
+import {Deserializable} from '../wrapper/deserializable.wrapper';
+import {Injectable} from '@angular/core';
 import {Article} from './article.model';
 import {User} from './user.model';
 
 @Injectable()
-export class Denunciation implements Deserializable{
+export class Denunciation implements Deserializable {
     id: number;
     denunciationDate: Date = new Date();
     entity: string;
@@ -12,9 +12,10 @@ export class Denunciation implements Deserializable{
     article: Article;
     user: User;
     ischeck: boolean;
+    invalidate: boolean = true;
     createDate: Date = new Date();
     updateDate: Date;
-    
+
     constructor(denunciation?) {
         denunciation = denunciation || {};
         this.id = denunciation.id;
@@ -23,6 +24,7 @@ export class Denunciation implements Deserializable{
         this.justification = denunciation.justification;
         this.article = denunciation.article;
         this.user = denunciation.user;
+        this.ischeck = denunciation.ischeck;
         this.createDate = denunciation.createDate;
         this.updateDate = denunciation.updateDate;
     }

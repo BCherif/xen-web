@@ -54,7 +54,7 @@
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Titre</mat-label>
-                                <input name="title" #title formControlName="title" matInput maxlength="160" required>
+                                <input name="title" #title formControlName="title" matInput maxlength="130" required>
                                 <mat-hint align="end">{{title.value.length}} / 160</mat-hint>
                             </mat-form-field>
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
@@ -133,9 +133,9 @@
                                 <mat-label>Description</mat-label>
                                 <textarea #description name="description" formControlName="description" matInput
                                           type="text"
-                                          maxlength="50"
+                                          maxlength="200"
                                           max-rows="5"></textarea>
-                                <mat-hint align="end">{{description.value.length}} / 50</mat-hint>
+                                <mat-hint align="end">{{description.value.length}} / 200</mat-hint>
                             </mat-form-field>
                         </div>
                         <div>

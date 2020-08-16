@@ -35,21 +35,21 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
-            <button mat-raised-button
-                    class="save-product-button"
-                    (click)="save()"
-                    [disabled]="legalFolderForm.invalid"
-                    *ngIf="pageType ==='new'">
-                <span>Enregistrer</span>
-            </button>
+            <!-- <button mat-raised-button
+                     class="save-product-button"
+                     (click)="save()"
+                     [disabled]="legalFolderForm.invalid"
+                     *ngIf="pageType ==='new'">
+                 <span>Enregistrer</span>
+             </button>
 
-            <button mat-raised-button
-                    (click)="save()"
-                    class="save-product-button"
-                    [disabled]="legalFolderForm.invalid || legalFolderForm.pristine"
-                    *ngIf="pageType ==='edit'">
-                <span>Modifier</span>
-            </button>
+             <button mat-raised-button
+                     (click)="save()"
+                     class="save-product-button"
+                     [disabled]="legalFolderForm.invalid || legalFolderForm.pristine"
+                     *ngIf="pageType ==='edit'">
+                 <span>Modifier</span>
+             </button>-->
         </div>
         <!-- / HEADER -->
 
@@ -62,197 +62,214 @@
                 <form name="publicationForm" [formGroup]="legalFolderForm" class="product w-100-p"
                       fxLayout="column" fxFlex>
 
-                    <mat-tab-group>
-                        <mat-tab label="Infos de l'article">
-                            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
-                                <div fxLayout="row" fxLayoutAlign="space-between">
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Choisir une entrée</mat-label>
-                                        <mat-select formControlName="degree"
-                                                    (selectionChange)="enterChoice($event.value)"
-                                                    required>
-                                            <mat-option *ngFor="let dg of degrees"
-                                                        [value]="dg">{{degree[dg]}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Juridiction</mat-label>
-                                        <mat-select (selectionChange)="findByJurisdictionSelected($event.value)"
-                                                    formControlName="jurisdiction"
-                                                    required>
-                                            <mat-option *ngFor="let juridict of jurisdictions"
-                                                        [value]="juridict.id">{{juridict.name}}
-                                                de {{juridict?.level?.name}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                                <div *ngIf="selectedDegree" fxLayout="row" fxLayoutAlign="space-between">
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Titre</mat-label>
-                                        <input name="title" #title formControlName="title" matInput maxlength="160"
-                                               required>
-                                        <mat-hint align="end">{{title.value.length}} / 160</mat-hint>
-                                    </mat-form-field>
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Nom de l'accusé</mat-label>
-                                        <input name="nameOfAccused" formControlName="nameOfAccused" matInput required>
-                                    </mat-form-field>
-                                </div>
-                                <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row"
-                                     fxLayoutAlign="start center">
-                                    <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                        <mat-label>Régions</mat-label>
-                                        <mat-select formControlName="region"
-                                                    (selectionChange)="onRegionChange($event.value)">
-                                            <mat-option *ngFor="let region of regions" [value]="region.id">
-                                                {{region.name}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-form-field *ngIf="regionId" appearance="outline" class="px-4"
-                                                    floatLabel="always"
-                                                    fxFlex="50">
-                                        <mat-label>Cercles</mat-label>
-                                        <mat-select formControlName="circle"
-                                                    (selectionChange)="onCircleChange($event.value)">
-                                            <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
-                                                <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
-                                                    {{circle?.name}}
-                                                </mat-option>
-                                            </mat-optgroup>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                                <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row"
-                                     fxLayoutAlign="start center">
-                                    <mat-form-field *ngIf="circleId" appearance="outline" class="px-4"
-                                                    floatLabel="always"
-                                                    fxFlex="50">
-                                        <mat-label>Commune</mat-label>
-                                        <mat-select formControlName="town"
-                                                    (selectionChange)="onTownChange($event.value)">
-                                            <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
-                                                <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
-                                                    {{tow?.name}}
-                                                </mat-option>
-                                            </mat-optgroup>
-                                        </mat-select>
-                                    </mat-form-field>
-
-                                    <mat-form-field *ngIf="vfqId" appearance="outline" class="px-4" floatLabel="always"
-                                                    fxFlex="50">
-                                        <mat-label>VFQ</mat-label>
-                                        <mat-select formControlName="vfq"
-                                                    (selectionChange)="onVFQChange($event.value)">
-                                            <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
-                                                <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
-                                                    {{vfq?.name}}
-                                                </mat-option>
-                                            </mat-optgroup>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                                <mat-form-field *ngIf="selectedDegree" appearance="outline" floatLabel="always"
-                                                class="w-100-p">
-                                    <mat-label>Domaine</mat-label>
-                                    <mat-select formControlName="domain"
-                                                (selectionChange)="findDomainSelected($event.value)"
-                                                required>
-                                        <mat-option *ngFor="let domain of domains"
-                                                    [value]="domain.id">{{domain.name}}
+                    <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Choisir une entrée</mat-label>
+                                <mat-select formControlName="degree"
+                                            (selectionChange)="enterChoice($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let dg of degrees"
+                                                [value]="dg">{{degree[dg]}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Juridiction</mat-label>
+                                <mat-select (selectionChange)="findByJurisdictionSelected($event.value)"
+                                            formControlName="jurisdiction"
+                                            required>
+                                    <mat-option *ngFor="let juridict of jurisdictions"
+                                                [value]="juridict.id">{{juridict.name}}
+                                        de {{juridict?.level?.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                <mat-label>Titre</mat-label>
+                                <input name="title" #title formControlName="title" matInput maxlength="130"
+                                       required>
+                                <mat-hint align="end">{{title.value.length}} / 130</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                <mat-label>Nom de l'accusé</mat-label>
+                                <input name="nameOfAccused" formControlName="nameOfAccused" matInput required>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row"
+                             fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                <mat-label>Régions</mat-label>
+                                <mat-select formControlName="region"
+                                            (selectionChange)="onRegionChange($event.value)">
+                                    <mat-option *ngFor="let region of regions" [value]="region.id">
+                                        {{region.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field *ngIf="regionId" appearance="outline" class="px-4"
+                                            floatLabel="always"
+                                            fxFlex="50">
+                                <mat-label>Cercles</mat-label>
+                                <mat-select formControlName="circle"
+                                            (selectionChange)="onCircleChange($event.value)">
+                                    <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
+                                        <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
+                                            {{circle?.name}}
                                         </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field *ngIf="selectedDegree" appearance="outline" floatLabel="always"
-                                                class="w-100-p">
-                                    <mat-label>Description</mat-label>
-                                    <textarea #description name="description" formControlName="description" matInput
-                                              type="text"
-                                              maxlength="50"
-                                              max-rows="5"></textarea>
-                                    <mat-hint align="end">{{description.value.length}} / 50</mat-hint>
-                                </mat-form-field>
-                                <div *ngIf="selectedDegree">
-                                    <ckeditor formControlName="content" required></ckeditor>
-                                </div>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Etat" [disabled]="!stateTabActive">
-                            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
-                                <div fxLayout="row" fxLayoutAlign="space-between">
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Etat</mat-label>
-                                        <mat-select formControlName="stateFolder"
-                                                    (selectionChange)="choiceState($event.value)"
-                                                    required>
-                                            <mat-option *ngFor="let state of statefolders"
-                                                        [value]="state">{{statefolder[state]}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
-                                        <mat-label>Jugement</mat-label>
-                                        <mat-select formControlName="judgment"
-                                                    (selectionChange)="choiceJudment($event.value)"
-                                                    required>
-                                            <mat-option *ngFor="let jud of judments"
-                                                        [value]="jud">{{judment[jud]}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                                <mat-form-field *ngIf="stateSelected != 'IN_PROGRESS'" appearance="outline"
-                                                floatLabel="always" class="w-100-p">
-                                    <mat-label>Montant en jeu</mat-label>
-                                    <input name="amountAtStake" formControlName="amountAtStake" matInput
-                                           mask="separator" type="text" required>
-                                </mat-form-field>
-                                <mat-form-field *ngIf="stateSelected != 'IN_PROGRESS'" appearance="outline"
-                                                floatLabel="always" class="w-100-p">
-                                    <mat-label>Décision</mat-label>
-                                    <textarea name="decisionOfJurisdiction" formControlName="decisionOfJurisdiction"
-                                              matInput type="text"
-                                              required
-                                              max-rows="5">
-                                </textarea>
-                                </mat-form-field>
-                                <mat-form-field *ngIf="stateSelected != 'IN_PROGRESS'" appearance="outline"
-                                                floatLabel="always" class="w-100-p">
-                                    <mat-label>Motivation</mat-label>
-                                    <textarea name="motivation" formControlName="motivation"
-                                              matInput type="text"
-                                              required
-                                              max-rows="5">
-                                </textarea>
-                                </mat-form-field>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Date" [disabled]="!dateTabActive">
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                    <mat-label>Date d'accusation</mat-label>
-                                    <input [matDatepicker]="dateOfCharge"
-                                           (dateChange)="onChangeDate($event)"
-                                           formControlName="dateOfCharge" matInput required
-                                           name="dateOfCharge">
-                                    <mat-datepicker-toggle [for]="dateOfCharge" matSuffix></mat-datepicker-toggle>
-                                    <mat-datepicker #dateOfCharge></mat-datepicker>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                    <mat-label>Date de jugement</mat-label>
-                                    <input [matDatepicker]="dateOfJudment"
-                                           formControlName="dateOfJudment" matInput required
-                                           name="dateOfJudment" [min]="minDate">
-                                    <mat-datepicker-toggle [for]="dateOfJudment" matSuffix></mat-datepicker-toggle>
-                                    <mat-datepicker #dateOfJudment></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </mat-tab>
-                    </mat-tab-group>
-                </form>
+                                    </mat-optgroup>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row"
+                             fxLayoutAlign="start center">
+                            <mat-form-field *ngIf="circleId" appearance="outline" class="px-4"
+                                            floatLabel="always"
+                                            fxFlex="50">
+                                <mat-label>Commune</mat-label>
+                                <mat-select formControlName="town"
+                                            (selectionChange)="onTownChange($event.value)">
+                                    <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
+                                        <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
+                                            {{tow?.name}}
+                                        </mat-option>
+                                    </mat-optgroup>
+                                </mat-select>
+                            </mat-form-field>
 
+                            <mat-form-field *ngIf="vfqId" appearance="outline" class="px-4" floatLabel="always"
+                                            fxFlex="50">
+                                <mat-label>VFQ</mat-label>
+                                <mat-select formControlName="vfq"
+                                            (selectionChange)="onVFQChange($event.value)">
+                                    <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
+                                        <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
+                                            {{vfq?.name}}
+                                        </mat-option>
+                                    </mat-optgroup>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always"
+                                            class="w-100-p">
+                                <mat-label>Domaine</mat-label>
+                                <mat-select formControlName="domain"
+                                            (selectionChange)="findDomainSelected($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let domain of domains"
+                                                [value]="domain.id">{{domain.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always"
+                                            class="w-100-p">
+                                <mat-label>Description</mat-label>
+                                <textarea #description name="description" formControlName="description" matInput
+                                          type="text"
+                                          maxlength="200"
+                                          max-rows="5"></textarea>
+                                <mat-hint align="end">{{description.value.length}} / 200</mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                <mat-label>Etat</mat-label>
+                                <mat-select formControlName="stateFolder"
+                                            (selectionChange)="choiceState($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let state of statefolders"
+                                                [value]="state">{{statefolder[state]}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                <mat-label>Jugement</mat-label>
+                                <mat-select formControlName="judgment"
+                                            (selectionChange)="choiceJudment($event.value)"
+                                            required>
+                                    <mat-option *ngFor="let jud of judments"
+                                                [value]="jud">{{judment[jud]}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree && stateSelected != 'IN_PROGRESS'" fxFlex="1 0 auto" fxLayout="row"
+                             fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline"
+                                            floatLabel="always" class="w-100-p">
+                                <mat-label>Montant en jeu</mat-label>
+                                <input name="amountAtStake" formControlName="amountAtStake" matInput
+                                       mask="separator" type="text">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree && stateSelected != 'IN_PROGRESS'" fxFlex="1 0 auto" fxLayout="row"
+                             fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline"
+                                            floatLabel="always" class="w-100-p">
+                                <mat-label>Décision</mat-label>
+                                <textarea name="decisionOfJurisdiction" formControlName="decisionOfJurisdiction"
+                                          matInput type="text"
+                                          max-rows="5">
+                                </textarea>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree && stateSelected != 'IN_PROGRESS'" fxFlex="1 0 auto" fxLayout="row"
+                             fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline"
+                                            floatLabel="always" class="w-100-p">
+                                <mat-label>Motivation</mat-label>
+                                <textarea name="motivation" formControlName="motivation"
+                                          matInput type="text"
+                                          max-rows="5">
+                                </textarea>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree && selectedDegree" fxFlex="1 0 auto" fxLayout="row"
+                             fxLayoutAlign="start center">
+                            <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                <mat-label>Date d'accusation</mat-label>
+                                <input [matDatepicker]="dateOfCharge"
+                                       (dateChange)="onChangeDate($event)"
+                                       formControlName="dateOfCharge" matInput required
+                                       name="dateOfCharge">
+                                <mat-datepicker-toggle [for]="dateOfCharge" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #dateOfCharge></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                                <mat-label>Date de jugement</mat-label>
+                                <input [matDatepicker]="dateOfJudment"
+                                       formControlName="dateOfJudment" matInput required
+                                       name="dateOfJudment" [min]="minDate">
+                                <mat-datepicker-toggle [for]="dateOfJudment" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #dateOfJudment></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="selectedDegree">
+                            <ckeditor formControlName="content" required></ckeditor>
+                        </div>
+                        <br>
+                        <button mat-raised-button
+                                color="primary"
+                                (click)="save()"
+                                [disabled]="legalFolderForm.invalid"
+                                *ngIf="pageType ==='new'">
+                            <span>Enregistrer</span>
+                        </button>
+
+                        <button mat-raised-button
+                                (click)="save()"
+                                color="primary"
+                                [disabled]="legalFolderForm.invalid || legalFolderForm.pristine"
+                                *ngIf="pageType ==='edit'">
+                            <span>Modifier</span>
+                        </button>
+                    </div>
+                </form>
             </div>
             <!-- / CONTENT -->
 

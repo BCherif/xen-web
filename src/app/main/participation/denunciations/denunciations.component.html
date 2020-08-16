@@ -84,7 +84,7 @@
                 <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let denunciation">
-                        <a [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
+                        <a *ngIf="!denunciation.ischeck" [routerLink]="'/main/participation/denunciations/'+denunciation.id+'/'+denunciation.entity">
                             <mat-icon>edit</mat-icon>
                         </a>&nbsp;&nbsp;
                         <a (click)="showDetail(denunciation)">

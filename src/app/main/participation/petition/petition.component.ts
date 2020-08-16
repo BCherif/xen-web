@@ -139,8 +139,10 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this.decisions = petition?.decisionMakers;
                     this.petitionForm.get('id').setValue(petition.id);
                     this.petitionForm.get('title').setValue(petition?.article?.title);
+                    this.petitionForm.get('objective').setValue(petition?.objective);
                     this.petitionForm.get('petitionContent').setValue(petition?.article?.content);
                     this.petitionForm.get('decisionMakers').setValue(petition?.decisionMakers);
+                    this.petitionForm.get('description').setValue(petition?.article?.description);
                     this.petitionForm.get('article').setValue(petition?.article?.id);
                     this.petitionForm.get('domain').setValue(petition?.article?.domain?.id);
                     this.petitionForm.get('region').setValue(petition?.article?.level?.id);
@@ -186,7 +188,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
             vfq: new FormControl(''),
             domain: new FormControl('', Validators.required),
             objective: new FormControl('', Validators.required),
-            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
+            description: new FormControl('', Validators.required),
             article: new FormControl('')
         });
     }
@@ -313,6 +315,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.petition = new Petition();
         this.petitionSaveEntity = new PetitionSaveEntity();
+        this.article.ischeck = true;
         this.article.id = this.petitionForm.get('article').value;
         this.article.title = this.petitionForm.get('title').value;
         this.article.content = this.petitionForm.get('petitionContent').value;
@@ -336,6 +339,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         } else {
@@ -347,6 +351,7 @@ export class PetitionComponent implements OnInit, OnDestroy {
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         }

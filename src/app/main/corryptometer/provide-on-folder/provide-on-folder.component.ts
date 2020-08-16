@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable, Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {fuseAnimations} from '@fuse/animations';
 import {CS_JUDGMENT, DEGREE, STATE_FOLDER} from '../../../data/enums/enums';
@@ -66,8 +66,6 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
 
     // Private
     private _unsubscribeAll: Subject<any>;
-
-    filteredOptions: Observable<Locality[]>;
 
     /**
      * Constructor
@@ -176,9 +174,9 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
             nameOfAccused: new FormControl('', Validators.required),
             judgment: new FormControl('', Validators.required),
             jurisdiction: new FormControl('', Validators.required),
-            decisionOfJurisdiction: new FormControl('', Validators.required),
-            amountAtStake: new FormControl('', Validators.required),
-            motivation: new FormControl('', Validators.required),
+            decisionOfJurisdiction: new FormControl(''),
+            amountAtStake: new FormControl(''),
+            motivation: new FormControl(''),
             stateFolder: new FormControl('', Validators.required),
             region: new FormControl(''),
             circle: new FormControl(''),
@@ -201,15 +199,6 @@ export class ProvideOnFolderComponent implements OnInit, OnDestroy {
             this.localities = value['response'];
             this.regions = this.localities.filter(value1 => value1.levelSup === null);
         }, error => console.log(error));
-    }
-
-    displayFn(locality: Locality): string {
-        return locality && locality.name ? locality.name : '';
-    }
-
-    private _filter(name: string): Locality[] {
-        const filterValue = name.toLowerCase();
-        return this.localities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
     }
 
     getLevel(value) {

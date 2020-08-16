@@ -121,7 +121,8 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                     this.denunciationForm.get('id').setValue(denunciation.id);
                     this.denunciationForm.get('title').setValue(denunciation?.article?.title);
                     this.denunciationForm.get('denunContent').setValue(denunciation?.article?.content);
-                    this.denunciationForm.get('entity').setValue(denunciation.entity);
+                    this.denunciationForm.get('entity').setValue(denunciation?.entity);
+                    this.denunciationForm.get('description').setValue(denunciation?.article?.description);
                     this.denunciationForm.get('article').setValue(denunciation?.article.id);
                     this.denunciationForm.get('domain').setValue(denunciation?.article?.domain?.id);
                     this.denunciationForm.get('region').setValue(denunciation?.article?.level?.id);
@@ -160,7 +161,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             title: new FormControl('', Validators.required),
             denunContent: new FormControl('', Validators.required),
-            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
+            description: new FormControl('', Validators.required),
             entity: new FormControl('', Validators.required),
             region: new FormControl(''),
             circle: new FormControl(''),
@@ -254,6 +255,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
         this.article = new Article();
         this.denunciation = new Denunciation();
         this.denunciationSaveEntity = new DenunciationSaveEntity();
+        this.article.ischeck = true;
         this.article.id = this.denunciationForm.get('article').value;
         this.article.title = this.denunciationForm.get('title').value;
         this.article.content = this.denunciationForm.get('denunContent').value;
@@ -276,6 +278,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         } else {
@@ -287,6 +290,7 @@ export class DenunciationComponent implements OnInit, OnDestroy {
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         }

@@ -132,15 +132,16 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                     this.lawProjectForm.get('id').setValue(lawProject.id);
                     this.lawProjectForm.get('title').setValue(lawProject?.article?.title);
                     this.lawProjectForm.get('projectContent').setValue(lawProject?.article?.content);
-                    this.lawProjectForm.get('year').setValue(lawProject.year);
-                    this.lawProjectForm.get('stateLawProject').setValue(lawProject.stateLawProject);
-                    this.lawProjectForm.get('article').setValue(lawProject.article.id);
+                    this.lawProjectForm.get('description').setValue(lawProject?.article?.description);
+                    this.lawProjectForm.get('year').setValue(lawProject?.year);
+                    this.lawProjectForm.get('stateLawProject').setValue(lawProject?.stateLawProject);
+                    this.lawProjectForm.get('article').setValue(lawProject?.article?.id);
                     this.lawProjectForm.get('domain').setValue(lawProject?.article?.domain?.id);
-                    this.lawProjectForm.get('initiator').setValue(lawProject.initiator);
-                    this.lawProjectForm.get('region').setValue(lawProject?.article?.level?.id);
+                    this.lawProjectForm.get('initiator').setValue(lawProject?.initiator);
+                    /*this.lawProjectForm.get('region').setValue(lawProject?.article?.level?.id);
                     this.lawProjectForm.get('circle').setValue(lawProject?.article?.level?.id);
                     this.lawProjectForm.get('town').setValue(lawProject?.article?.level?.id);
-                    this.lawProjectForm.get('vfq').setValue(lawProject?.article?.level?.id);
+                    this.lawProjectForm.get('vfq').setValue(lawProject?.article?.level?.id);*/
                     this.lawProject = new LawProject(lawProject);
                     this.pageType = 'edit';
                 } else {
@@ -176,14 +177,33 @@ export class LawProjectComponent implements OnInit, OnDestroy {
             year: new FormControl(new Date(), Validators.required),
             stateLawProject: new FormControl('', Validators.required),
             initiator: new FormControl('', Validators.required),
-            region: new FormControl(''),
+            /*region: new FormControl(''),
             circle: new FormControl(''),
             town: new FormControl(''),
-            vfq: new FormControl(''),
+            vfq: new FormControl(''),*/
             domain: new FormControl('', Validators.required),
-            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
+            description: new FormControl('', Validators.required),
             article: new FormControl('')
         });
+    }
+
+    getDomains() {
+        this._domainsService.getAll().subscribe(value => {
+            this.domains = value['response'];
+        }, error => console.log(error));
+    }
+
+    getDomainById(id: number) {
+        this._domainsService.getById(id).subscribe(value => {
+            this.domain = value['response'];
+        }, error => console.log(error));
+    }
+
+    getLevelByName() {
+        this._localitiesService.findByName().subscribe(value => {
+            this.locality = value['response'];
+            console.log(this.locality);
+        }, error => console.log(error));
     }
 
     getLocalities() {
@@ -197,31 +217,18 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.getLocalityById(value.id);
     }
 
-    getDomains() {
-        this._domainsService.getAll().subscribe(value => {
-            this.domains = value['response'];
-        }, error => console.log(error));
-    }
-
-
     getLocalityById(id: number) {
         this._localitiesService.getById(id).subscribe(value => {
             this.locality = value['response'];
         }, error => console.log(error));
     }
 
-    getDomainById(id: number) {
-        this._domainsService.getById(id).subscribe(value => {
-            this.domain = value['response'];
-        }, error => console.log(error));
+    findDomainSelected(value) {
+        this.getDomainById(value);
     }
 
     findByLocalitySelected(value) {
         this.getLocalityById(value);
-    }
-
-    findDomainSelected(value) {
-        this.getDomainById(value);
     }
 
     getCircles(id: number) {
@@ -276,7 +283,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.article.description = this.lawProjectForm.get('description').value;
         this.article.category = this.categories[2];
         this.article.subCategory = this.subCategories[4];
-        this.article.level = this.locality;
+        this.article.level = this.localities.find(value => value.name === 'Mali');
         this.article.ischeck = true;
         this.article.domain = this.domain;
         this.lawProject.id = this.lawProjectForm.get('id').value;
@@ -284,6 +291,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
         this.lawProject.initiator = this.lawProjectForm.get('initiator').value;
         this.lawProject.stateLawProject = this.lawProjectForm.get('stateLawProject').value;
         this.lawProject.ischeck = true;
+        // console.log();
         this.lawProjectSaveEntity.article = this.article;
         this.lawProjectSaveEntity.lawProject = this.lawProject;
         if (!this.lawProject.id) {
@@ -294,6 +302,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
         } else {
@@ -305,6 +314,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
                     this._spinnerService.hide();
                 } else {
                     this._toastr.error(data['message']);
+                    this._spinnerService.hide();
                 }
             });
 

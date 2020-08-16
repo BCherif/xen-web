@@ -51,4 +51,31 @@ export class DetailsPetitionsComponent {
         });
     }
 
+    toPublish(petition: Petition) {
+        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            disableClose: false
+        });
+
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de démoderer la petition ';
+
+        this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                petition.ischeck = false;
+                petition.article.ischeck = false;
+                this._petitionsService.toPublish(petition).subscribe(data => {
+                    if (data['status'] === 'OK') {
+                        this._toastr.success(data['message']);
+                        const petitionIndex = this._petitionsService.petitions.indexOf(petition);
+                        this._petitionsService.petitions.splice(petitionIndex, 1, data['response']);
+                        this._petitionsService.onPetitionsChanged.next(this._petitionsService.petitions);
+                        this.matDialogRef.close();
+                    } else {
+                        this._toastr.error(data['message']);
+                        this.matDialogRef.close();
+                    }
+                }, error => console.log(error));
+            }
+        });
+    }
+
 }

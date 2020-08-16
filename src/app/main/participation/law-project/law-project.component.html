@@ -54,8 +54,8 @@
                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
                                 <mat-label>Titre</mat-label>
-                                <input name="title" #title formControlName="title" matInput maxlength="160" required>
-                                <mat-hint align="end">{{title.value.length}} / 160</mat-hint>
+                                <input name="title" #title formControlName="title" matInput maxlength="130" required>
+                                <mat-hint align="end">{{title.value.length}} / 130</mat-hint>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
@@ -87,65 +87,65 @@
                             </mat-form-field>
                         </div>
 
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
-                                <mat-label>Régions</mat-label>
-                                <mat-select formControlName="region"
-                                            (selectionChange)="onRegionChange($event.value)">
-                                    <mat-option *ngFor="let region of regions" [value]="region.id">
-                                        {{region.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field *ngIf="regionId" appearance="outline" class="px-4"
-                                            floatLabel="always"
-                                            fxFlex="50">
-                                <mat-label>Cercles</mat-label>
-                                <mat-select formControlName="circle"
-                                            (selectionChange)="onCircleChange($event.value)">
-                                    <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
-                                        <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
-                                            {{circle?.name}}
-                                        </mat-option>
-                                    </mat-optgroup>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field *ngIf="circleId" appearance="outline" class="px-4"
-                                            floatLabel="always"
-                                            fxFlex="50">
-                                <mat-label>Commune</mat-label>
-                                <mat-select formControlName="town"
-                                            (selectionChange)="onTownChange($event.value)">
-                                    <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
-                                        <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
-                                            {{tow?.name}}
-                                        </mat-option>
-                                    </mat-optgroup>
-                                </mat-select>
-                            </mat-form-field>
+                        <!-- <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                             <mat-form-field appearance="outline" class="px-4" floatLabel="always" fxFlex="50">
+                                 <mat-label>Régions</mat-label>
+                                 <mat-select formControlName="region"
+                                             (selectionChange)="onRegionChange($event.value)">
+                                     <mat-option *ngFor="let region of regions" [value]="region?.id">
+                                         {{region?.name}}
+                                     </mat-option>
+                                 </mat-select>
+                             </mat-form-field>
+                             <mat-form-field *ngIf="regionId" appearance="outline" class="px-4"
+                                             floatLabel="always"
+                                             fxFlex="50">
+                                 <mat-label>Cercles</mat-label>
+                                 <mat-select formControlName="circle"
+                                             (selectionChange)="onCircleChange($event.value)">
+                                     <mat-optgroup *ngFor="let group of circles" [label]="group?.name">
+                                         <mat-option *ngFor="let circle of group?.levels" [value]="circle?.id">
+                                             {{circle?.name}}
+                                         </mat-option>
+                                     </mat-optgroup>
+                                 </mat-select>
+                             </mat-form-field>
+                         </div>
+                         <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                             <mat-form-field *ngIf="circleId" appearance="outline" class="px-4"
+                                             floatLabel="always"
+                                             fxFlex="50">
+                                 <mat-label>Commune</mat-label>
+                                 <mat-select formControlName="town"
+                                             (selectionChange)="onTownChange($event.value)">
+                                     <mat-optgroup *ngFor="let group of towns" [label]="group?.name">
+                                         <mat-option *ngFor="let tow of group?.levels" [value]="tow?.id">
+                                             {{tow?.name}}
+                                         </mat-option>
+                                     </mat-optgroup>
+                                 </mat-select>
+                             </mat-form-field>
 
-                            <mat-form-field *ngIf="vfqId" appearance="outline" class="px-4" floatLabel="always"
-                                            fxFlex="50">
-                                <mat-label>VFQ</mat-label>
-                                <mat-select formControlName="vfq"
-                                            (selectionChange)="onVFQChange($event.value)">
-                                    <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
-                                        <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
-                                            {{vfq?.name}}
-                                        </mat-option>
-                                    </mat-optgroup>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                             <mat-form-field *ngIf="vfqId" appearance="outline" class="px-4" floatLabel="always"
+                                             fxFlex="50">
+                                 <mat-label>VFQ</mat-label>
+                                 <mat-select formControlName="vfq"
+                                             (selectionChange)="onVFQChange($event.value)">
+                                     <mat-optgroup *ngFor="let group of vfqs" [label]="group?.name">
+                                         <mat-option *ngFor="let vfq of group?.levels" [value]="vfq?.id">
+                                             {{vfq?.name}}
+                                         </mat-option>
+                                     </mat-optgroup>
+                                 </mat-select>
+                             </mat-form-field>
+                         </div>-->
                         <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                             <mat-label>Domaine</mat-label>
                             <mat-select formControlName="domain"
                                         (selectionChange)="findDomainSelected($event.value)"
                                         required>
                                 <mat-option *ngFor="let domain of domains"
-                                            [value]="domain.id">{{domain.name}}
+                                            [value]="domain?.id">{{domain?.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -154,9 +154,9 @@
                                 <mat-label>Description</mat-label>
                                 <textarea #description name="description" formControlName="description" matInput
                                           type="text"
-                                          maxlength="50"
+                                          maxlength="200"
                                           max-rows="5"></textarea>
-                                <mat-hint align="end">{{description.value.length}} / 50</mat-hint>
+                                <mat-hint align="end">{{description.value.length}} / 200</mat-hint>
                             </mat-form-field>
                         </div>
                         <div>

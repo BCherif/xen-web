@@ -16,7 +16,7 @@ export class Article implements Deserializable {
     subCategory: SUB_CATEGORY;
     level: Locality;
     domain: Domain;
-    ischeck: boolean;
+    ischeck: boolean = false;
     user: User;
     createDate: Date = new Date();
     updateDate: Date;

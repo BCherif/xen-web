@@ -71,4 +71,8 @@ export class PetitionsService implements Resolve<any> {
     publish(petition1: Petition) {
         return this._httpClient.post(this.serviceURL + '/publish', petition1, this.httpOptions);
     }
+
+    toPublish(petition1: Petition) {
+        return this._httpClient.put(this.serviceURL + '/toPublish', petition1, this.httpOptions);
+    }
 }

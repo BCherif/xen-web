@@ -155,9 +155,9 @@ export class ArticleComponent implements OnInit, OnDestroy {
     createArticleForm() {
         this.articleForm = this._formBuilder.group({
             id: new FormControl(''),
-            title: new FormControl('', [Validators.required, Validators.maxLength(400), Validators.minLength(3)]),
-            description: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(10)]),
-            content: new FormControl('', [Validators.required, Validators.maxLength(999999), Validators.minLength(10)]),
+            title: new FormControl('', Validators.required),
+            description: new FormControl('', Validators.required),
+            content: new FormControl('', Validators.required),
             domain: new FormControl('', Validators.required),
             /*  fileName: new FormControl(''),
             *  level: new FormControl('', Validators.required),*/

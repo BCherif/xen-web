@@ -18,6 +18,7 @@ export class Interpellation implements Deserializable {
     organs: Organ[];
     article: Article;
     ischeck: boolean;
+    invalidate: boolean = true;
     createDate: Date = new Date();
     updateDate: Date;
 
@@ -33,6 +34,7 @@ export class Interpellation implements Deserializable {
         this.electeds = interpellation.electeds;
         this.organs = interpellation.organs;
         this.ischeck = interpellation.ischeck;
+        this.invalidate = interpellation.invalidate;
         this.article = interpellation.article;
         this.createDate = interpellation.createDate;
         this.updateDate = interpellation.updateDate;

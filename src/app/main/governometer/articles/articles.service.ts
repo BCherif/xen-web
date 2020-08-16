@@ -74,4 +74,8 @@ export class ArticlesService implements Resolve<any> {
         return this._httpClient.post(this.serviceURL + '/publish', article, this.httpOptions);
     }
 
+    toPublish(article: Article) {
+        return this._httpClient.put(this.serviceURL + '/toPublish', article, this.httpOptions);
+    }
+
 }

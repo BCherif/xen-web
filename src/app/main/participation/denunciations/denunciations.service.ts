@@ -72,4 +72,8 @@ export class DenunciationsService implements Resolve<any> {
         return this._httpClient.post(this.serviceURL + '/publish', denunciation1, this.httpOptions);
     }
 
+    toPublish(denunciation1: Denunciation) {
+        return this._httpClient.put(this.serviceURL + '/toPublish', denunciation1, this.httpOptions);
+    }
+
 }

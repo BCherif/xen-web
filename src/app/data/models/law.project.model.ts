@@ -1,11 +1,14 @@
-import {Deserializable} from "../wrapper/deserializable.wrapper";
-import {Injectable} from "@angular/core";
+import {Deserializable} from '../wrapper/deserializable.wrapper';
+import {Injectable} from '@angular/core';
 import {Article} from './article.model';
 import {INITIATOR, STATE_LAW_PROJECT} from '../enums/enums';
 
 @Injectable()
-export class LawProject implements Deserializable{
+export class LawProject implements Deserializable {
     id: number;
+    likeFor: number;
+    notlike: number;
+    comment: number;
     year: Date;
     stateLawProject: STATE_LAW_PROJECT;
     article: Article;
@@ -13,10 +16,13 @@ export class LawProject implements Deserializable{
     ischeck: boolean;
     createDate: Date = new Date();
     updateDate: Date;
-    
+
     constructor(lawProject?) {
         lawProject = lawProject || {};
         this.id = lawProject.id;
+        this.likeFor = lawProject.likeFor;
+        this.notlike = lawProject.notlike;
+        this.comment = lawProject.comment;
         this.year = lawProject.year;
         this.stateLawProject = lawProject.stateLawProject;
         this.article = lawProject.article;

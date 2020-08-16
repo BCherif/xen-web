@@ -18,7 +18,15 @@
             color="primary"
             (click)="validation(denunciation)">
         <mat-icon>check</mat-icon>&nbsp;
-        <span>Valider</span>
+        <span>Publier</span>
+    </button>
+    <button *ngIf="denunciation.ischeck"
+            mat-raised-button class="save-button"
+            matTooltip="Démoderer"
+            (click)="toPublish(denunciation)"
+            color="primary">
+        <mat-icon>close</mat-icon>&nbsp;
+        <span>Dépublier</span>
     </button>
     <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
         <mat-icon>close</mat-icon>&nbsp;

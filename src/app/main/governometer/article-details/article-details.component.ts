@@ -33,11 +33,37 @@ export class ArticleDetailsComponent {
             disableClose: false
         });
 
-        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de valider cet article';
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de moderer cet article';
 
         this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this._articlesService.publish(article).subscribe(data => {
+                    if (data['status'] === 'OK') {
+                        this._toastr.success(data['message']);
+                        const articleIndex = this._articlesService.articles.indexOf(article);
+                        this._articlesService.articles.splice(articleIndex, 1, data['response']);
+                        this._articlesService.onArticlesChanged.next(this._articlesService.articles);
+                        this.matDialogRef.close();
+                    } else {
+                        this._toastr.error(data['message']);
+                        this.matDialogRef.close();
+                    }
+                }, error => console.log(error));
+            }
+        });
+    }
+
+    toPublish(article: Article) {
+        this.confirmDialogRef = this._matDialog.open(ConfirmDialogComponent, {
+            disableClose: false
+        });
+
+        this.confirmDialogRef.componentInstance.confirmMessage = 'Etes-vous sûre de démoderer cet article';
+
+        this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                article.ischeck = false;
+                this._articlesService.toPublish(article).subscribe(data => {
                     if (data['status'] === 'OK') {
                         this._toastr.success(data['message']);
                         const articleIndex = this._articlesService.articles.indexOf(article);

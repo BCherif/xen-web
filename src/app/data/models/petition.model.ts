@@ -11,6 +11,8 @@ export class Petition implements Deserializable {
     article: Article;
     user: User;
     ischeck: boolean;
+    invalidate: boolean = true;
+    frontend: boolean;
     objective: number = 0;
     decisionMakers: any[];
     createDate: Date = new Date();
@@ -24,6 +26,8 @@ export class Petition implements Deserializable {
         this.article = petition.article;
         this.user = petition.user;
         this.ischeck = petition.ischeck;
+        this.invalidate = petition.invalidate;
+        this.frontend = petition.frontend;
         this.decisionMakers = petition.decisionMakers;
         this.objective = petition.objective;
         this.createDate = petition.createDate;

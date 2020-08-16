@@ -405,6 +405,7 @@ export class InterpellationComponent implements OnInit, OnDestroy {
         }
         this.interpellation.organCall = this.interpellationForm.get('organCall').value;
         this.article.user = this.currentUser;
+        this.article.ischeck = true;
         this.article.title = this.interpellationForm.get('title').value;
         this.article.id = this.interpellationForm.get('article').value;
         this.article.description = this.interpellationForm.get('description').value;

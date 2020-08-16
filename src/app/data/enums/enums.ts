@@ -12,7 +12,8 @@ export enum CS_JUDGMENT {
 
 export enum INITIATOR {
     PRESIDENT = 'Gouvernement',
-    ASSEMBLY = 'Assemblée nationale'
+    ASSEMBLY = 'Assemblée nationale',
+    CITIZEN = 'Citoyen'
 }
 
 export enum STATE_PROJECT {
@@ -78,10 +79,10 @@ export enum DEGREE {
 }
 
 export enum STATE_LAW_PROJECT {
-    IN_AMENDMENT = 'En amendement',
-    IN_REJECTION = 'En rejet',
-    IN_PROMULGATION = 'En promulgation',
-    IN_ADOPTION = 'En adoption'
+    STUDY = 'A l\'étude',
+    ADOPTED = 'Adoptée',
+    PUBLISHED = 'Publiée',
+    PROMULGATED = 'Promulguée'
 }
 
 export enum CATEGORY_FORM {

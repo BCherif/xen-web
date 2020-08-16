@@ -83,4 +83,8 @@ export class InterpellationsService implements Resolve<any> {
     publish(interpellation1: Interpellation) {
         return this._httpClient.post(this.serviceURL + '/publish', interpellation1, this.httpOptions);
     }
+
+    toPublish(interpellation1: Interpellation) {
+        return this._httpClient.put(this.serviceURL + '/toPublish', interpellation1, this.httpOptions);
+    }
 }
