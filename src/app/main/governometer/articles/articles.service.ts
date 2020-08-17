@@ -59,7 +59,7 @@ export class ArticlesService implements Resolve<any> {
      */
     getArticles(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get(this.serviceURL + '/governometer', this.httpOptions)
+            this._httpClient.get(this.serviceURL + '/governometer/backOffice', this.httpOptions)
                 .subscribe((res: any) => {
                     if (res['status'] === 'OK') {
                         this.articles = res['response'];
