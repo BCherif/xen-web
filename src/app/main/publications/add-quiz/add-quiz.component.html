@@ -23,13 +23,6 @@
 
             <div fxLayout="row" fxLayoutAlign="start center">
                 <mat-form-field appearance="outline" fxFlex>
-                    <mat-label>Libellé</mat-label>
-                    <input type="text" formControlName="name" matInput required>
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row" fxLayoutAlign="start center">
-                <mat-form-field appearance="outline" fxFlex>
                     <mat-label>Formulaire</mat-label>
                     <mat-select formControlName="form"
                                 (selectionChange)="findFormSelected($event.value)"
@@ -38,6 +31,26 @@
                                     [value]="form.id">{{form.name}}
                         </mat-option>
                     </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="action === 'edit'" fxLayout="row" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Catégorie</mat-label>
+                    <mat-select formControlName="category"
+                                (selectionChange)="onCategorySelected($event.value)"
+                                required>
+                        <mat-option *ngFor="let category of categories"
+                                    [value]="category.id">{{category.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Libellé</mat-label>
+                    <input type="text" formControlName="name" matInput required>
                 </mat-form-field>
             </div>
 
@@ -53,7 +66,8 @@
                 </mat-form-field>
             </div>
 
-            <div *ngIf="typeSelected ==='checkbox' || typeSelected ==='select'" fxLayoutAlign="start center">
+            <div *ngIf="typeSelected ==='checkbox' || typeSelected ==='select'  || quiz.id"
+                 fxLayoutAlign="start center">
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-chip-list #chipList>
                         <mat-chip *ngFor="let response of responses;let indx=index;"
@@ -129,12 +143,21 @@
 
     <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="center">
 
-        <button mat-button
+        <button *ngIf="action !== 'edit'" mat-button
                 (click)="saveQuiz()"
                 class="save-button"
                 [disabled]="quizForm.invalid"
                 matTooltip="Enregistrer">
             Enregistrer
+        </button>
+
+        <button *ngIf="action === 'edit'"
+                mat-button
+                (click)="saveQuiz()"
+                class="save-button"
+                [disabled]="quizForm.invalid || quizForm.pristine"
+                matTooltip="Modifier">
+            Modifier
         </button>
 
         <button (click)="matDialogRef.close()"

@@ -70,15 +70,15 @@
                 </ng-container>
 
                 <!-- Buttons Column -->
-                <!--<ng-container matColumnDef="actions">
+                <ng-container matColumnDef="buttons">
                     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                     <mat-cell *matCellDef="let form">
-                        &lt;!&ndash; <a matTooltip="Modifier" (click)="editForm(form)">
-                             <mat-icon>edit</mat-icon>
-                         </a>&nbsp;&ndash;&gt;
-                        <br><br>
+                        <a matTooltip="Modifier"
+                           (click)="editForm(form)">
+                            <mat-icon>edit</mat-icon>
+                        </a>&nbsp;&nbsp;
                     </mat-cell>
-                </ng-container>-->
+                </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 

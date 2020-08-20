@@ -25,7 +25,7 @@ export class QuizzesComponent implements OnInit
     dialogRef: any;
     typeQuiz = TYPE_QUIZ_ANSWER;
     dataSource: FilesDataSource | null;
-    displayedColumns = ['name','type','form'];
+    displayedColumns = ['name','type','form','buttons'];
 
     @ViewChild(MatPaginator, {static: true})
     paginator: MatPaginator;
@@ -75,11 +75,12 @@ export class QuizzesComponent implements OnInit
             });
     }
 
-    newQuiz() {
+    editQuiz(quiz) {
         this.dialogRef = this._matDialog.open(PublicationsAddQuizDialogComponent, {
             panelClass: 'add-quiz-dialog',
-            data      : {
-                action: 'new'
+            data: {
+                action: 'edit',
+                quiz: quiz
             }
         });
     }

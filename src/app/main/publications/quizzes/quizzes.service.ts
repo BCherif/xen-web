@@ -72,6 +72,10 @@ export class QuizzesService implements Resolve<any> {
         return this._httpClient.post(this.serviceURL, quiz, this.httpOptions);
     }
 
+    update(quiz: Quiz) {
+        return this._httpClient.put(this.serviceURL, quiz, this.httpOptions);
+    }
+
     getAll() {
         return this._httpClient.get(this.serviceURL, this.httpOptions);
     }

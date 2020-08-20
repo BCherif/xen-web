@@ -1,5 +1,5 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ToastrService} from 'ngx-toastr';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -29,6 +29,7 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
     action: string;
     quiz: Quiz;
     category: Category;
+    categories: Category[];
     quizForm: FormGroup;
     types: any[];
     type = TYPE_QUIZ_ANSWER;
@@ -78,19 +79,26 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
     ) {
         // Set the defaults
         this.action = _data.action;
-        this.category = _data.category;
 
-        if (this.action === 'new') {
-            this.dialogTitle = 'Ajouter une question';
+        if (this.action === 'edit') {
+            this.dialogTitle = 'Modifier une question';
+            this.quiz = _data.quiz;
+            this.responses = this.quiz.responses;
+            this.getFormById(this.quiz?.form?.id);
+            this.getCategoryById(this.quiz?.category?.id);
+            this.updateQuizForm();
+        } else {
+            this.dialogTitle = 'Affectation d\' une question';
+            this.category = _data.category;
+            this.createQuizForm();
         }
-        this.quiz = new Quiz();
-        this.createQuizForm();
     }
 
     ngOnInit() {
         this.types = Object.keys(this.type);
         this.getResponses();
         this.getForms();
+        this.getCategories();
 
         this.filteredResponses = this.quizForm.get('responses').valueChanges.pipe(
             startWith(''),
@@ -111,6 +119,18 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
             name: [this.quiz.name, Validators.required],
             typeQuiz: [this.quiz.typeQuiz, Validators.required],
             form: [this.quiz.form, Validators.required],
+            responses: [this.quiz.responses]
+            /*  answers: this._formBuilder.array([]),*/
+        });
+    }
+
+    updateQuizForm() {
+        this.quizForm = this._formBuilder.group({
+            id: [this.quiz.id],
+            category: [this.quiz.category.id],
+            name: [this.quiz.name, Validators.required],
+            typeQuiz: [this.quiz.typeQuiz, Validators.required],
+            form: [this.quiz.form.id, Validators.required],
             responses: [this.quiz.responses]
             /*  answers: this._formBuilder.array([]),*/
         });
@@ -172,6 +192,23 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this.getFormById(value);
     }
 
+    getCategories() {
+        this._categoriesService.getAll().subscribe(value => {
+            this.categories = value['response'];
+        }, error => console.log(error));
+    }
+
+    getCategoryById(id: number) {
+        this._categoriesService.getById(id).subscribe(value => {
+            this.category = value['response'];
+        }, error => console.log(error));
+    }
+
+    onCategorySelected(value) {
+        this.getFormById(value);
+    }
+
+
     /*
      answers(): FormArray {
          return this.quizForm.get('answers') as FormArray;
@@ -198,18 +235,34 @@ export class PublicationsAddQuizDialogComponent implements OnInit {
         this.quiz.category = this.category;
         this.quiz.form = this.form;
         this.quiz.responses = this.responses;
-        this._quizzesService.create(this.quiz).subscribe(data => {
-            if (data['status'] === 'OK') {
-                this._quizzesService.getQuizzes();
-                this._toastr.success(data['message']);
-                this._spinnerService.hide();
-                this.matDialogRef.close();
-            } else {
-                this._toastr.error(data['message']);
-                this._spinnerService.hide();
-                this.matDialogRef.close();
-            }
-        });
+        if (!this.quiz.id) {
+            this._quizzesService.create(this.quiz).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._quizzesService.getQuizzes();
+                    this._toastr.success(data['message']);
+                    this._spinnerService.hide();
+                    this.matDialogRef.close();
+                } else {
+                    this._toastr.error(data['message']);
+                    this._spinnerService.hide();
+                    this.matDialogRef.close();
+                }
+            });
+        } else {
+            this.quiz.updateDate = new Date();
+            this._quizzesService.update(this.quiz).subscribe(data => {
+                if (data['status'] === 'OK') {
+                    this._quizzesService.getQuizzes();
+                    this._toastr.success(data['message']);
+                    this._spinnerService.hide();
+                    this.matDialogRef.close();
+                } else {
+                    this._toastr.error(data['message']);
+                    this._spinnerService.hide();
+                    this.matDialogRef.close();
+                }
+            });
+        }
     }
 
     onTypeChange(value) {
