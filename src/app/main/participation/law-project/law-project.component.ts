@@ -174,7 +174,7 @@ export class LawProjectComponent implements OnInit, OnDestroy {
             id: new FormControl(''),
             title: new FormControl('', Validators.required),
             projectContent: new FormControl('', Validators.required),
-            year: new FormControl(new Date(), Validators.required),
+            year: new FormControl('', Validators.required),
             stateLawProject: new FormControl('', Validators.required),
             initiator: new FormControl('', Validators.required),
             /*region: new FormControl(''),
