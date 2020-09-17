@@ -21,7 +21,7 @@
     }
 
     .secondary-text {
-        color: black !important ;
+        color: black !important;
     }
 
     .icon,
@@ -30,7 +30,7 @@
     }
 
     .hint-text {
-        color: black !important ;
+        color: black !important;
     }
 
     .disabled-text {
@@ -225,29 +225,24 @@ $matHues: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A70
 // -----------------------------------------------------------------------------------------------------
 @mixin generate-color-classes($colorName, $color, $contrastColor, $hue) {
 
-   /* .#{$colorName}#{$hue}-bg {
-        background-color: $color !important;
-    }
+    /* .#{$colorName}#{$hue}-bg {
+         background-color: $color !important;
+     }
 
-    .#{$colorName}#{$hue} {
-        background-color: $color !important;
-        color: $contrastColor !important;
+     .#{$colorName}#{$hue} {
+         background-color: $color !important;
+         color: $contrastColor !important;
 
-        &[disabled] {
-            background-color: rgba($color, .12) !important;
-            color: rgba($contrastColor, .26) !important;
-        }
-    }*/
+         &[disabled] {
+             background-color: rgba($color, .12) !important;
+             color: rgba($contrastColor, .26) !important;
+         }
+     }*/
 
     body.theme-default .accent {
         background-color: #006400 !important;
         color: white !important;
     }
-
-    /*body.theme-default .dsn-dark {
-        background-color: #7f7f80 !important;
-        color: white !important;
-    }*/
 
     .#{$colorName}#{$hue}-fg {
         color: $color !important;

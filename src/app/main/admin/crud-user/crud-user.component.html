@@ -37,6 +37,19 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
+            <button mat-raised-button (click)="save()"
+                    class="save-product-button"
+                    [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
+                    *ngIf="pageType ==='new'">
+                <span>Enregistrer</span>
+            </button>
+
+            <button mat-raised-button (click)="update()"
+                    class="save-product-button"
+                    [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
+                    *ngIf="pageType ==='edit'">
+                <span>Modifier</span>
+            </button>
         </div>
         <!-- / HEADER -->
 
@@ -111,21 +124,6 @@
                                               [formControlName]="i">{{roles[i].name}}</mat-checkbox>
                             </div>
                         </div>
-                        <br>
-                        <button mat-raised-button (click)="save()"
-                                color="primary"
-                                [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
-                                *ngIf="pageType ==='new'">
-                            <span>Enregistrer</span>
-                        </button>
-
-                        <button mat-raised-button (click)="update()"
-                                color="primary"
-                                [disabled]="userForm.invalid || selectedRoleValues?.length <= 0"
-                                *ngIf="pageType ==='edit'">
-                            <span>Modifier</span>
-                        </button>
-
                     </div>
 
                 </form>

@@ -3,9 +3,11 @@
     <div class="leadership_event_icon">
         <span><i class="fa fa-calendar"></i>{{article?.createDate | date: 'dd/MM/yyyy'}}</span>
         <span><i class="fa fa-map-marker"></i>{{article?.level?.name}}</span>
-        <span><a href="#" class="tagcloud">{{article?.domain?.name}}</a></span>
+        <span><a class="tagcloud">{{article?.domain?.name}}</a></span>
     </div>
     <br>
+    <h3><strong>Auteur</strong></h3>
+    <p>{{article?.user?.firstname}} {{article?.user?.lastname}}</p>
     <h3><strong>Sous-Catégorie :</strong></h3>
     <p>{{subCategory[article?.subCategory]}}</p>
     <h3><strong>Contenu :</strong></h3>

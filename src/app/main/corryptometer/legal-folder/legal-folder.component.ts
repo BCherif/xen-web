@@ -23,7 +23,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {SearchLevelEntity} from '../../../utils/search-level-entity';
 
 @Component({
-    selector: 'corryptometer-denunciation',
+    selector: 'corryptometer-legal-folder',
     templateUrl: './legal-folder.component.html',
     styleUrls: ['./legal-folder.component.scss'],
     encapsulation: ViewEncapsulation.None,

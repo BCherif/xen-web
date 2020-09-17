@@ -19,9 +19,7 @@ export class PrivilegeService {
     }
 
     findAll(): Observable<any> {
-        return this.http.get(this.serviceURL, this.httpOptions)
+        return this.http.get(this.serviceURL, this.httpOptions);
     }
-
-
 
 }

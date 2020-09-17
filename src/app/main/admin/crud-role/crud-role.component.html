@@ -37,6 +37,12 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
+            <button mat-raised-button (click)="update()"
+                    class="save-product-button"
+                    [disabled]="roleForm.invalid || selectedPrivilegeValues?.length <= 0"
+                    *ngIf="pageType ==='edit'">
+                <span>Modifier</span>
+            </button>
 
         </div>
         <!-- / HEADER -->
@@ -76,20 +82,6 @@
                                               [formControlName]="i">{{privileges[i].name}}</mat-checkbox>
                             </div>
                         </div>
-                        <br>
-                        <button mat-raised-button
-                                color="primary"
-                                [disabled]="roleForm.invalid"
-                                *ngIf="pageType ==='new'">
-                            <span>Enregistrer</span>
-                        </button>
-
-                        <button mat-raised-button (click)="update()"
-                                color="primary"
-                                [disabled]="roleForm.invalid"
-                                *ngIf="pageType ==='edit'">
-                            <span>Modifier</span>
-                        </button>
                     </div>
 
                 </form>
